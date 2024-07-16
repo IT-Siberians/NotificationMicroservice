@@ -5,10 +5,10 @@ namespace NotificationMicroservice.Domain.Entities
 {
     public class MessageTemplate<T>
     {
-        public T _id;
-        public string _template;
-        public string _createUserName;
-        public DateTime _createDate;
+        private T _id;
+        private string _template;
+        private string _createUserName;
+        private DateTime _createDate;
 
         /// <summary>
         /// Идентификатор

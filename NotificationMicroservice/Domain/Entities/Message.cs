@@ -5,11 +5,11 @@
     /// </summary>
     public class Message<T>
     {
-        public T _id;
-        public T _messageType;
-        public string _messageText;
-        public string _direction;
-        public DateTime _createdDate;
+        private T _id;
+        private T _messageType;
+        private string _messageText;
+        private string _direction;
+        private DateTime _createdDate;
 
         /// <summary>
         /// Идентификатор
