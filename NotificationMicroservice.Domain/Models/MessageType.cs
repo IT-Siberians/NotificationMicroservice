@@ -1,5 +1,5 @@
-﻿using NotificationMicroservice.Domain.Interfaces.Model;
-using System.Text;
+﻿using NotificationMicroservice.Domain.Exception.MessageType;
+using NotificationMicroservice.Domain.Interfaces.Model;
 
 namespace NotificationMicroservice.Domain.Models
 {
@@ -15,6 +15,7 @@ namespace NotificationMicroservice.Domain.Models
 
         private Guid _id;
         private string _name;
+        private bool _isRemove;
         private string _createUserName;
         private DateTime _createDate;
         private string? _modifyUserName;
@@ -29,6 +30,11 @@ namespace NotificationMicroservice.Domain.Models
         /// Название типа сообщения
         /// </summary>
         public string Name { get => _name; }
+
+        /// <summary>
+        /// Статус удаления типа
+        /// </summary>
+        public bool IsRemove { get => _isRemove; }
 
         /// <summary>
         /// Пользователь создавший тип сообщения
@@ -50,21 +56,42 @@ namespace NotificationMicroservice.Domain.Models
         /// </summary>
         public DateTime? ModifyDate { get => _modifyDate; }
 
-        public MessageType() { }
-
         /// <summary>
-        /// Основной конструктор класса
+        /// Основной конструктор класса (новая сущность)
         /// </summary>
         /// <param name="id">идентификатор записи</param>
         /// <param name="name">название типа сообщения</param>
+        /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="createUserName">пользователь создавший тип сообщения</param>
         /// <param name="createDate">дата и время создания типа сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifyDate">дата и время изменения типа сообщения</param>
-        private MessageType(Guid id, string name, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
+        /// <returns>Сущность</returns>
+        public MessageType(Guid id, string name, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
         {
+            if (id == Guid.Empty)
+            {
+                throw new MessageTypeGuidEmptyException($"{nameof(id)} cannot be empty");
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new MessageTypeNameNullOrEmptyException($"{nameof(name)} cannot be empty");
+            }
+
+            if (name.Length > MAX_NAME_LENG)
+            {
+                throw new MessageTypeNameLengthException(nameof(name));
+            }
+
+            if (string.IsNullOrEmpty(createUserName))
+            {
+                throw new MessageTypeUserNameNullOrEmptyException($"{nameof(createUserName)} cannot be empty");
+            }
+
             _id = id;
             _name = name;
+            _isRemove = isRemove;
             _createUserName = createUserName;
             _createDate = createDate;
             _modifyUserName = modifyUserName;
@@ -72,35 +99,50 @@ namespace NotificationMicroservice.Domain.Models
         }
 
         /// <summary>
-        /// Создание типа сообщения
+        /// Обновление типа сообщения
         /// </summary>
-        /// <param name="id">идентификатор записи</param>
         /// <param name="name">название типа сообщения</param>
-        /// <param name="createUserName">пользователь создавший тип сообщения</param>
-        /// <param name="createDate">дата и время создания типа сообщения</param>
+        /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifyDate">дата и время изменения типа сообщения</param>
-        /// <returns>Кортеж (Сущность, Ошибки)</returns>
-        public (MessageType MessageType, string Error) Create(Guid id, string name, string createUserName, DateTime createDate, string? modifyUserName = null, DateTime? modifyDate = null)
+        public void Update(string name, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
-            var errorSb = new StringBuilder();
-
-            if (id == Guid.Empty)
+            if (string.IsNullOrEmpty(name))
             {
-                errorSb.AppendLine($"Identifier {id} cannot be empty");
+                throw new MessageTypeNameNullOrEmptyException(nameof(name));
             }
 
-            if (string.IsNullOrEmpty(name) || name.Length > MAX_NAME_LENG)
+            if (name.Length > MAX_NAME_LENG)
             {
-                errorSb.AppendLine($"Type name: {name} cannot be empty or more than {MAX_NAME_LENG} characters");
+                throw new MessageTypeNameLengthException(nameof(name));
             }
 
-            if (string.IsNullOrEmpty(createUserName))
+            if (string.IsNullOrEmpty(modifyUserName))
             {
-                errorSb.AppendLine($"CreateUser cannot be empty");
+                throw new MessageTypeUserNameNullOrEmptyException(nameof(modifyUserName));
             }
 
-            return (new MessageType(id, name, createUserName, createDate, modifyUserName, modifyDate), errorSb.ToString());
+            _name = name;
+            _isRemove = isRemove;
+            _modifyUserName = modifyUserName;
+            _modifyDate = modifyDate;
+        }
+
+        /// <summary>
+        /// Деактивация "Удаление"
+        /// </summary>
+        /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
+        /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        public void Delete(string modifyUserName, DateTime modifyDate)
+        {
+            if (string.IsNullOrEmpty(modifyUserName))
+            {
+                throw new MessageTypeUserNameNullOrEmptyException(nameof(modifyUserName));
+            }
+
+            _isRemove = true;
+            _modifyUserName = modifyUserName;
+            _modifyDate = modifyDate;
         }
 
     }

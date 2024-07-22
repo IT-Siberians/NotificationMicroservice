@@ -26,9 +26,9 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <summary>
         /// Удалить сущность.
         /// </summary>
-        /// <param name="id"> Идентификатор сущности для удаления. </param>
+        /// <param name="entity"> Сущность для "удаления". </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Была ли сущность удалена. </returns>
-        Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(MessageType entity, CancellationToken cancellationToken);
     }
 }

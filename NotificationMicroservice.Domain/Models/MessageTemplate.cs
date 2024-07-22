@@ -1,5 +1,5 @@
-﻿using NotificationMicroservice.Domain.Interfaces.Model;
-using System.Text;
+﻿using NotificationMicroservice.Domain.Exception.MessageTemplate;
+using NotificationMicroservice.Domain.Interfaces.Model;
 
 namespace NotificationMicroservice.Domain.Models
 {
@@ -17,7 +17,7 @@ namespace NotificationMicroservice.Domain.Models
         private MessageType _messageType;
         private string _language;
         private string _template;
-        private bool _isActive;
+        private bool _isRemove;
         private string _createUserName;
         private DateTime _createDate;
         private string? _modifyUserName;
@@ -44,9 +44,9 @@ namespace NotificationMicroservice.Domain.Models
         public string Template { get => _template; }
 
         /// <summary>
-        /// Статус шаблона
+        /// Статус удаления шааблона
         /// </summary>
-        public bool IsActive { get => _isActive; }
+        public bool IsRemove { get => _isRemove; }
 
         /// <summary>
         /// Пользователь создавший шаблон сообщения
@@ -68,8 +68,6 @@ namespace NotificationMicroservice.Domain.Models
         /// </summary>
         public DateTime? ModifyDate { get => _modifyDate; }
 
-        public MessageTemplate() { }
-
         /// <summary>
         /// Основной конструктор класса
         /// </summary>
@@ -77,18 +75,44 @@ namespace NotificationMicroservice.Domain.Models
         /// <param name="messageType">тип сообщения</param>
         /// <param name="language">язык шаблона</param>
         /// <param name="template">текст шаблона сообщения</param>
-        /// <param name="isActive">статус шаблона сообщения</param>
+        /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="createUserName">пользователь создавший шаблон сообщения</param>
         /// <param name="createDate">дата и время создания шаблона сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
-        private MessageTemplate(Guid id, MessageType messageType, string language, string template, bool isActive, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
+        public MessageTemplate(Guid id, MessageType messageType, string language, string template, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
         {
+
+            if (id == Guid.Empty)
+            {
+                throw new MessageTemplateGuidEmptyException(nameof(id));
+            }
+
+            if (string.IsNullOrEmpty(language))
+            {
+                throw new MessageTemplateLanguageNullOrEmptyException(nameof(language));
+            }
+
+            if (language.Length != LANGUAGE_LENG)
+            {
+                throw new MessageTemplateLanguageLengthException(nameof(language));
+            }
+
+            if (string.IsNullOrEmpty(template))
+            {
+                throw new MessageTemplateNullOrEmptyException(nameof(template));
+            }
+
+            if (string.IsNullOrEmpty(createUserName))
+            {
+                throw new MessageTemplateUserNameNullOrEmptyException(nameof(createUserName));
+            }
+
             _id = id;
             _messageType = messageType;
             _language = language;
             _template = template;
-            _isActive = isActive;
+            _isRemove = isRemove;
             _createUserName = createUserName;
             _createDate = createDate;
             _modifyUserName = modifyUserName;
@@ -96,44 +120,60 @@ namespace NotificationMicroservice.Domain.Models
         }
 
         /// <summary>
-        /// Создание шаблона сообщения
+        /// Обновление класса
         /// </summary>
-        /// <param name="id">идентификатор записи</param>
         /// <param name="messageType">тип сообщения</param>
         /// <param name="language">язык шаблона</param>
         /// <param name="template">текст шаблона сообщения</param>
-        /// <param name="isActive">статус шаблона сообщения</param>
-        /// <param name="createUserName">пользователь создавший шаблон сообщения</param>
-        /// <param name="createDate">дата и время создания шаблона сообщения</param>
+        /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
-        /// <returns>Кортеж (Сущность, Ошибки)</returns>
-        public (MessageTemplate MessageTemplate, string Error) Create(Guid id, MessageType messageType, string language, string template, bool isActive, string createUserName, DateTime createDate, string? modifyUserName = null, DateTime? modifyDate = null)
+        public void Update(MessageType messageType, string language, string template, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
-            var errorSb = new StringBuilder();
-
-            if (id == Guid.Empty)
+            if (string.IsNullOrEmpty(language))
             {
-                errorSb.AppendLine($"Identifier {id} cannot be empty");
+                throw new MessageTemplateLanguageNullOrEmptyException(nameof(language));
             }
 
-            if (string.IsNullOrEmpty(language) || language.Length != LANGUAGE_LENG)
+            if (language.Length != LANGUAGE_LENG)
             {
-                errorSb.AppendLine($"Language code {language} cannot be empty or not match the encoding");
+                throw new MessageTemplateLanguageLengthException(nameof(language));
             }
 
             if (string.IsNullOrEmpty(template))
             {
-                errorSb.AppendLine($"Template text cannot be empty");
+                throw new MessageTemplateNullOrEmptyException(nameof(template));
             }
 
-            if (string.IsNullOrEmpty(createUserName))
+            if (string.IsNullOrEmpty(modifyUserName))
             {
-                errorSb.AppendLine($"CreateUser cannot be empty");
+                throw new MessageTemplateUserNameNullOrEmptyException(nameof(modifyUserName));
             }
 
-            return (new MessageTemplate(id, messageType, language, template, isActive, createUserName, createDate, modifyUserName, modifyDate), errorSb.ToString());
+            _messageType = messageType;
+            _language = language;
+            _template = template;
+            _isRemove = isRemove;
+            _modifyUserName = modifyUserName;
+            _modifyDate = modifyDate;
         }
 
+        /// <summary>
+        /// Деактивация "Удаление"
+        /// </summary>
+        /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
+        /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        public void Delete(string modifyUserName, DateTime modifyDate)
+        {
+
+            if (string.IsNullOrEmpty(modifyUserName))
+            {
+                throw new MessageTemplateUserNameNullOrEmptyException(nameof(modifyUserName));
+            }
+
+            _isRemove = true;
+            _modifyUserName = modifyUserName;
+            _modifyDate = modifyDate;
+        }
     }
 }

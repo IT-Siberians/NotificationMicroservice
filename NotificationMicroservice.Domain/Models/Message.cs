@@ -1,5 +1,5 @@
-﻿using NotificationMicroservice.Domain.Interfaces.Model;
-using System.Text;
+﻿using NotificationMicroservice.Domain.Exception.Message;
+using NotificationMicroservice.Domain.Interfaces.Model;
 
 namespace NotificationMicroservice.Domain.Models
 {
@@ -44,50 +44,42 @@ namespace NotificationMicroservice.Domain.Models
         /// </summary>
         public DateTime CreateDate { get => _createDate; }
 
-        public Message() { }
-
         /// <summary>
         /// Основной конструктор класса
-        /// </summary>
-        private Message(Guid id, MessageType messageType, string messageText, string direction, DateTime createDate)
-        {
-            _id = id;
-            _messageType = messageType;
-            _messageText = messageText;
-            _direction = direction;
-            _createDate = createDate;
-        }
-
-        /// <summary>
-        /// Cоздание сообщения
         /// </summary>
         /// <param name="id">идентификатор записи</param>
         /// <param name="messageType">сущность типа сообщения</param>
         /// <param name="messageText">текст сообщения</param>
         /// <param name="direction">отправление отправки сообщения</param>
         /// <param name="createDate">дата и время отправки сообщения</param>
-        /// <returns>Кортеж (Сущность, Ошибки)</returns>
-        public (Message Message, string Error) Create(Guid id, MessageType messageType, string messageText, string direction, DateTime createDate)
+        public Message(Guid id, MessageType messageType, string messageText, string direction, DateTime createDate)
         {
-            var errorSb = new StringBuilder();
-
             if (id == Guid.Empty)
             {
-                errorSb.AppendLine($"Identifier {id} cannot be empty");
+                throw new MessageGuidEmptyException(nameof(id));
             }
 
             if (string.IsNullOrEmpty(messageText))
             {
-                errorSb.AppendLine($"Message text cannot be empty");
+                throw new MessageTextNullOrEmptyException(nameof(messageText));
             }
 
-            if (string.IsNullOrEmpty(direction) || direction.Length > MAX_DIRECTION_LENG)
+            if (string.IsNullOrEmpty(direction))
             {
-                errorSb.AppendLine($"Direction cannot be empty");
+                throw new MessageDirectionNullOrEmptyException(nameof(direction));
+
             }
 
-            return (new Message(id, messageType, messageText, direction, createDate), errorSb.ToString());
-        }
+            if (direction.Length > MAX_DIRECTION_LENG)
+            {
+                throw new MessageDirectionLengthException();
+            }
 
+            _id = id;
+            _messageType = messageType;
+            _messageText = messageText;
+            _direction = direction;
+            _createDate = createDate;
+        }
     }
 }

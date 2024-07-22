@@ -8,6 +8,6 @@ namespace NotificationMicroservice.Domain.Interfaces.Services
         Task<MessageTemplate>? GetByIdAsync(Guid id);
         Task<MessageTemplate> AddAsync(MessageTemplate messageTemplate);
         Task<bool> UpdateAsync(MessageTemplate messageTemplate);
-        Task<bool> DeleteAsync(Guid id);
+        Task<bool> DeleteAsync(MessageTemplate messageTemplate);
     }
 }
