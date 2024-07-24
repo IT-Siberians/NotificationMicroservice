@@ -6,7 +6,7 @@ namespace NotificationMicroservice.Domain.Interfaces.Services
     {
         Task<IEnumerable<MessageTemplate>> GetAllAsync();
         Task<MessageTemplate>? GetByIdAsync(Guid id);
-        Task<MessageTemplate> AddAsync(MessageTemplate messageTemplate);
+        Task<Guid> AddAsync(MessageTemplate messageTemplate);
         Task<bool> UpdateAsync(MessageTemplate messageTemplate);
         Task<bool> DeleteAsync(MessageTemplate messageTemplate);
     }

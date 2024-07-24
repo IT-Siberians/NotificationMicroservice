@@ -1,6 +1,6 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
-    [Serializable]
+
     internal class MessageTemplateLanguageNullOrEmptyException : System.Exception
     {
         public MessageTemplateLanguageNullOrEmptyException()

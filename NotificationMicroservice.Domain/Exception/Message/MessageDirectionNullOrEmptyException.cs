@@ -1,6 +1,5 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.Message
 {
-    [Serializable]
     internal class MessageDirectionNullOrEmptyException : System.Exception
     {
         public MessageDirectionNullOrEmptyException()

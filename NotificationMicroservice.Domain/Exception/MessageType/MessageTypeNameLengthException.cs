@@ -1,6 +1,5 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageType
 {
-    [Serializable]
     internal class MessageTypeNameLengthException : System.Exception
     {
         public MessageTypeNameLengthException()

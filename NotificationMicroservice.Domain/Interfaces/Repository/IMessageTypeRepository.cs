@@ -13,7 +13,7 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <param name="entity"> Сущность для добавления. </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Добавленная сущность. </returns>
-        Task<MessageType> AddAsync(MessageType entity, CancellationToken cancellationToken);
+        Task<Guid> AddAsync(MessageType entity, CancellationToken cancellationToken);
 
         /// <summary>
         /// Для сущности проставить состояние - что она изменена.

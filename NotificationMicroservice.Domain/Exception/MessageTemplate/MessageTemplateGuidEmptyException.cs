@@ -1,6 +1,5 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
-    [Serializable]
     internal class MessageTemplateGuidEmptyException : System.Exception
     {
         public MessageTemplateGuidEmptyException()

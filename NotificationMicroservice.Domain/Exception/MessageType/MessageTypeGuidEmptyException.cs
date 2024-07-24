@@ -1,6 +1,5 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageType
 {
-    [Serializable]
     internal class MessageTypeGuidEmptyException : System.Exception
     {
         public MessageTypeGuidEmptyException()
