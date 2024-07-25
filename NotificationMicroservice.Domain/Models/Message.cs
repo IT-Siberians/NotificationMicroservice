@@ -1,5 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Exception.Message;
 using NotificationMicroservice.Domain.Interfaces.Model;
+using NotificationMicroservice.Domain.Resources;
 
 namespace NotificationMicroservice.Domain.Models
 {
@@ -56,23 +57,23 @@ namespace NotificationMicroservice.Domain.Models
         {
             if (id == Guid.Empty)
             {
-                throw new MessageGuidEmptyException(nameof(id));
+                throw new MessageGuidEmptyException(StringResources.ERROR_ID, id.ToString());
             }
 
             if (string.IsNullOrEmpty(messageText))
             {
-                throw new MessageTextNullOrEmptyException(nameof(messageText));
+                throw new MessageTextNullOrEmptyException(StringResources.ERROR_TEXT, messageText);
             }
 
             if (string.IsNullOrEmpty(direction))
             {
-                throw new MessageDirectionNullOrEmptyException(nameof(direction));
+                throw new MessageDirectionNullOrEmptyException(StringResources.ERROR_DIRECTION, direction);
 
             }
 
             if (direction.Length > MAX_DIRECTION_LENG)
             {
-                throw new MessageDirectionLengthException();
+                throw new MessageDirectionLengthException(StringResources.ERROR_DIRECTION_LENG, direction.Length.ToString());
             }
 
             _id = id;

@@ -1,16 +1,18 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
-    internal class MessageTemplateGuidEmptyException : System.Exception
+    internal class MessageTemplateGuidEmptyException : ArgumentException
     {
         public MessageTemplateGuidEmptyException()
         {
         }
 
-        public MessageTemplateGuidEmptyException(string? name) : base($"Identifier '{name}' cannot be empty")
+        public MessageTemplateGuidEmptyException(string? message, string? value) 
+            : base(message, value)
         {
         }
 
-        public MessageTemplateGuidEmptyException(string? message, System.Exception? innerException) : base(message, innerException)
+        public MessageTemplateGuidEmptyException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

@@ -1,16 +1,18 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageType
 {
-    internal class MessageTypeNameLengthException : System.Exception
+    internal class MessageTypeNameLengthException : ArgumentException
     {
         public MessageTypeNameLengthException()
         {
         }
 
-        public MessageTypeNameLengthException(string? name) : base($"The '{name}' cannot be longer than the maximum allowed value")
+        public MessageTypeNameLengthException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageTypeNameLengthException(string? message, System.Exception? innerException) : base(message, innerException)
+        public MessageTypeNameLengthException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

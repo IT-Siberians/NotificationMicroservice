@@ -1,16 +1,18 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.Message
 {
-    internal class MessageTextNullOrEmptyException : System.Exception
+    internal class MessageTextNullOrEmptyException : ArgumentException
     {
         public MessageTextNullOrEmptyException()
         {
         }
 
-        public MessageTextNullOrEmptyException(string? name) : base($"Message text '{name}' cannot be empty")
+        public MessageTextNullOrEmptyException(string? message, string? value) 
+            : base(message, value)
         {
         }
 
-        public MessageTextNullOrEmptyException(string? message, System.Exception? innerException) : base(message, innerException)
+        public MessageTextNullOrEmptyException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }
