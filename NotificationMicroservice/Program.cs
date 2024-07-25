@@ -1,3 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using NotificationMicroservice.Application.Services;
+using NotificationMicroservice.DataAccess;
+using NotificationMicroservice.DataAccess.Repository;
+using NotificationMicroservice.Domain.Interfaces.Repository;
+using NotificationMicroservice.Domain.Interfaces.Services;
+
 namespace NotificationMicroservice
 {
     public class Program
@@ -6,12 +13,24 @@ namespace NotificationMicroservice
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<NotificationMicroserviceDbContext>(
+                options =>
+                {
+                    options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(NotificationMicroserviceDbContext)));
+                });
+
+            builder.Services.AddScoped<IMessageTypeService, MessageTypeService>();
+            builder.Services.AddScoped<IMessageTypeRepository, MessageTypeRepository>();
+
+            builder.Services.AddScoped<IMessageTemplateService, MessageTemplateService>();
+            builder.Services.AddScoped<IMessageTemplateRepository, MessageTemplateRepository>();
+
+            builder.Services.AddScoped<IMessageService, MessageService>();
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
             var app = builder.Build();
 
