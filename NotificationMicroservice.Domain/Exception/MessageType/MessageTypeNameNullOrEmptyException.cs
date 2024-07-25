@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageTypeNameNullOrEmptyException(string? name) : base($"The '{name}' cannot be empty")
+        public MessageTypeNameNullOrEmptyException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageTypeNameNullOrEmptyException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageTypeNameNullOrEmptyException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

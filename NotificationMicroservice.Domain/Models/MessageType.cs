@@ -1,5 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Exception.MessageType;
 using NotificationMicroservice.Domain.Interfaces.Model;
+using NotificationMicroservice.Domain.Resources;
 
 namespace NotificationMicroservice.Domain.Models
 {
@@ -71,22 +72,22 @@ namespace NotificationMicroservice.Domain.Models
         {
             if (id == Guid.Empty)
             {
-                throw new MessageTypeGuidEmptyException($"{nameof(id)} cannot be empty");
+                throw new MessageTypeGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
             }
 
             if (string.IsNullOrEmpty(name))
             {
-                throw new MessageTypeNameNullOrEmptyException($"{nameof(name)} cannot be empty");
+                throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
             }
 
             if (name.Length > MAX_NAME_LENG)
             {
-                throw new MessageTypeNameLengthException(nameof(name));
+                throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENG, name.Length.ToString());
             }
 
             if (string.IsNullOrEmpty(createUserName))
             {
-                throw new MessageTypeUserNameNullOrEmptyException($"{nameof(createUserName)} cannot be empty");
+                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, createUserName);
             }
 
             _id = id;
@@ -109,17 +110,17 @@ namespace NotificationMicroservice.Domain.Models
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new MessageTypeNameNullOrEmptyException(nameof(name));
+                throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
             }
 
             if (name.Length > MAX_NAME_LENG)
             {
-                throw new MessageTypeNameLengthException(nameof(name));
+                throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENG, name.Length.ToString());
             }
 
             if (string.IsNullOrEmpty(modifyUserName))
             {
-                throw new MessageTypeUserNameNullOrEmptyException(nameof(modifyUserName));
+                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
             }
 
             _name = name;
@@ -137,7 +138,7 @@ namespace NotificationMicroservice.Domain.Models
         {
             if (string.IsNullOrEmpty(modifyUserName))
             {
-                throw new MessageTypeUserNameNullOrEmptyException(nameof(modifyUserName));
+                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
             }
 
             _isRemove = true;

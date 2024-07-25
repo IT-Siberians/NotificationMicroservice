@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageDirectionNullOrEmptyException(string? name) : base($"Direction '{name}' cannot be empty")
+        public MessageDirectionNullOrEmptyException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageDirectionNullOrEmptyException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageDirectionNullOrEmptyException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

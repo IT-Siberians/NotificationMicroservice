@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageTemplateUserNameNullOrEmptyException(string? name) : base($"The '{name}' cannot be empty")
+        public MessageTemplateUserNameNullOrEmptyException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageTemplateUserNameNullOrEmptyException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageTemplateUserNameNullOrEmptyException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageTemplateLanguageNullOrEmptyException(string? name) : base($"Language code '{name}' cannot be empty")
+        public MessageTemplateLanguageNullOrEmptyException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageTemplateLanguageNullOrEmptyException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageTemplateLanguageNullOrEmptyException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

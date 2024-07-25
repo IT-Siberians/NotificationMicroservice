@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageTemplateLanguageLengthException(string? name) : base($"Language code '{name}' not match the encoding")
+        public MessageTemplateLanguageLengthException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageTemplateLanguageLengthException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageTemplateLanguageLengthException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

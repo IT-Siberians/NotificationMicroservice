@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageTypeNameLengthException(string? name) : base($"The '{name}' cannot be longer than the maximum allowed value")
+        public MessageTypeNameLengthException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageTypeNameLengthException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageTypeNameLengthException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

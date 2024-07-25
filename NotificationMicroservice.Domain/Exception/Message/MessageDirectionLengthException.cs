@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageDirectionLengthException(string? name) : base($"Direction '{name}' cannot be empty.")
+        public MessageDirectionLengthException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageDirectionLengthException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageDirectionLengthException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }

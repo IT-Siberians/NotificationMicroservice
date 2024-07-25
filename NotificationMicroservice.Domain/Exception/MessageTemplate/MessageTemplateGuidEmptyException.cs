@@ -6,11 +6,13 @@
         {
         }
 
-        public MessageTemplateGuidEmptyException(string? name) : base($"Identifier '{name}' cannot be empty")
+        public MessageTemplateGuidEmptyException(string? message, string? value)
+            : base(message, value)
         {
         }
 
-        public MessageTemplateGuidEmptyException(string? message, ArgumentException? innerException) : base(message, innerException)
+        public MessageTemplateGuidEmptyException(string? message, ArgumentException? innerException) 
+            : base(message, innerException)
         {
         }
     }
