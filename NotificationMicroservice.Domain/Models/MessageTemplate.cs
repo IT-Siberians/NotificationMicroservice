@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Exception.MessageTemplate;
+using NotificationMicroservice.Domain.Exception.Resources;
 using NotificationMicroservice.Domain.Interfaces.Model;
-using NotificationMicroservice.Domain.Resources;
 
 namespace NotificationMicroservice.Domain.Models
 {
@@ -86,27 +86,27 @@ namespace NotificationMicroservice.Domain.Models
 
             if (id == Guid.Empty)
             {
-                throw new MessageTemplateGuidEmptyException(StringResources.ERROR_ID, id.ToString());
+                throw new MessageTemplateGuidEmptyException(ExceptionStrings.ERROR_ID, id.ToString());
             }
 
             if (string.IsNullOrEmpty(language))
             {
-                throw new MessageTemplateLanguageNullOrEmptyException(StringResources.ERROR_LANG_CODE, language);
+                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionStrings.ERROR_LANG_CODE, language);
             }
 
             if (language.Length != LANGUAGE_LENG)
             {
-                throw new MessageTemplateLanguageLengthException(StringResources.ERROR_LANG_CODE_LENG, language.Length.ToString());
+                throw new MessageTemplateLanguageLengthException(ExceptionStrings.ERROR_LANG_CODE_LENG, language.Length.ToString());
             }
 
             if (string.IsNullOrEmpty(template))
             {
-                throw new MessageTemplateNullOrEmptyException(StringResources.ERROR_TEMPLATE, template);
+                throw new MessageTemplateNullOrEmptyException(ExceptionStrings.ERROR_TEMPLATE, template);
             }
 
             if (string.IsNullOrEmpty(createUserName))
             {
-                throw new MessageTemplateUserNameNullOrEmptyException(StringResources.ERROR_USERNAME, createUserName);
+                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, createUserName);
             }
 
             _id = id;
@@ -133,22 +133,22 @@ namespace NotificationMicroservice.Domain.Models
         {
             if (string.IsNullOrEmpty(language))
             {
-                throw new MessageTemplateLanguageNullOrEmptyException(StringResources.ERROR_LANG_CODE, language);
+                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionStrings.ERROR_LANG_CODE, language);
             }
 
             if (language.Length != LANGUAGE_LENG)
             {
-                throw new MessageTemplateLanguageLengthException(StringResources.ERROR_LANG_CODE_LENG, language.Length.ToString());
+                throw new MessageTemplateLanguageLengthException(ExceptionStrings.ERROR_LANG_CODE_LENG, language.Length.ToString());
             }
 
             if (string.IsNullOrEmpty(template))
             {
-                throw new MessageTemplateNullOrEmptyException(StringResources.ERROR_TEMPLATE, template);
+                throw new MessageTemplateNullOrEmptyException(ExceptionStrings.ERROR_TEMPLATE, template);
             }
 
             if (string.IsNullOrEmpty(modifyUserName))
             {
-                throw new MessageTemplateUserNameNullOrEmptyException(StringResources.ERROR_USERNAME, modifyUserName);
+                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, modifyUserName);
             }
 
             _messageType = messageType;
@@ -169,7 +169,7 @@ namespace NotificationMicroservice.Domain.Models
 
             if (string.IsNullOrEmpty(modifyUserName))
             {
-                throw new MessageTemplateUserNameNullOrEmptyException(StringResources.ERROR_USERNAME, modifyUserName);
+                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, modifyUserName);
             }
 
             _isRemove = true;
