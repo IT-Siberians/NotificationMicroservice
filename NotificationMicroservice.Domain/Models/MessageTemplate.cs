@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Exception.MessageTemplate;
+using NotificationMicroservice.Domain.Exception.Resources;
 using NotificationMicroservice.Domain.Interfaces.Model;
-using NotificationMicroservice.Domain.Resources;
 
 namespace NotificationMicroservice.Domain.Models
 {

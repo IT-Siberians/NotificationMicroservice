@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.Domain.Resources
+﻿namespace NotificationMicroservice.Domain.Exception.Resources
 {
     internal class ExceptionString
     {
