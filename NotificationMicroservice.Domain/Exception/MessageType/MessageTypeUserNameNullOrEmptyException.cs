@@ -1,6 +1,6 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageType
 {
-    internal class MessageTypeUserNameNullOrEmptyException : ArgumentException
+    public class MessageTypeUserNameNullOrEmptyException : ArgumentException
     {
         public MessageTypeUserNameNullOrEmptyException()
         {

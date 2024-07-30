@@ -1,6 +1,6 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
-    internal class MessageTemplateLanguageLengthException : ArgumentException
+    public class MessageTemplateLanguageLengthException : ArgumentException
     {
         public MessageTemplateLanguageLengthException()
         {

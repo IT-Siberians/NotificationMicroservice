@@ -1,6 +1,6 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.Message
 {
-    internal class MessageGuidEmptyException : ArgumentException
+    public class MessageGuidEmptyException : ArgumentException
     {
         public MessageGuidEmptyException()
         {

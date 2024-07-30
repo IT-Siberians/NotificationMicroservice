@@ -1,7 +1,7 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
 
-    internal class MessageTemplateLanguageNullOrEmptyException : ArgumentException
+    public class MessageTemplateLanguageNullOrEmptyException : ArgumentException
     {
         public MessageTemplateLanguageNullOrEmptyException()
         {
