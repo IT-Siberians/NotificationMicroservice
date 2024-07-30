@@ -32,24 +32,6 @@ namespace NotificationMicroservice.Tests
         }
 
         [Fact]
-        public void TemplateCreateNotNull()
-        {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-            var message = new Message(_guidTest, type, _messageText, _direction, _now);
-
-            Assert.NotNull(message);
-        }
-
-        [Fact]
-        public void TemplateCreateTypeOk()
-        {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-            var message = new Message(_guidTest, type, _messageText, _direction, _now);
-
-            Assert.IsType<Message>(message);
-        }
-
-        [Fact]
         public async Task ExceptionGuidEmpty()
         {
             await Assert.ThrowsAsync<MessageGuidEmptyException>(() => MethodGuidEmpty());

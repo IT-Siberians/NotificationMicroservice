@@ -32,22 +32,6 @@ namespace NotificationMicroservice.Tests
         }
         
         [Fact]
-        public void TypeCreateNotNull()
-        {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-
-            Assert.NotNull(type);
-        }
-
-        [Fact]
-        public void MessageCreateTypeOk()
-        {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-
-            Assert.IsType<MessageType>(type);
-        }
-
-        [Fact]
         public void TypeUpdateOk()
         {
             var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);

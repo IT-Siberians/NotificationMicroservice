@@ -21,6 +21,7 @@ namespace NotificationMicroservice.Tests
         public void TemplateCreateOk()
         {
             var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
+            
             var template = new MessageTemplate(_guidTest, type, _language, _template, false, _createUser, _now, null, null);
 
             Assert.Equal(_guidTest, template.Id);
@@ -33,24 +34,6 @@ namespace NotificationMicroservice.Tests
             Assert.Equal(null, template.ModifyUserName);
             Assert.Equal(null, template.ModifyDate);
 
-        }
-
-        [Fact]
-        public void TemplateCreateNotNull()
-        {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-            var template = new MessageTemplate(_guidTest, type, _language, _template, false, _createUser, _now, null, null);
-
-            Assert.NotNull(template);
-        }
-
-        [Fact]
-        public void TemplateCreateTypeOk()
-        {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-            var template = new MessageTemplate(_guidTest, type, _language, _template, false, _createUser, _now, null, null);
-
-            Assert.IsType<MessageTemplate>(template);
         }
 
         [Fact]
