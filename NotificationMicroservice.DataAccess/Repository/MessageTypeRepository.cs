@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NotificationMicroservice.DataAccess.Entities;
 using NotificationMicroservice.Domain.Interfaces.Repository;
-using NotificationMicroservice.Domain.Models;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {
-    public class MessageTypeRepository : IMessageTypeRepository
+    public class MessageTypeRepository : IMessageTypeRepository<TypeEntity>
     {
         private readonly NotificationMicroserviceDbContext _context;
 
@@ -20,36 +19,20 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <param name="cancellationToken">Токен отмены</param>
         /// <param name="asNoTracking">Вызвать с AsNoTracking</param>
         /// <returns>Список сущностей</returns>
-        public async Task<IEnumerable<MessageType>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false)
+        public async Task<IEnumerable<TypeEntity>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false)
         {
             return await (asNoTracking ? _context.Types.AsNoTracking() : _context.Types)
-                .Select(z => new MessageType(
-                    z.Id,
-                    z.Name,
-                    z.IsRemove,
-                    z.CreateUserName,
-                    z.CreateDate,
-                    z.ModifyUserName,
-                    z.ModifyDate))
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<MessageType>? GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<TypeEntity>? GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Types
                 .Where(x => x.Id == id)
-                .Select(z => new MessageType(
-                    z.Id,
-                    z.Name,
-                    z.IsRemove,
-                    z.CreateUserName,
-                    z.CreateDate,
-                    z.ModifyUserName,
-                    z.ModifyDate))
-                .FirstAsync(cancellationToken);
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Guid> AddAsync(MessageType entity, CancellationToken cancellationToken)
+        public async Task<Guid> AddAsync(TypeEntity entity, CancellationToken cancellationToken)
         {
             var typeEntity = new TypeEntity
             {
@@ -67,7 +50,7 @@ namespace NotificationMicroservice.DataAccess.Repository
             return entity.Id;
         }
 
-        public async Task<bool> UpdateAsync(MessageType entity, CancellationToken cancellationToken)
+        public async Task<bool> UpdateAsync(TypeEntity entity, CancellationToken cancellationToken)
         {
             await _context.Types
                 .Where(x => x.Id == entity.Id)
@@ -79,7 +62,7 @@ namespace NotificationMicroservice.DataAccess.Repository
             return true;
         }
 
-        public async Task<bool> DeleteAsync(MessageType entity, CancellationToken cancellationToken)
+        public async Task<bool> DeleteAsync(TypeEntity entity, CancellationToken cancellationToken)
         {
             await _context.Types
                 .Where(x => x.Id == entity.Id)

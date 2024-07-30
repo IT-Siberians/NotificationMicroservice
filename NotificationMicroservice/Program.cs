@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NotificationMicroservice.Application.Services;
 using NotificationMicroservice.DataAccess;
+using NotificationMicroservice.DataAccess.Entities;
 using NotificationMicroservice.DataAccess.Repository;
 using NotificationMicroservice.Domain.Interfaces.Repository;
 using NotificationMicroservice.Domain.Interfaces.Services;
@@ -24,7 +25,7 @@ namespace NotificationMicroservice
                 });
 
             builder.Services.AddScoped<IMessageTypeService, MessageTypeService>();
-            builder.Services.AddScoped<IMessageTypeRepository, MessageTypeRepository>();
+            builder.Services.AddScoped<IMessageTypeRepository<TypeEntity>, MessageTypeRepository>();
 
             builder.Services.AddScoped<IMessageTemplateService, MessageTemplateService>();
             builder.Services.AddScoped<IMessageTemplateRepository, MessageTemplateRepository>();

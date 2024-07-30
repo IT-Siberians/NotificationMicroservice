@@ -5,7 +5,7 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
     /// <summary>
     /// Описания методов для репозитория Типов сообщений.
     /// </summary>
-    public interface IMessageTypeRepository : IBaseRepository<MessageType, Guid>
+    public interface IMessageTypeRepository<TEntity> : IBaseRepository<TEntity, Guid>
     {
         /// <summary>
         /// Добавить в базу одну сущность.
@@ -13,7 +13,7 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <param name="entity"> Сущность для добавления. </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Добавленная сущность. </returns>
-        Task<Guid> AddAsync(MessageType entity, CancellationToken cancellationToken);
+        Task<Guid> AddAsync(TEntity entity, CancellationToken cancellationToken);
 
         /// <summary>
         /// Для сущности проставить состояние - что она изменена.
@@ -21,7 +21,7 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <param name="entity"> Сущность для изменения. </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Была ли сущность обновлена. </returns>
-        Task<bool> UpdateAsync(MessageType entity, CancellationToken cancellationToken);
+        Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удалить сущность.
@@ -29,6 +29,6 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <param name="entity"> Сущность для изменения. </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Была ли сущность удалена. </returns>
-        Task<bool> DeleteAsync(MessageType entity, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken);
     }
 }

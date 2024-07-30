@@ -1,4 +1,5 @@
-﻿using NotificationMicroservice.Domain.Interfaces.Repository;
+﻿using NotificationMicroservice.DataAccess.Entities;
+using NotificationMicroservice.Domain.Interfaces.Repository;
 using NotificationMicroservice.Domain.Interfaces.Services;
 using NotificationMicroservice.Domain.Models;
 
@@ -6,36 +7,93 @@ namespace NotificationMicroservice.Application.Services
 {
     public class MessageTypeService : IMessageTypeService
     {
-        private readonly IMessageTypeRepository _messageTypeRepository;
+        private readonly IMessageTypeRepository<TypeEntity> _messageTypeRepository;
         private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
 
-        public MessageTypeService(IMessageTypeRepository messageTypeRepository)
+        public MessageTypeService(IMessageTypeRepository<TypeEntity> messageTypeRepository)
         {
             _messageTypeRepository = messageTypeRepository;
         }
 
         public async Task<IEnumerable<MessageType>> GetAllAsync()
         {
-            return await _messageTypeRepository.GetAllAsync(cancelTokenSource.Token, true);
+            var dbEntities = await _messageTypeRepository.GetAllAsync(cancelTokenSource.Token, true);
+
+            return dbEntities.Select(z => new MessageType(
+                                        z.Id,
+                                        z.Name,
+                                        z.IsRemove,
+                                        z.CreateUserName,
+                                        z.CreateDate,
+                                        z.ModifyUserName,
+                                        z.ModifyDate));
         }
 
         public async Task<MessageType>? GetByIdAsync(Guid id)
         {
-            return await _messageTypeRepository.GetByIdAsync(id, cancelTokenSource.Token);
+            var dbEntity = await _messageTypeRepository.GetByIdAsync(id, cancelTokenSource.Token);
+            
+            if (dbEntity == null) {
+                throw new InvalidOperationException("!!!!Alarm!!!!");
+            }
+
+            var result = new MessageType(
+                dbEntity.Id,
+                dbEntity.Name,
+                dbEntity.IsRemove,
+                dbEntity.CreateUserName,
+                dbEntity.CreateDate,
+                dbEntity.ModifyUserName,
+                dbEntity.ModifyDate);
+
+            return result;
         }
         public async Task<Guid> AddAsync(MessageType messageType)
         {
-            return await _messageTypeRepository.AddAsync(messageType, cancelTokenSource.Token);
+            var messageEntity = new TypeEntity()
+            {
+                Id = messageType.Id,
+                Name = messageType.Name,
+                IsRemove = messageType.IsRemove,
+                CreateUserName = messageType.CreateUserName,
+                CreateDate = messageType.CreateDate,
+                ModifyUserName = messageType.ModifyUserName,
+                ModifyDate = messageType.ModifyDate
+            };
+
+            return await _messageTypeRepository.AddAsync(messageEntity, cancelTokenSource.Token);
         }
 
         public async Task<bool> UpdateAsync(MessageType messageType)
         {
-            return await _messageTypeRepository.UpdateAsync(messageType, cancelTokenSource.Token);
+            var messageEntity = new TypeEntity()
+            {
+                Id = messageType.Id,
+                Name = messageType.Name,
+                IsRemove = messageType.IsRemove,
+                CreateUserName = messageType.CreateUserName,
+                CreateDate = messageType.CreateDate,
+                ModifyUserName = messageType.ModifyUserName,
+                ModifyDate = messageType.ModifyDate
+            };
+
+            return await _messageTypeRepository.UpdateAsync(messageEntity, cancelTokenSource.Token);
         }
 
         public async Task<bool> DeleteAsync(MessageType messageType)
         {
-            return await _messageTypeRepository.DeleteAsync(messageType, cancelTokenSource.Token);
+            var messageEntity = new TypeEntity()
+            {
+                Id = messageType.Id,
+                Name = messageType.Name,
+                IsRemove = messageType.IsRemove,
+                CreateUserName = messageType.CreateUserName,
+                CreateDate = messageType.CreateDate,
+                ModifyUserName = messageType.ModifyUserName,
+                ModifyDate = messageType.ModifyDate
+            };
+
+            return await _messageTypeRepository.DeleteAsync(messageEntity, cancelTokenSource.Token);
         }
     }
 }
