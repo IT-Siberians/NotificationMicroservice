@@ -68,6 +68,10 @@ namespace NotificationMicroservice.Domain.Models
         /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifyDate">дата и время изменения типа сообщения</param>
         /// <returns>Сущность</returns>
+        /// <exception cref="MessageTypeGuidEmptyException"></exception>
+        /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
+        /// <exception cref="MessageTypeNameLengthException"></exception>
+        /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         public MessageType(Guid id, string name, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
         {
             if (id == Guid.Empty)
@@ -106,6 +110,9 @@ namespace NotificationMicroservice.Domain.Models
         /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifyDate">дата и время изменения типа сообщения</param>
+        /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
+        /// <exception cref="MessageTypeNameLengthException"></exception>
+        /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         public void Update(string name, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
             if (string.IsNullOrEmpty(name))
@@ -134,6 +141,7 @@ namespace NotificationMicroservice.Domain.Models
         /// </summary>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         public void Delete(string modifyUserName, DateTime modifyDate)
         {
             if (string.IsNullOrEmpty(modifyUserName))

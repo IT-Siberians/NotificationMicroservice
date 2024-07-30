@@ -81,6 +81,11 @@ namespace NotificationMicroservice.Domain.Models
         /// <param name="createDate">дата и время создания шаблона сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTemplateGuidEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageLengthException"></exception>
+        /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public MessageTemplate(Guid id, MessageType messageType, string language, string template, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
         {
 
@@ -129,6 +134,10 @@ namespace NotificationMicroservice.Domain.Models
         /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageLengthException"></exception>
+        /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public void Update(MessageType messageType, string language, string template, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
             if (string.IsNullOrEmpty(language))
@@ -164,6 +173,7 @@ namespace NotificationMicroservice.Domain.Models
         /// </summary>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public void Delete(string modifyUserName, DateTime modifyDate)
         {
 

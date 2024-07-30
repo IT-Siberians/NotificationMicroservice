@@ -53,6 +53,10 @@ namespace NotificationMicroservice.Domain.Models
         /// <param name="messageText">текст сообщения</param>
         /// <param name="direction">отправление отправки сообщения</param>
         /// <param name="createDate">дата и время отправки сообщения</param>
+        /// <exception cref="MessageGuidEmptyException"></exception>
+        /// <exception cref="MessageTextNullOrEmptyException"></exception>
+        /// <exception cref="MessageDirectionNullOrEmptyException"></exception>
+        /// <exception cref="MessageDirectionLengthException"></exception>
         public Message(Guid id, MessageType messageType, string messageText, string direction, DateTime createDate)
         {
             if (id == Guid.Empty)
