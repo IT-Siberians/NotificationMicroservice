@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NotificationMicroservice.Application.Mapper;
 using NotificationMicroservice.Application.Services;
 using NotificationMicroservice.DataAccess;
 using NotificationMicroservice.DataAccess.Entities;
@@ -25,13 +26,15 @@ namespace NotificationMicroservice
                 });
 
             builder.Services.AddScoped<IMessageTypeService, MessageTypeService>();
-            builder.Services.AddScoped<IMessageTypeRepository<TypeEntity>, MessageTypeRepository>();
+            builder.Services.AddScoped<IMessageTypeRepository<TypeEntity, Guid>, MessageTypeRepository>();
 
             builder.Services.AddScoped<IMessageTemplateService, MessageTemplateService>();
-            builder.Services.AddScoped<IMessageTemplateRepository, MessageTemplateRepository>();
+            builder.Services.AddScoped<IMessageTemplateRepository<TemplateEntity, Guid>, MessageTemplateRepository>();
 
             builder.Services.AddScoped<IMessageService, MessageService>();
-            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+            builder.Services.AddScoped<IMessageRepository<MessageEntity, Guid>, MessageRepository>();
+
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             var app = builder.Build();
 

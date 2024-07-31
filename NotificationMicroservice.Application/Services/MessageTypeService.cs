@@ -1,4 +1,5 @@
-﻿using NotificationMicroservice.DataAccess.Entities;
+﻿using AutoMapper;
+using NotificationMicroservice.DataAccess.Entities;
 using NotificationMicroservice.Domain.Interfaces.Repository;
 using NotificationMicroservice.Domain.Interfaces.Services;
 using NotificationMicroservice.Domain.Models;
@@ -7,17 +8,18 @@ namespace NotificationMicroservice.Application.Services
 {
     public class MessageTypeService : IMessageTypeService
     {
-        private readonly IMessageTypeRepository<TypeEntity> _messageTypeRepository;
+        private readonly IMessageTypeRepository<TypeEntity, Guid> _messageTypeRepository;
         private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+        private readonly IMapper _mapper;
 
-        public MessageTypeService(IMessageTypeRepository<TypeEntity> messageTypeRepository)
+        public MessageTypeService(IMessageTypeRepository<TypeEntity, Guid> messageTypeRepository)
         {
             _messageTypeRepository = messageTypeRepository;
         }
 
         public async Task<IEnumerable<MessageType>> GetAllAsync()
         {
-            var dbEntities = await _messageTypeRepository.GetAllAsync(cancelTokenSource.Token, true);
+            var dbEntities = await _messageTypeRepository.GetAllAsync(cancelTokenSource.Token, true);           
 
             return dbEntities.Select(z => new MessageType(
                                         z.Id,
@@ -37,16 +39,16 @@ namespace NotificationMicroservice.Application.Services
                 throw new InvalidOperationException("!!!!Alarm!!!!");
             }
 
-            var result = new MessageType(
-                dbEntity.Id,
-                dbEntity.Name,
-                dbEntity.IsRemove,
-                dbEntity.CreateUserName,
-                dbEntity.CreateDate,
-                dbEntity.ModifyUserName,
-                dbEntity.ModifyDate);
+            // _mapper.Map<MessageType>(MessageEntity);
 
-            return result;
+            return new MessageType(
+                    dbEntity.Id,
+                    dbEntity.Name,
+                    dbEntity.IsRemove,
+                    dbEntity.CreateUserName,
+                    dbEntity.CreateDate,
+                    dbEntity.ModifyUserName,
+                    dbEntity.ModifyDate);
         }
         public async Task<Guid> AddAsync(MessageType messageType)
         {

@@ -13,6 +13,11 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
+    <Folder Include="Exception\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
 </Project>

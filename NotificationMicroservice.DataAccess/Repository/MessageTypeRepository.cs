@@ -4,7 +4,7 @@ using NotificationMicroservice.Domain.Interfaces.Repository;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {
-    public class MessageTypeRepository : IMessageTypeRepository<TypeEntity>
+    public class MessageTypeRepository : IMessageTypeRepository<TypeEntity, Guid>
     {
         private readonly NotificationMicroserviceDbContext _context;
 
@@ -34,17 +34,17 @@ namespace NotificationMicroservice.DataAccess.Repository
 
         public async Task<Guid> AddAsync(TypeEntity entity, CancellationToken cancellationToken)
         {
-            var typeEntity = new TypeEntity
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                CreateUserName = entity.CreateUserName,
-                CreateDate = entity.CreateDate,
-                ModifyUserName = entity.ModifyUserName,
-                ModifyDate = entity.ModifyDate,
-            };
+            //var typeEntity = new TypeEntity
+            //{
+            //    Id = entity.Id,
+            //    Name = entity.Name,
+            //    CreateUserName = entity.CreateUserName,
+            //    CreateDate = entity.CreateDate,
+            //    ModifyUserName = entity.ModifyUserName,
+            //    ModifyDate = entity.ModifyDate,
+            //};
 
-            await _context.Types.AddAsync(typeEntity, cancellationToken);
+            await _context.Types.AddAsync(entity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             return entity.Id;
