@@ -45,30 +45,14 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<Guid>> AddAsync([FromBody] TemplateRequestAdd request)
         {
-            var typeId = await _messageTemplateService.AddAsync(_mapper.Map<CreateTemplateModel>(request));
+            var templateId = await _messageTemplateService.AddAsync(_mapper.Map<CreateTemplateModel>(request));
 
-            if (typeId == Guid.Empty)
+            if (templateId == Guid.Empty)
             {
                 return BadRequest("Type can not be created");
             }
 
-            return Created("", typeId);
-
-            //var type =  new MessageType(
-            //            typeModel.Id,
-            //            typeModel.Name,
-            //            typeModel.IsRemove,
-            //            typeModel.CreateUserName,
-            //            typeModel.CreateDate,
-            //            typeModel.ModifyUserName,
-            //            typeModel.ModifyDate);
-
-            //var template = new MessageTemplate(Guid.NewGuid(), type, request.Language, request.Template, true, request.CreateUserName, DateTime.UtcNow, null, null);
-
-            //var entityId = await _messageTemplateService.AddAsync(template);
-
-            //return Ok(entityId);
-            return Ok();
+            return Created("", templateId);
         }
 
         [HttpPut("{id:guid}")]

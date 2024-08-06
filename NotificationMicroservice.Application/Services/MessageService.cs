@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NotificationMicroservice.Application.Interface;
 using NotificationMicroservice.Application.Model.Message;
+using NotificationMicroservice.Domain.Entity;
 using NotificationMicroservice.Domain.Interfaces.Repository;
 
 namespace NotificationMicroservice.Application.Services
@@ -8,18 +9,33 @@ namespace NotificationMicroservice.Application.Services
     public class MessageService : IMessageApplicationService
     {
         private readonly IMessageRepository _messageRepository;
+        private readonly ITypeApplicationService _typeApplicationService;
         private readonly IMapper _mapper;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        public MessageService(IMessageRepository messageRepository, IMapper mapper)
+        public MessageService(IMessageRepository messageRepository, ITypeApplicationService typeApplicationService, IMapper mapper)
         {
             _messageRepository = messageRepository;
+            _typeApplicationService = typeApplicationService;
             _mapper = mapper;
         }
 
-        public Task<Guid> AddAsync(MessageModel messageTemplate)
+        public async Task<Guid> AddAsync(CreateMessageModel messageCreate)
         {
-            throw new NotImplementedException();
+            var typeQ = await _typeApplicationService.GetByIdAsync(messageCreate.MessageTypeId);
+            
+            if (typeQ is null)
+            {
+                throw new ArgumentNullException($"MessageType {messageCreate.MessageTypeId} not found!");
+            }
+
+            var type = _mapper.Map<MessageType>(typeQ);
+
+            var message = new Message(Guid.NewGuid(), type, messageCreate.MessageText, messageCreate.Direction, DateTime.UtcNow);
+
+            var messageId = await _messageRepository.AddAsync(message, _cancellationTokenSource.Token);
+
+            return messageId;
         }
 
         public async Task<IEnumerable<MessageModel>> GetAllAsync()

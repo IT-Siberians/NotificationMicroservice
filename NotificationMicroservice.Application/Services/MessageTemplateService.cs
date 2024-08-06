@@ -52,21 +52,25 @@ namespace NotificationMicroservice.Application.Services
 
         public async Task<bool> UpdateAsync(EditTemplateModel messageTemplate)
         {
-            //var entityDb = new TemplateEntity
-            //{
-            //    Id = messageTemplate.Id,
-            //    TypeId = messageTemplate.MessageType.Id,
-            //    Language = messageTemplate.Language,
-            //    Template = messageTemplate.Template,
-            //    IsRemove = messageTemplate.IsRemove,
-            //    CreateUserName = messageTemplate.CreateUserName,
-            //    CreateDate = messageTemplate.CreateDate,
-            //    ModifyUserName = messageTemplate.ModifyUserName,
-            //    ModifyDate = messageTemplate.ModifyDate,
-            //};
+            var typeQ = await _messageTypeService.GetByIdAsync(messageTemplate.MessageTypeId);
 
-            //return await _messageTemplateRepository.UpdateAsync(entityDb, _cancelTokenSource.Token);
-            return false;
+            if (typeQ is null)
+            {
+                throw new Exception($"MessageType {messageTemplate.MessageTypeId} not found!");
+            }
+            var type = _mapper.Map<MessageType>(typeQ);
+
+            var template = await _messageTemplateRepository.GetByIdAsync(messageTemplate.Id, _cancelTokenSource.Token);
+
+            if (template is null)
+            {
+                throw new Exception($"MessageTemplate {messageTemplate.Id} not found!");
+            }
+
+            template.Update(type, messageTemplate.Language, messageTemplate.Template, messageTemplate.IsRemove, messageTemplate.ModifyUserName, DateTime.UtcNow);
+
+            return await _messageTemplateRepository.UpdateAsync(template, _cancelTokenSource.Token);
+
         }
 
         public async Task<bool> DeleteAsync(EditTemplateModel messageTemplate)
