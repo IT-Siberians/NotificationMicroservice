@@ -21,7 +21,7 @@
         /// <param name="id"> Идентификатор сущности. </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Cущность. </returns>
-        Task<TEntity>? GetByIdAsync(TKey id, CancellationToken cancellationToken);
+        Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken);
 
     }
 }

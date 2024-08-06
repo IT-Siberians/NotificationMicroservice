@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using NotificationMicroservice.Application.Interface;
 using NotificationMicroservice.Contracts.Message;
-using NotificationMicroservice.Domain.Interfaces.Services;
 
 namespace NotificationMicroservice.Controllers
 {
@@ -8,11 +9,13 @@ namespace NotificationMicroservice.Controllers
     [Route("[controller]/[action]")]
     public class MessageController : ControllerBase
     {
-        private readonly IMessageService _messageService;
+        private readonly IMessageApplicationService _messageService;
+        private readonly IMapper _mapper;
 
-        public MessageController(IMessageService messageService)
+        public MessageController(IMessageApplicationService messageService, IMapper mapper)
         {
             _messageService = messageService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -21,27 +24,19 @@ namespace NotificationMicroservice.Controllers
         {
             var messages = await _messageService.GetAllAsync();
 
-            var response = messages.Select(z => new MessageResponse(z.Id, z.MessageType.Name, z.MessageType.Id, z.MessageText, z.Direction, z.CreateDate));
-
-            return Ok(response);
+            return Ok(messages.Select(_mapper.Map<MessageResponse>));
         }
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(MessageResponse), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<MessageResponse>> GetByIdAsync(Guid id)
         {
             var message = await _messageService.GetByIdAsync(id);
 
-            if (message == null)
-            {
-                return BadRequest($"Message id:{id} not found!");
-            }
-
-            var response = new MessageResponse(message.Id, message.MessageType.Name, message.MessageType.Id, message.MessageText, message.Direction, message.CreateDate);
-
-            return Ok(response);
+            return message is null 
+                ? NotFound($"Message id:{id} not found!") 
+                : Ok(_mapper.Map<MessageResponse>(message));
         }
     }
 }

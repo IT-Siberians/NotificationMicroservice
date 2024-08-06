@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using NotificationMicroservice.Application.Interface;
+using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Contracts.Template;
-using NotificationMicroservice.Domain.Interfaces.Services;
-using NotificationMicroservice.Domain.Models;
 
 namespace NotificationMicroservice.Controllers
 {
@@ -9,13 +10,13 @@ namespace NotificationMicroservice.Controllers
     [Route("[controller]/[action]")]
     public class MessageTemplateController : ControllerBase
     {
-        private readonly IMessageTemplateService _messageTemplateService;
-        private readonly IMessageTypeService _messageTypeService;
+        private readonly ITemplateApplicationService _messageTemplateService;
+        private readonly IMapper _mapper;
 
-        public MessageTemplateController(IMessageTemplateService messageTemplateService, IMessageTypeService messageTypeService)
+        public MessageTemplateController(ITemplateApplicationService messageTemplateService, IMapper mapper)
         {
             _messageTemplateService = messageTemplateService;
-            _messageTypeService = messageTypeService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,57 +24,51 @@ namespace NotificationMicroservice.Controllers
         public async Task<ActionResult<List<TemplateResponse>>> GetAllAsync()
         {
             var templates = await _messageTemplateService.GetAllAsync();
-
-            var response = templates
-                .Select(z => new TemplateResponse(z.Id, z.MessageType.Name, z.MessageType.Id, z.Language, z.Template, z.IsRemove, z.CreateUserName, z.CreateDate, z.ModifyUserName, z.ModifyDate));
-
-            return Ok(response);
+            
+            return Ok(templates.Select(_mapper.Map<TemplateResponse>));
         }
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(TemplateResponse), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<List<TemplateResponse>>> GetByIdAsync(Guid id)
         {
             var template = await _messageTemplateService.GetByIdAsync(id);
 
-            if (template == null)
-            {
-                return BadRequest("Template not found!");
-            }
-
-            var response = new TemplateResponse(
-                template.Id,
-                template.MessageType.Name,
-                template.MessageType.Id,
-                template.Language,
-                template.Template,
-                template.IsRemove,
-                template.CreateUserName,
-                template.CreateDate,
-                template.ModifyUserName,
-                template.ModifyDate);
-
-            return Ok(response);
+            return template is null
+                ? NotFound($"Template {id} not found!") 
+                : Ok(_mapper.Map<TemplateResponse>(template));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), 201)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<Guid>> AddAsync([FromBody] TemplateRequestAdd request)
         {
-            var type = await _messageTypeService.GetByIdAsync(request.MessageTypeId);
+            var typeId = await _messageTemplateService.AddAsync(_mapper.Map<CreateTemplateModel>(request));
 
-            if (type == null)
+            if (typeId == Guid.Empty)
             {
-                return NotFound($"MessageType {request.MessageTypeId} not found!");
+                return BadRequest("Type can not be created");
             }
-            var template = new MessageTemplate(Guid.NewGuid(), type, request.Language, request.Template, true, request.CreateUserName, DateTime.UtcNow, null, null);
 
-            var entityId = await _messageTemplateService.AddAsync(template);
+            return Created("", typeId);
 
-            return Ok(entityId);
+            //var type =  new MessageType(
+            //            typeModel.Id,
+            //            typeModel.Name,
+            //            typeModel.IsRemove,
+            //            typeModel.CreateUserName,
+            //            typeModel.CreateDate,
+            //            typeModel.ModifyUserName,
+            //            typeModel.ModifyDate);
+
+            //var template = new MessageTemplate(Guid.NewGuid(), type, request.Language, request.Template, true, request.CreateUserName, DateTime.UtcNow, null, null);
+
+            //var entityId = await _messageTemplateService.AddAsync(template);
+
+            //return Ok(entityId);
+            return Ok();
         }
 
         [HttpPut("{id:guid}")]
@@ -81,23 +76,33 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TemplateRequestUp request)
         {
-            var type = await _messageTypeService.GetByIdAsync(request.MessageTypeId);
+            //var typeModel = await _messageTypeService.GetByIdAsync(request.MessageTypeId);
 
-            if (type == null)
-            {
-                return NotFound("MessageType not found");
-            }
+            //if (typeModel == null)
+            //{
+            //    return NotFound($"MessageType {request.MessageTypeId} not found!");
+            //}
 
-            var template = await _messageTemplateService.GetByIdAsync(id);
+            //var type = new MessageType(
+            //            typeModel.Id,
+            //            typeModel.Name,
+            //            typeModel.IsRemove,
+            //            typeModel.CreateUserName,
+            //            typeModel.CreateDate,
+            //            typeModel.ModifyUserName,
+            //            typeModel.ModifyDate);
 
-            if (template == null)
-            {
-                return NotFound($"Template {id} not found!");
-            }
+            //var template = await _messageTemplateService.GetByIdAsync(id);
 
-            template.Update(type, request.Language, request.Template, false, request.ModifyUserName, DateTime.UtcNow);
-            
-            return Ok(await _messageTemplateService.UpdateAsync(template));
+            //if (template == null)
+            //{
+            //    return NotFound($"Template {id} not found!");
+            //}
+
+            //template.Update(type, request.Language, request.Template, false, request.ModifyUserName, DateTime.UtcNow);
+
+            //return Ok(await _messageTemplateService.UpdateAsync(template));
+            return Ok();
         }
 
         [HttpDelete("{id:guid}")]
@@ -105,16 +110,17 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TemplateDelete request)
         {
-            var template = await _messageTemplateService.GetByIdAsync(id);
+            //var template = await _messageTemplateService.GetByIdAsync(id);
 
-            if (template == null)
-            {
-                return NotFound($"Template {id} not found!");
-            }
+            //if (template == null)
+            //{
+            //    return NotFound($"Template {id} not found!");
+            //}
 
-            template.Delete(request.ModifyUserName, DateTime.UtcNow);
+            //template.Delete(request.ModifyUserName, DateTime.UtcNow);
 
-            return Ok(await _messageTemplateService.DeleteAsync(template));
+            //return Ok(await _messageTemplateService.DeleteAsync(template));
+            return Ok();
         }
     }
 }

@@ -1,19 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NotificationMicroservice.DataAccess.Entities;
+using NotificationMicroservice.Domain.Entity;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
-    internal class MessageConfiguration : IEntityTypeConfiguration<MessageEntity>
+    internal class MessageConfiguration : IEntityTypeConfiguration<Message>
     {
-        public void Configure(EntityTypeBuilder<MessageEntity> builder)
+        public void Configure(EntityTypeBuilder<Message> builder)
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.TypeId)
-                .IsRequired();
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
-            builder.Property(x => x.MessageText)
+            builder.Property(x => x.Text)
                 .IsRequired();
 
             builder.Property(x => x.Direction)
@@ -23,8 +23,11 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .IsRequired();
 
             builder.HasOne(x => x.Type)
-            .WithMany(c => c.Messages)
-            .HasForeignKey(x => x.TypeId);
+                .WithMany()
+                .IsRequired();
+
+            builder.Navigation(x => x.Type)
+                .AutoInclude();
         }
     }
 }

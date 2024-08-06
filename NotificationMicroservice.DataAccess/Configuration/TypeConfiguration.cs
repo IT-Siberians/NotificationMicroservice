@@ -1,15 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NotificationMicroservice.DataAccess.Entities;
-using NotificationMicroservice.Domain.Models;
+using NotificationMicroservice.Domain.Entity;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
-    public class TypeConfiguration : IEntityTypeConfiguration<TypeEntity>
+    public class TypeConfiguration : IEntityTypeConfiguration<MessageType>
     {
-        public void Configure(EntityTypeBuilder<TypeEntity> builder)
+        public void Configure(EntityTypeBuilder<MessageType> builder)
         {
             builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
             builder.Property(x => x.Name)
                 .HasMaxLength(MessageType.MAX_NAME_LENG)
@@ -21,9 +23,17 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(x => x.CreateDate)
                 .IsRequired();
 
-            builder.Property(x => x.ModifyUserName);
+            builder.Property(e => e.ModifyUserName)
+                  .IsRequired(false);
 
-            builder.Property(x => x.ModifyDate);
+            builder.Property(e => e.ModifyDate)
+                  .IsRequired(false);
+
+            builder.HasMany<Message>()
+                .WithOne(x => x.Type);
+
+            builder.HasMany<MessageTemplate>()
+                .WithOne(x => x.Type);
 
         }
     }

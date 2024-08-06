@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NotificationMicroservice.DataAccess.Entities;
+using NotificationMicroservice.Domain.Entity;
 
 namespace NotificationMicroservice.DataAccess
 {
@@ -9,9 +9,19 @@ namespace NotificationMicroservice.DataAccess
             : base(options)
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+            base.OnConfiguring(optionsBuilder);
+        }
 
-        public DbSet<TemplateEntity> Templates { get; set; }
-        public DbSet<TypeEntity> Types { get; set; }
-        public DbSet<MessageEntity> Messages { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        }
+
+        public DbSet<MessageTemplate> Templates { get; set; }
+        public DbSet<MessageType> Types { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }

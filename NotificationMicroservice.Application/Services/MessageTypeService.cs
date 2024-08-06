@@ -1,101 +1,81 @@
 ﻿using AutoMapper;
-using NotificationMicroservice.DataAccess.Entities;
+using NotificationMicroservice.Application.Interface;
+using NotificationMicroservice.Application.Model.Type;
+using NotificationMicroservice.Domain.Entity;
 using NotificationMicroservice.Domain.Interfaces.Repository;
-using NotificationMicroservice.Domain.Interfaces.Services;
-using NotificationMicroservice.Domain.Models;
 
 namespace NotificationMicroservice.Application.Services
 {
-    public class MessageTypeService : IMessageTypeService
+    public class MessageTypeService : ITypeApplicationService
     {
-        private readonly IMessageTypeRepository<TypeEntity, Guid> _messageTypeRepository;
-        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+        private readonly IMessageTypeRepository _messageTypeRepository;
         private readonly IMapper _mapper;
+        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();        
 
-        public MessageTypeService(IMessageTypeRepository<TypeEntity, Guid> messageTypeRepository)
+        public MessageTypeService(IMessageTypeRepository messageTypeRepository, IMapper mapper)
         {
             _messageTypeRepository = messageTypeRepository;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<MessageType>> GetAllAsync()
+        public async Task<IEnumerable<TypeModel>> GetAllAsync()
         {
-            var dbEntities = await _messageTypeRepository.GetAllAsync(cancelTokenSource.Token, true);           
+            var dbEntities = await _messageTypeRepository.GetAllAsync(cancelTokenSource.Token, true);
 
-            return dbEntities.Select(z => new MessageType(
-                                        z.Id,
-                                        z.Name,
-                                        z.IsRemove,
-                                        z.CreateUserName,
-                                        z.CreateDate,
-                                        z.ModifyUserName,
-                                        z.ModifyDate));
+            return dbEntities.Select(_mapper.Map<TypeModel>);
         }
 
-        public async Task<MessageType>? GetByIdAsync(Guid id)
+        public async Task<TypeModel?> GetByIdAsync(Guid id)
         {
             var dbEntity = await _messageTypeRepository.GetByIdAsync(id, cancelTokenSource.Token);
-            
-            if (dbEntity == null) {
-                throw new InvalidOperationException("!!!!Alarm!!!!");
+
+            return dbEntity is null ? null : _mapper.Map<TypeModel>(dbEntity);
+        }
+
+        public async Task<Guid> AddAsync(CreateTypeModel type)
+        {
+            var typeNew = new MessageType(Guid.NewGuid(), type.Name, false, type.CreateUserName, DateTime.UtcNow, null, null);
+
+            var typeId = await _messageTypeRepository.AddAsync(typeNew, cancelTokenSource.Token);
+
+            return typeId;
+        }
+
+        public async Task<bool> UpdateAsync(EditTypeModel type1)
+        {
+            var type = await GetByIdAsync(type1.Id);
+
+            if (type is null || type.IsRemove)
+            {
+                return false;
             }
 
-            // _mapper.Map<MessageType>(MessageEntity);
+            var typeNew = _mapper.Map<MessageType>(type);
 
-            return new MessageType(
-                    dbEntity.Id,
-                    dbEntity.Name,
-                    dbEntity.IsRemove,
-                    dbEntity.CreateUserName,
-                    dbEntity.CreateDate,
-                    dbEntity.ModifyUserName,
-                    dbEntity.ModifyDate);
+            typeNew.Update(type1.Name, false, type1.ModifyUserName, DateTime.UtcNow);
+
+            var result = await _messageTypeRepository.UpdateAsync(typeNew, cancelTokenSource.Token);
+
+            return result;
         }
-        public async Task<Guid> AddAsync(MessageType messageType)
+
+        public async Task<bool> DeleteAsync(EditTypeModel type1)
         {
-            var messageEntity = new TypeEntity()
-            {
-                Id = messageType.Id,
-                Name = messageType.Name,
-                IsRemove = messageType.IsRemove,
-                CreateUserName = messageType.CreateUserName,
-                CreateDate = messageType.CreateDate,
-                ModifyUserName = messageType.ModifyUserName,
-                ModifyDate = messageType.ModifyDate
-            };
+            var type = await GetByIdAsync(type1.Id);
 
-            return await _messageTypeRepository.AddAsync(messageEntity, cancelTokenSource.Token);
+            if (type is null)
+            {
+                return false;
+            }
+
+            var typeNew = _mapper.Map<MessageType>(type);
+
+            typeNew.Delete(type1.ModifyUserName, DateTime.UtcNow);
+
+            var result = await _messageTypeRepository.DeleteAsync(typeNew, cancelTokenSource.Token);
+
+            return result;
         }
 
-        public async Task<bool> UpdateAsync(MessageType messageType)
-        {
-            var messageEntity = new TypeEntity()
-            {
-                Id = messageType.Id,
-                Name = messageType.Name,
-                IsRemove = messageType.IsRemove,
-                CreateUserName = messageType.CreateUserName,
-                CreateDate = messageType.CreateDate,
-                ModifyUserName = messageType.ModifyUserName,
-                ModifyDate = messageType.ModifyDate
-            };
-
-            return await _messageTypeRepository.UpdateAsync(messageEntity, cancelTokenSource.Token);
-        }
-
-        public async Task<bool> DeleteAsync(MessageType messageType)
-        {
-            var messageEntity = new TypeEntity()
-            {
-                Id = messageType.Id,
-                Name = messageType.Name,
-                IsRemove = messageType.IsRemove,
-                CreateUserName = messageType.CreateUserName,
-                CreateDate = messageType.CreateDate,
-                ModifyUserName = messageType.ModifyUserName,
-                ModifyDate = messageType.ModifyDate
-            };
-
-            return await _messageTypeRepository.DeleteAsync(messageEntity, cancelTokenSource.Token);
-        }
     }
 }

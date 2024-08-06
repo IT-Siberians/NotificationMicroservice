@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.Application.Model
+﻿namespace NotificationMicroservice.Application.Model.Type
 {
     public class TypeModel
     {

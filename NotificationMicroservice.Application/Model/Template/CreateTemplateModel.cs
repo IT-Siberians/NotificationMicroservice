@@ -1,10 +1,9 @@
-﻿namespace NotificationMicroservice.Contracts.Template
+﻿namespace NotificationMicroservice.Application.Model.Template
 {
-    public record TemplateRequestAdd(
+    public record CreateTemplateModel(
         Guid MessageTypeId,
         string Language,
         string Template,
         string CreateUserName
         );
-
 }

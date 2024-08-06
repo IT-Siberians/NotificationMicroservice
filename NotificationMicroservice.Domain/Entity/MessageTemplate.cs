@@ -2,7 +2,7 @@
 using NotificationMicroservice.Domain.Exception.Resources;
 using NotificationMicroservice.Domain.Interfaces.Model;
 
-namespace NotificationMicroservice.Domain.Models
+namespace NotificationMicroservice.Domain.Entity
 {
     /// <summary>
     /// Шаблон сообщения
@@ -14,66 +14,61 @@ namespace NotificationMicroservice.Domain.Models
         /// </summary>
         public const int LANGUAGE_LENG = 3;
 
-        private Guid _id;
-        private MessageType _messageType;
-        private string _language;
-        private string _template;
-        private bool _isRemove;
-        private string _createUserName;
-        private DateTime _createDate;
-        private string? _modifyUserName;
-        private DateTime? _modifyDate;
-
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public Guid Id { get => _id; }
+        public Guid Id { get; }
 
         /// <summary>
         /// Тип сообщения
         /// </summary>
-        public MessageType MessageType { get => _messageType; }
+        public MessageType Type { get; private set; }
 
         /// <summary>
         /// Язык шаблона
         /// </summary>
-        public string Language { get => _language; }
+        public string Language { get; private set; }
 
         /// <summary>
         /// Текс шаблона сообщений
         /// </summary>
-        public string Template { get => _template; }
+        public string Template { get; private set; }
 
         /// <summary>
         /// Статус удаления шааблона
         /// </summary>
-        public bool IsRemove { get => _isRemove; }
+        public bool IsRemove { get; private set; }
 
         /// <summary>
         /// Пользователь создавший шаблон сообщения
         /// </summary>
-        public string CreateUserName { get => _createUserName; }
+        public string CreateUserName { get; }
 
         /// <summary>
         /// Дата создания шаблона сообщения
         /// </summary>
-        public DateTime CreateDate { get => _createDate; }
+        public DateTime CreateDate { get; }
 
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
         /// </summary>
-        public string? ModifyUserName { get => _modifyUserName; }
+        public string? ModifyUserName { get; private set; }
 
         /// <summary>
         /// Дата изменения шаблона сообщения
         /// </summary>
-        public DateTime? ModifyDate { get => _modifyDate; }
+        public DateTime? ModifyDate { get; private set; }
+
+        /// <summary>
+        /// Пустой конструктор для EF Core
+        /// </summary>
+        protected MessageTemplate() { }
 
         /// <summary>
         /// Основной конструктор класса
         /// </summary>
         /// <param name="id">идентификатор записи</param>
-        /// <param name="messageType">тип сообщения</param>
+        /// <param name="type">тип сообщения</param>
         /// <param name="language">язык шаблона</param>
         /// <param name="template">текст шаблона сообщения</param>
         /// <param name="isRemove">признак удаления типа сообщения</param>
@@ -81,7 +76,7 @@ namespace NotificationMicroservice.Domain.Models
         /// <param name="createDate">дата и время создания шаблона сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
-        public MessageTemplate(Guid id, MessageType messageType, string language, string template, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
+        public MessageTemplate(Guid id, MessageType type, string language, string template, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
         {
 
             if (id == Guid.Empty)
@@ -109,15 +104,15 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, createUserName);
             }
 
-            _id = id;
-            _messageType = messageType;
-            _language = language;
-            _template = template;
-            _isRemove = isRemove;
-            _createUserName = createUserName;
-            _createDate = createDate;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            Id = id;
+            Type = type;
+            Language = language;
+            Template = template;
+            IsRemove = isRemove;
+            CreateUserName = createUserName;
+            CreateDate = createDate;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
 
         /// <summary>
@@ -151,12 +146,12 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
             }
 
-            _messageType = messageType;
-            _language = language;
-            _template = template;
-            _isRemove = isRemove;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            Type = messageType;
+            Language = language;
+            Template = template;
+            IsRemove = isRemove;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
 
         /// <summary>
@@ -172,9 +167,9 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
             }
 
-            _isRemove = true;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            IsRemove = true;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
     }
 }

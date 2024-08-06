@@ -2,60 +2,53 @@
 using NotificationMicroservice.Domain.Exception.Resources;
 using NotificationMicroservice.Domain.Interfaces.Model;
 
-namespace NotificationMicroservice.Domain.Models
+namespace NotificationMicroservice.Domain.Entity
 {
     /// <summary>
     /// Тип шаблона сообщения
     /// </summary>
     public class MessageType : IModifyEntity<string, Guid>
     {
+
         /// <summary>
         /// Максимальная длинна назнания для типа сообщения
         /// </summary>
         public const int MAX_NAME_LENG = 50;
 
-        private Guid _id;
-        private string _name;
-        private bool _isRemove;
-        private string _createUserName;
-        private DateTime _createDate;
-        private string? _modifyUserName;
-        private DateTime? _modifyDate;
-
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public Guid Id { get => _id; }
+        public Guid Id { get; }
 
         /// <summary>
         /// Название типа сообщения
         /// </summary>
-        public string Name { get => _name; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Статус удаления типа
         /// </summary>
-        public bool IsRemove { get => _isRemove; }
+        public bool IsRemove { get; private set; }
 
         /// <summary>
         /// Пользователь создавший тип сообщения
         /// </summary>
-        public string CreateUserName { get => _createUserName; }
+        public string CreateUserName { get; }
 
         /// <summary>
         /// Дата создания типа сообщения
         /// </summary>
-        public DateTime CreateDate { get => _createDate; }
+        public DateTime CreateDate { get; }
 
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
         /// </summary>
-        public string? ModifyUserName { get => _modifyUserName; }
+        public string? ModifyUserName { get; private set; }
 
         /// <summary>
         /// Дата изменения шаблона сообщения
         /// </summary>
-        public DateTime? ModifyDate { get => _modifyDate; }
+        public DateTime? ModifyDate { get; private set; }
 
         /// <summary>
         /// Основной конструктор класса (новая сущность)
@@ -90,13 +83,13 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, createUserName);
             }
 
-            _id = id;
-            _name = name;
-            _isRemove = isRemove;
-            _createUserName = createUserName;
-            _createDate = createDate;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            Id = id;
+            Name = name;
+            IsRemove = isRemove;
+            CreateUserName = createUserName;
+            CreateDate = createDate;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
 
         /// <summary>
@@ -123,10 +116,10 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
             }
 
-            _name = name;
-            _isRemove = isRemove;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            Name = name;
+            IsRemove = isRemove;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
 
         /// <summary>
@@ -141,9 +134,9 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
             }
 
-            _isRemove = true;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            IsRemove = true;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
 
     }

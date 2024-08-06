@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using NotificationMicroservice.Application.Interface;
+using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.Contracts.Type;
-using NotificationMicroservice.Domain.Interfaces.Services;
-using NotificationMicroservice.Domain.Models;
 
 namespace NotificationMicroservice.Controllers
 {
@@ -9,11 +10,13 @@ namespace NotificationMicroservice.Controllers
     [Route("[controller]/[action]")]
     public class MessageTypeController : ControllerBase
     {
-        private readonly IMessageTypeService _messageTypeService;
+        private readonly ITypeApplicationService _messageTypeService;
+        private readonly IMapper _mapper;
 
-        public MessageTypeController(IMessageTypeService messageTypeService)
+        public MessageTypeController(ITypeApplicationService messageTypeService, IMapper mapper)
         {
             _messageTypeService = messageTypeService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,72 +25,58 @@ namespace NotificationMicroservice.Controllers
         {
             var types = await _messageTypeService.GetAllAsync();
 
-            var response = types.Select(z => new TypeResponse(z.Id, z.Name, z.IsRemove, z.CreateUserName, z.CreateDate, z.ModifyUserName, z.ModifyDate));
-
-            return Ok(response);
+            return Ok(types.Select(_mapper.Map<TypeResponse>));
         }
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(TypeResponse), 200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<TypeResponse>> GetByIdAsync(Guid id)
         {
             var type = await _messageTypeService.GetByIdAsync(id);
 
-            if (type == null)
-            {
-                return NotFound($"Type id:{id} not found!");
-            }
-
-            var response = new TypeResponse(type.Id, type.Name, type.IsRemove, type.CreateUserName, type.CreateDate, type.ModifyUserName, type.ModifyDate);
-
-            return Ok(response);
+            return type is null 
+                ? NotFound($"Type {id} not found!") 
+                : Ok(_mapper.Map<TypeResponse>(type));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), 201)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<Guid>> AddAsync([FromBody] TypeRequestAdd request)
         {
-            var typeNew = new MessageType(Guid.NewGuid(), request.Name, false, request.CreateUserName, DateTime.UtcNow, null, null);
+            var typeId = await _messageTypeService.AddAsync(_mapper.Map<CreateTypeModel>(request));
 
-            return Ok(await _messageTypeService.AddAsync(typeNew));
+            if (typeId == Guid.Empty)
+            {
+                return BadRequest("Type can not be created");
+            }
+
+            return Created("", typeId);
         }
 
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(bool), 201)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TypeRequestUp request)
         {
+            var type = _mapper.Map<EditTypeModel>(request);
 
-            var type = await _messageTypeService.GetByIdAsync(id);
+            type.Id = id;
 
-            if (type == null)
-            {
-                return NotFound($"Type id:{id} not found!");
-            }
-
-            type.Update(request.Name, false, request.ModifyUserName, DateTime.UtcNow);
-
-            return Ok(await _messageTypeService.UpdateAsync(type));
+           return await _messageTypeService.UpdateAsync(type) is true ? Ok(true) : NotFound($"Type {id} not found or remove!");
         }
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(bool), 200)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TypeDelete request)
+        [ProducesResponseType(typeof(string), 404)]
+        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TypeRequestDelete request)
         {
-            var type = await _messageTypeService.GetByIdAsync(id);
+            var type = _mapper.Map<EditTypeModel>(request);
 
-            if (type == null)
-            {
-                return NotFound($"Type id:{id} not found!");
-            }
+            type.Id = id;
 
-            type.Delete(request.ModifyUserName, DateTime.UtcNow);
-
-            return Ok(await _messageTypeService.DeleteAsync(type));
+            return await _messageTypeService.DeleteAsync(type) is true ? Ok(true) : NotFound($"Type {id} not found!");
         }
 
     }

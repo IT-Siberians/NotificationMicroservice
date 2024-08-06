@@ -1,19 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NotificationMicroservice.DataAccess.Entities;
+using NotificationMicroservice.Domain.Entity;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
-    internal class TemplateConfiguration : IEntityTypeConfiguration<TemplateEntity>
+    internal class TemplateConfiguration : IEntityTypeConfiguration<MessageTemplate>
     {
-        public void Configure(EntityTypeBuilder<TemplateEntity> builder)
+        public void Configure(EntityTypeBuilder<MessageTemplate> builder)
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.TypeId)
-                .IsRequired();
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
 
             builder.Property(x => x.Language)
+                .HasMaxLength(MessageTemplate.LANGUAGE_LENG)
                 .IsRequired();
 
             builder.Property(x => x.Template)
@@ -28,13 +29,17 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(x => x.CreateDate)
                 .IsRequired();
 
-            builder.Property(x => x.ModifyUserName);
+            builder.Property(x => x.ModifyUserName)
+                .IsRequired(false);
 
-            builder.Property(x => x.ModifyDate);
+            builder.Property(x => x.ModifyDate)
+                .IsRequired(false);
 
             builder.HasOne(x => x.Type)
-            .WithMany(c => c.Templates)
-            .HasForeignKey(x => x.TypeId);
+                .WithMany();
+
+            builder.Navigation(x => x.Type)
+                .AutoInclude();
 
         }
     }

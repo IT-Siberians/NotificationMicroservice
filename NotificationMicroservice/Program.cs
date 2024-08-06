@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using NotificationMicroservice.Application.Interface;
 using NotificationMicroservice.Application.Mapper;
 using NotificationMicroservice.Application.Services;
 using NotificationMicroservice.DataAccess;
 using NotificationMicroservice.DataAccess.Entities;
 using NotificationMicroservice.DataAccess.Repository;
 using NotificationMicroservice.Domain.Interfaces.Repository;
-using NotificationMicroservice.Domain.Interfaces.Services;
+using NotificationMicroservice.Mapper;
 
 namespace NotificationMicroservice
 {
@@ -25,16 +26,16 @@ namespace NotificationMicroservice
                     options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(NotificationMicroserviceDbContext)));
                 });
 
-            builder.Services.AddScoped<IMessageTypeService, MessageTypeService>();
-            builder.Services.AddScoped<IMessageTypeRepository<TypeEntity, Guid>, MessageTypeRepository>();
+            builder.Services.AddScoped<ITypeApplicationService, MessageTypeService>();
+            builder.Services.AddScoped<IMessageTypeRepository, MessageTypeRepository>();
 
-            builder.Services.AddScoped<IMessageTemplateService, MessageTemplateService>();
-            builder.Services.AddScoped<IMessageTemplateRepository<TemplateEntity, Guid>, MessageTemplateRepository>();
+            builder.Services.AddScoped<ITemplateApplicationService, MessageTemplateService>();
+            builder.Services.AddScoped<IMessageTemplateRepository, MessageTemplateRepository>();
 
-            builder.Services.AddScoped<IMessageService, MessageService>();
-            builder.Services.AddScoped<IMessageRepository<MessageEntity, Guid>, MessageRepository>();
+            builder.Services.AddScoped<IMessageApplicationService, MessageService>();
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.AddAutoMapper(typeof(ProfilePre), typeof(ProfileApp));
 
             var app = builder.Build();
 

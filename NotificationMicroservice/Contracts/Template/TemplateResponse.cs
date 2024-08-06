@@ -1,9 +1,10 @@
-﻿namespace NotificationMicroservice.Contracts.Template
+﻿using NotificationMicroservice.Contracts.Type;
+
+namespace NotificationMicroservice.Contracts.Template
 {
     public record TemplateResponse(
         Guid Id,
-        string MessageTypeName,
-        Guid MessageTypeId,
+        TypeResponse Type,
         string Language,
         string Template,
         bool IsRemove,
