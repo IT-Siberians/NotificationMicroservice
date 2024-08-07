@@ -9,27 +9,25 @@ namespace NotificationMicroservice.Application.Services
     public class MessageService : IMessageApplicationService
     {
         private readonly IMessageRepository _messageRepository;
-        private readonly ITypeApplicationService _typeApplicationService;
+        private readonly IMessageTypeRepository _typeRepository;
         private readonly IMapper _mapper;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-        public MessageService(IMessageRepository messageRepository, ITypeApplicationService typeApplicationService, IMapper mapper)
+        public MessageService(IMessageRepository messageRepository, IMessageTypeRepository typeRepository, IMapper mapper)
         {
             _messageRepository = messageRepository;
-            _typeApplicationService = typeApplicationService;
+            _typeRepository = typeRepository;
             _mapper = mapper;
         }
 
         public async Task<Guid> AddAsync(CreateMessageModel messageCreate)
         {
-            var typeQ = await _typeApplicationService.GetByIdAsync(messageCreate.MessageTypeId);
+            var type = await _typeRepository.GetByIdAsync(messageCreate.MessageTypeId, _cancellationTokenSource.Token);
             
-            if (typeQ is null)
+            if (type is null)
             {
                 throw new ArgumentNullException($"MessageType {messageCreate.MessageTypeId} not found!");
             }
-
-            var type = _mapper.Map<MessageType>(typeQ);
 
             var message = new Message(Guid.NewGuid(), type, messageCreate.MessageText, messageCreate.Direction, DateTime.UtcNow);
 

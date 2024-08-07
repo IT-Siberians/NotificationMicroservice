@@ -23,6 +23,7 @@ namespace NotificationMicroservice.Mapper
 
             CreateMap<TemplateModel, TemplateResponse>();
             CreateMap<TemplateRequestAdd, CreateTemplateModel>();
+            CreateMap<TemplateRequestUp, EditTemplateModel>();
             //CreateMap<TypeRequestUp, CreateTypeModel>();
             //CreateMap<TypeModel, TypeResponse>();
         }        

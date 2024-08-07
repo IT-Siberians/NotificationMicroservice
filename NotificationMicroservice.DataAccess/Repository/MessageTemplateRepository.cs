@@ -29,11 +29,13 @@ namespace NotificationMicroservice.DataAccess.Repository
         {
             return await _context.Templates
                 .Where(x => x.Id == id)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<Guid> AddAsync(MessageTemplate entity, CancellationToken cancellationToken)
         {
+            _context.Types.Attach(entity.Type);
             await _context.Templates.AddAsync(entity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
@@ -42,29 +44,15 @@ namespace NotificationMicroservice.DataAccess.Repository
 
         public async Task<bool> UpdateAsync(MessageTemplate entity, CancellationToken cancellationToken)
         {
-            await _context.Templates
-                .Where(x => x.Id == entity.Id)
-                .ExecuteUpdateAsync(z => z
-                    .SetProperty(a => a.Type, a => entity.Type)
-                    .SetProperty(a => a.Language, a => entity.Language)
-                    .SetProperty(a => a.Template, a => entity.Template)
-                    .SetProperty(a => a.IsRemove, a => entity.IsRemove)
-                    .SetProperty(a => a.ModifyUserName, a => entity.ModifyUserName)
-                    .SetProperty(a => a.ModifyDate, a => entity.ModifyDate), cancellationToken);
+            _context.Types.Attach(entity.Type);
+            _context.Templates.Update(entity);
 
-            return true;
+            return await _context.SaveChangesAsync(cancellationToken) == 1 ? true : false;
         }
 
         public async Task<bool> DeleteAsync(MessageTemplate entity, CancellationToken cancellationToken)
         {
-            await _context.Templates
-                .Where(x => x.Id == entity.Id)
-                .ExecuteUpdateAsync(z => z
-                    .SetProperty(a => a.IsRemove, a => entity.IsRemove)
-                    .SetProperty(a => a.ModifyUserName, a => entity.ModifyUserName)
-                    .SetProperty(a => a.ModifyDate, a => entity.ModifyDate), cancellationToken);
-
-            return true;
+            return await UpdateAsync(entity, cancellationToken);
         }
     }
 }

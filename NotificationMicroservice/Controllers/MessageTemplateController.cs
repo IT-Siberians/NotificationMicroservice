@@ -56,55 +56,32 @@ namespace NotificationMicroservice.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(bool), 201)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(typeof(bool), 400)]
         public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TemplateRequestUp request)
         {
-            //var typeModel = await _messageTypeService.GetByIdAsync(request.MessageTypeId);
+            var editTemplate = _mapper.Map<EditTemplateModel>(request);
+            editTemplate.Id = id;
 
-            //if (typeModel == null)
-            //{
-            //    return NotFound($"MessageType {request.MessageTypeId} not found!");
-            //}
+            var result = await _messageTemplateService.UpdateAsync(editTemplate);
 
-            //var type = new MessageType(
-            //            typeModel.Id,
-            //            typeModel.Name,
-            //            typeModel.IsRemove,
-            //            typeModel.CreateUserName,
-            //            typeModel.CreateDate,
-            //            typeModel.ModifyUserName,
-            //            typeModel.ModifyDate);
-
-            //var template = await _messageTemplateService.GetByIdAsync(id);
-
-            //if (template == null)
-            //{
-            //    return NotFound($"Template {id} not found!");
-            //}
-
-            //template.Update(type, request.Language, request.Template, false, request.ModifyUserName, DateTime.UtcNow);
-
-            //return Ok(await _messageTemplateService.UpdateAsync(template));
-            return Ok();
+            return result is true ? Ok(true) : BadRequest(false);
         }
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(bool), 200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(bool), 400)]
         public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TemplateDelete request)
         {
-            //var template = await _messageTemplateService.GetByIdAsync(id);
+            var editTemplate = new EditTemplateModel 
+            { 
+                Id = id, 
+                ModifyUserName = request.ModifyUserName
+            };
+            
+            var result = await _messageTemplateService.DeleteAsync(editTemplate);
 
-            //if (template == null)
-            //{
-            //    return NotFound($"Template {id} not found!");
-            //}
-
-            //template.Delete(request.ModifyUserName, DateTime.UtcNow);
-
-            //return Ok(await _messageTemplateService.DeleteAsync(template));
-            return Ok();
+            return result is true ? Ok(true) : BadRequest(false);
         }
     }
 }

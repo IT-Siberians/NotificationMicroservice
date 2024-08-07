@@ -3,7 +3,6 @@ using NotificationMicroservice.Application.Interface;
 using NotificationMicroservice.Application.Mapper;
 using NotificationMicroservice.Application.Services;
 using NotificationMicroservice.DataAccess;
-using NotificationMicroservice.DataAccess.Entities;
 using NotificationMicroservice.DataAccess.Repository;
 using NotificationMicroservice.Domain.Interfaces.Repository;
 using NotificationMicroservice.Mapper;

@@ -30,6 +30,7 @@ namespace NotificationMicroservice.DataAccess.Repository
         {
             return await _context.Types
                 .Where(x => x.Id == id)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
         }
 

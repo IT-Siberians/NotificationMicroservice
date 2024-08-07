@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NotificationMicroservice.DataAccess.Migrations
 {
     [DbContext(typeof(NotificationMicroserviceDbContext))]
-    [Migration("20240721010743_AddIsRemoveTypeTemplate")]
-    partial class AddIsRemoveTypeTemplate
+    [Migration("20240807034101_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NotificationMicroservice.DataAccess.Entities.MessageEntity", b =>
+            modelBuilder.Entity("NotificationMicroservice.Domain.Entity.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace NotificationMicroservice.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("MessageText")
+                    b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -52,7 +52,7 @@ namespace NotificationMicroservice.DataAccess.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("NotificationMicroservice.DataAccess.Entities.TemplateEntity", b =>
+            modelBuilder.Entity("NotificationMicroservice.Domain.Entity.MessageTemplate", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,8 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
                     b.Property<string>("Language")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
 
                     b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp with time zone");
@@ -92,7 +93,7 @@ namespace NotificationMicroservice.DataAccess.Migrations
                     b.ToTable("Templates");
                 });
 
-            modelBuilder.Entity("NotificationMicroservice.DataAccess.Entities.TypeEntity", b =>
+            modelBuilder.Entity("NotificationMicroservice.Domain.Entity.MessageType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,17 +117,18 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Types");
                 });
 
-            modelBuilder.Entity("NotificationMicroservice.DataAccess.Entities.MessageEntity", b =>
+            modelBuilder.Entity("NotificationMicroservice.Domain.Entity.Message", b =>
                 {
-                    b.HasOne("NotificationMicroservice.DataAccess.Entities.TypeEntity", "Type")
-                        .WithMany("Messages")
+                    b.HasOne("NotificationMicroservice.Domain.Entity.MessageType", "Type")
+                        .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -134,22 +136,15 @@ namespace NotificationMicroservice.DataAccess.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("NotificationMicroservice.DataAccess.Entities.TemplateEntity", b =>
+            modelBuilder.Entity("NotificationMicroservice.Domain.Entity.MessageTemplate", b =>
                 {
-                    b.HasOne("NotificationMicroservice.DataAccess.Entities.TypeEntity", "Type")
-                        .WithMany("Templates")
+                    b.HasOne("NotificationMicroservice.Domain.Entity.MessageType", "Type")
+                        .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Type");
-                });
-
-            modelBuilder.Entity("NotificationMicroservice.DataAccess.Entities.TypeEntity", b =>
-                {
-                    b.Navigation("Messages");
-
-                    b.Navigation("Templates");
                 });
 #pragma warning restore 612, 618
         }

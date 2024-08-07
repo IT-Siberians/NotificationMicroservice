@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace NotificationMicroservice.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,8 @@ namespace NotificationMicroservice.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    IsRemove = table.Column<bool>(type: "boolean", nullable: false),
                     CreateUserName = table.Column<string>(type: "text", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifyUserName = table.Column<string>(type: "text", nullable: true),
@@ -33,19 +34,19 @@ namespace NotificationMicroservice.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    MessageText = table.Column<string>(type: "text", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: false),
                     Direction = table.Column<string>(type: "text", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    TypesId = table.Column<Guid>(type: "uuid", nullable: true)
+                    CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Types_TypesId",
-                        column: x => x.TypesId,
+                        name: "FK_Messages_Types_TypeId",
+                        column: x => x.TypeId,
                         principalTable: "Types",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,34 +55,34 @@ namespace NotificationMicroservice.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Language = table.Column<string>(type: "text", nullable: false),
+                    Language = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
                     Template = table.Column<string>(type: "text", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    IsRemove = table.Column<bool>(type: "boolean", nullable: false),
                     CreateUserName = table.Column<string>(type: "text", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ModifyUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    TypesId = table.Column<Guid>(type: "uuid", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Templates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Templates_Types_TypesId",
-                        column: x => x.TypesId,
+                        name: "FK_Templates_Types_TypeId",
+                        column: x => x.TypeId,
                         principalTable: "Types",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_TypesId",
+                name: "IX_Messages_TypeId",
                 table: "Messages",
-                column: "TypesId");
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Templates_TypesId",
+                name: "IX_Templates_TypeId",
                 table: "Templates",
-                column: "TypesId");
+                column: "TypeId");
         }
 
         /// <inheritdoc />

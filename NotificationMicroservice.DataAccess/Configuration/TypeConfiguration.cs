@@ -29,11 +29,11 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(e => e.ModifyDate)
                   .IsRequired(false);
 
-            //builder.HasMany<Message>()
-            //    .WithOne(x => x.Type);
+            builder.HasMany<Message>()
+                .WithOne(x => x.Type);
 
-            //builder.HasMany<MessageTemplate>()
-            //    .WithOne(x => x.Type);
+            builder.HasMany<MessageTemplate>()
+                .WithOne(x => x.Type);
 
         }
     }
