@@ -1,6 +1,6 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.Resources
 {
-    internal class ExceptionStrings
+    public class ExceptionStrings
     {
         public const string ERROR_ID = $"Identifier cannot be empty.";
         public const string ERROR_DIRECTION = $"Direction cannot be empty.";

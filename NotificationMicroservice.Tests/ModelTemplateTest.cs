@@ -1,121 +1,157 @@
 ﻿using NotificationMicroservice.Domain.Exception.MessageTemplate;
+using NotificationMicroservice.Domain.Exception.Resources;
 using NotificationMicroservice.Domain.Models;
+using System;
 using Xunit;
 
 namespace NotificationMicroservice.Tests
 {
     public class ModelTemplateTest
     {
-        private readonly Guid _guidEmpty = Guid.Empty;
-        private readonly Guid _guidTest = Guid.NewGuid();
-        private readonly string _name = "Тип сообщения";
-        private readonly string _nameNext = "Тип сообщения изменение";
-        private readonly string _createUser = "Admin1";
-        private readonly string _modifyUser = "Admin 2";
-        private readonly DateTime _now = DateTime.Now;
-        private readonly DateTime _nowNext = DateTime.Now;
-        private readonly string _language = "rus";
-        private readonly string _template = "Какой-то текст уведомления";
-
         [Fact]
-        public void TemplateCreateOk()
+        public void Constructor_Should_Create_MessageTemplate_When_Valid_Parameters()
         {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-            
-            var template = new MessageTemplate(_guidTest, type, _language, _template, false, _createUser, _now, null, null);
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var language = "eng";
+            var template = "This is a test template.";
+            var userName = "TestUser";
+            var createDate = DateTime.Now;
 
-            Assert.Equal(_guidTest, template.Id);
-            Assert.Equal(type, template.MessageType);
-            Assert.Equal(_language, template.Language);
-            Assert.Equal(_template, template.Template);
-            Assert.False(template.IsRemove);
-            Assert.Equal(_createUser, template.CreateUserName);            
-            Assert.Equal(_now, template.CreateDate);
-            Assert.Equal(null, template.ModifyUserName);
-            Assert.Equal(null, template.ModifyDate);
+            // Act
+            var messageTemplate = new MessageTemplate(id, type, language, template, false, userName, createDate, null, null);
 
+            // Assert
+            Assert.Equal(id, messageTemplate.Id);
+            Assert.Equal(type, messageTemplate.MessageType);
+            Assert.Equal(language, messageTemplate.Language);
+            Assert.Equal(template, messageTemplate.Template);
+            Assert.False(messageTemplate.IsRemove);
+            Assert.Equal(userName, messageTemplate.CreateUserName);
+            Assert.Equal(createDate, messageTemplate.CreateDate);
+            Assert.Null(messageTemplate.ModifyUserName);
+            Assert.Null(messageTemplate.ModifyDate);
         }
 
         [Fact]
-        public void TemplateUpdateOk()
+        public void Constructor_Should_ThrowException_When_IdIsEmpty()
         {
-            var type = new MessageType(_guidTest, _name, false, _modifyUser, _nowNext, null, null);
-            var template = new MessageTemplate(_guidTest, type, _language, _template, false, _createUser, _now, null, null);
+            // Arrange
+            var type = GetType();
+            var language = "eng";
+            var template = "This is a test template.";
+            var userName = "TestUser";
+            var createDate = DateTime.Now;
 
-            template.Update(type,_language, _template, false, _modifyUser, _nowNext);
-
-            Assert.Equal(type, template.MessageType);
-            Assert.Equal(_language, template.Language);
-            Assert.Equal(_template, template.Template);
-            Assert.False(template.IsRemove);
-            Assert.Equal(_createUser, template.CreateUserName);
-            Assert.Equal(_now, template.CreateDate);
-            Assert.Equal(_modifyUser, template.ModifyUserName);
-            Assert.Equal(_nowNext, template.ModifyDate);
+            // Act & Assert
+            Assert.Throws<MessageTemplateGuidEmptyException>(() =>
+                new MessageTemplate(Guid.Empty, type, language, template, false, userName, createDate, null, null));
         }
 
         [Fact]
-        public void TemplateDeleteOk()
+        public void Constructor_Should_ThrowException_When_Language_IsNullOrEmpty()
         {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-            var template = new MessageTemplate(_guidTest, type, _language, _template, false, _createUser, _now, null, null);
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var template = "This is a test template.";
+            var userName = "TestUser";
+            var createDate = DateTime.Now;
 
-            template.Delete(_createUser, _nowNext);
-
-            Assert.True(template.IsRemove);
-            Assert.Equal(_createUser, template.ModifyUserName);
-            Assert.Equal(_nowNext, template.ModifyDate);
-        }
-
-        [Fact]
-        public async Task ExceptionGuidEmpty()
-        {
-            await Assert.ThrowsAsync<MessageTemplateGuidEmptyException>(() => MethodGuidEmpty());
+            // Act & Assert
+            Assert.Throws<MessageTemplateLanguageNullOrEmptyException>(() =>
+                new MessageTemplate(id, type, string.Empty, template, false, userName, createDate, null, null));
         }
 
         [Fact]
-        public async Task ExceptionTemplateLanguageLength()
+        public void Constructor_Should_ThrowException_When_Language_Length_IsInvalid()
         {
-            await Assert.ThrowsAsync<MessageTemplateLanguageLengthException>(() => MethodMessageTemplateLanguageLength());
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var language = "en";
+            var template = "This is a test template.";
+            var userName = "TestUser";
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            Assert.Throws<MessageTemplateLanguageLengthException>(() =>
+                new MessageTemplate(id, type, language, template, false, userName, createDate, null, null));
         }
 
         [Fact]
-        public async Task ExceptionTemplateLanguageNullOrEmpty()
+        public void Update_Should_Update_Fields_When_Valid_Parameters()
         {
-            await Assert.ThrowsAsync<MessageTemplateLanguageNullOrEmptyException>(() => MethodMessageTemplateLanguageNullOrEmpty());
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var language = "eng";
+            var template = "This is a test template.";
+            var userName = "TestUser";
+            var createDate = DateTime.Now;
+
+            // Arrange
+            var messageTemplate = new MessageTemplate(id, type, language, template, false, userName, createDate, null, null);
+            var newMessageType = new MessageType(Guid.NewGuid(), "NewType", false, userName, createDate, null, null);
+            var newLanguage = "fra";
+            var newTemplate = "This is an updated template.";
+            var newUserName = "NewUser";
+
+            // Act
+            messageTemplate.Update(newMessageType, newLanguage, newTemplate, true, newUserName, createDate);
+
+            // Assert
+            Assert.Equal(newMessageType, messageTemplate.MessageType);
+            Assert.Equal(newLanguage, messageTemplate.Language);
+            Assert.Equal(newTemplate, messageTemplate.Template);
+            Assert.True(messageTemplate.IsRemove);
+            Assert.Equal(newUserName, messageTemplate.ModifyUserName);
+            Assert.Equal(createDate, messageTemplate.ModifyDate);
         }
 
         [Fact]
-        public async Task ExceptionTemplateNullOrEmpty()
+        public void Delete_Should_Set_IsRemove_ToTrue()
         {
-            await Assert.ThrowsAsync<MessageTemplateNullOrEmptyException>(() => MethodMessageTemplateNullOrEmpty());
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var language = "eng";
+            var template = "This is a test template.";
+            var userName = "TestUser";
+            var createDate = DateTime.Now;
+            var messageTemplate = new MessageTemplate(id, type, language, template, false, userName, createDate, null, null);
+            var newUserName = "NewUser";
+
+            // Act
+            messageTemplate.Delete(newUserName, createDate);
+
+            // Assert
+            Assert.True(messageTemplate.IsRemove);
+            Assert.Equal(newUserName, messageTemplate.ModifyUserName);
+            Assert.Equal(createDate, messageTemplate.ModifyDate);
         }
 
         [Fact]
-        public async Task ExceptionUserNameNullOrEmpty()
+        public void Delete_Should_ThrowException_When_UserName_IsNullOrEmpty()
         {
-            await Assert.ThrowsAsync<MessageTemplateUserNameNullOrEmptyException>(() => MethodMessageTemplateUserNameNullOrEmpty());
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var language = "eng";
+            var template = "This is a test template.";
+            var userName = "TestUser";
+            var createDate = DateTime.Now;
+            var messageTemplate = new MessageTemplate(id, type, language, template, false, userName, createDate, null, null);
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTemplateUserNameNullOrEmptyException>(() => messageTemplate.Delete(string.Empty, createDate));
+            Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
         }
 
-        private Task MethodGuidEmpty()
+        private MessageType GetType()
         {
-            throw new MessageTemplateGuidEmptyException("Null GUID", _guidTest.ToString());
-        }
-        private Task MethodMessageTemplateLanguageLength()
-        {
-            throw new MessageTemplateLanguageLengthException("Big Length Language", _language.Length.ToString());
-        }
-        private Task MethodMessageTemplateLanguageNullOrEmpty()
-        {
-            throw new MessageTemplateLanguageNullOrEmptyException("Null Language", _language);
-        }
-        private Task MethodMessageTemplateNullOrEmpty()
-        {
-            throw new MessageTemplateNullOrEmptyException("Null Template", _template);
-        }
-        private Task MethodMessageTemplateUserNameNullOrEmpty()
-        {
-            throw new MessageTemplateUserNameNullOrEmptyException("Null UserName", _modifyUser);
+            return new MessageType(Guid.NewGuid(), "Тип сообщения", false, "Admin1", DateTime.UtcNow, null, null);
         }
     }
 }

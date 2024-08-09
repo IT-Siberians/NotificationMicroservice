@@ -1,4 +1,5 @@
 ﻿using NotificationMicroservice.Domain.Exception.Message;
+using NotificationMicroservice.Domain.Exception.Resources;
 using NotificationMicroservice.Domain.Models;
 using Xunit;
 
@@ -6,69 +7,75 @@ namespace NotificationMicroservice.Tests
 {
     public class ModelMessageTest
     {
-        private readonly Guid _guidEmpty = Guid.Empty;
-        private readonly Guid _guidTest = Guid.NewGuid();
-        private readonly string _name = "Тип сообщения";
-        private readonly string _nameNext = "Тип сообщения изменение";
-        private readonly string _createUser = "Admin1";
-        private readonly string _modifyUser = "Admin 2";
-        private readonly DateTime _now = DateTime.Now;
-        private readonly DateTime _nowNext = DateTime.Now;
-        private readonly string _direction = "Email";
-        private readonly string _messageText = "Какой-то текст уведомления";
-
         [Fact]
-        public void MessageCreateOk()
+        public void Constructor_Should_Create_Message_When_Valid_Parameters()
         {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
-            var message = new Message(_guidTest, type, _messageText, _direction, _now);
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var text = "Test message";
+            var direction = "Outgoing";
+            var createDate = DateTime.Now;
 
-            Assert.Equal(_guidTest, message.Id);
+            // Act
+            var message = new Message(id, type, text, direction, createDate);
+
+            // Assert
+            Assert.Equal(id, message.Id);
             Assert.Equal(type, message.MessageType);
-            Assert.Equal(_messageText, message.MessageText);
-            Assert.Equal(_direction, message.Direction);
-            Assert.Equal(_now, message.CreateDate);
-
+            Assert.Equal(text, message.MessageText);
+            Assert.Equal(direction, message.Direction);
+            Assert.Equal(createDate, message.CreateDate);
         }
 
         [Fact]
-        public async Task ExceptionGuidEmpty()
+        public void Constructor_Should_ThrowException_When_Text_Is_NullOrEmpty()
         {
-            await Assert.ThrowsAsync<MessageGuidEmptyException>(() => MethodGuidEmpty());
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var direction = "Outgoing";
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTextNullOrEmptyException>(() => new Message(id, type, string.Empty, direction, createDate));
+            Assert.Equal(ExceptionStrings.ERROR_TEXT, exception.Message);
         }
 
         [Fact]
-        public async Task ExceptionDirectionLength()
+        public void Constructor_Should_ThrowException_When_Direction_Is_NullOrEmpty()
         {
-            await Assert.ThrowsAsync<MessageDirectionLengthException>(() => MethodMessageDirectionLength());
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var text = "Test message";
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageDirectionNullOrEmptyException>(() => new Message(id, type, text, string.Empty, createDate));
+            Assert.Equal(ExceptionStrings.ERROR_DIRECTION, exception.Message);
         }
 
         [Fact]
-        public async Task ExceptionDirectionNullOrEmpty()
+        public void Constructor_Should_ThrowException_When_Direction_Exceeds_MaxLength()
         {
-            await Assert.ThrowsAsync<MessageDirectionNullOrEmptyException>(() => MethodMessageDirectionNullOrEmpty());
-        }
-        [Fact]
-        public async Task ExceptionTextNullOrEmpty()
-        {
-            await Assert.ThrowsAsync<MessageTextNullOrEmptyException>(() => MethodMessageTextNullOrEmpty());
+            // Arrange
+            var id = Guid.NewGuid();
+            var type = GetType();
+            var text = "Test message";
+            var direction = new string('A', Message.MAX_DIRECTION_LENG + 1);
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageDirectionLengthException>(() => new Message(id, type, text, direction, createDate));
+            Assert.Equal(ExceptionStrings.ERROR_DIRECTION_LENG + $" (Parameter '{Message.MAX_DIRECTION_LENG + 1}')", exception.Message);
         }
 
-        private Task MethodGuidEmpty()
+
+        private MessageType GetType()
         {
-            throw new MessageGuidEmptyException("Null GUID", _guidTest.ToString());
+            return new MessageType(Guid.NewGuid(), "Тип сообщения", false, "Admin1", DateTime.UtcNow, null, null);
         }
-        private Task MethodMessageDirectionLength()
-        {
-            throw new MessageDirectionLengthException("Big Length Direction", _direction.Length.ToString());
-        }
-        private Task MethodMessageDirectionNullOrEmpty()
-        {
-            throw new MessageDirectionNullOrEmptyException("Null Direction", _direction);
-        }
-        private Task MethodMessageTextNullOrEmpty()
-        {
-            throw new MessageTextNullOrEmptyException("Null Text", _messageText);
-        }
+
     }
 }

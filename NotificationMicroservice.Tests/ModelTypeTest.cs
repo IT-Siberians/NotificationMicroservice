@@ -1,5 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Exception.Message;
 using NotificationMicroservice.Domain.Exception.MessageType;
+using NotificationMicroservice.Domain.Exception.Resources;
 using NotificationMicroservice.Domain.Models;
 using Xunit;
 
@@ -7,94 +8,155 @@ namespace NotificationMicroservice.Tests
 {
     public class ModelTypeTest
     {
-        private readonly Guid _guidEmpty = Guid.Empty;
-        private readonly Guid _guidTest = Guid.NewGuid();
-        private readonly string _name = "Тип сообщения";
-        private readonly string _nameNext = "Тип сообщения изменение";
-        private readonly string _createUser = "Admin1";
-        private readonly string _modifyUser = "Admin 2";
-        private readonly DateTime _now = DateTime.Now;
-        private readonly DateTime _nowNext = DateTime.Now;
-
-
         [Fact]
-        public void TypeCreateOk()
+        public void Constructor_Should_Create_MessageType_When_Valid_Parameters()
         {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
+            // Arrange
+            var id = Guid.NewGuid();
+            var name = "TestType";
+            var isRemove = false;
+            var createUserName = "Creator";
+            var createDate = DateTime.Now;
+            var modifyUserName = "Modifier";
+            var modifyDate = DateTime.Now;
 
-            Assert.Equal(_guidTest, type.Id);
-            Assert.Equal(_name, type.Name);
-            Assert.Equal(_createUser, type.CreateUserName);
-            Assert.False(type.IsRemove);
-            Assert.Equal(_now, type.CreateDate);
-            Assert.Equal(null, type.ModifyUserName);
-            Assert.Equal(null, type.ModifyDate);
-        }
-        
-        [Fact]
-        public void TypeUpdateOk()
-        {
-            var type = new MessageType(_guidTest, _name, false, _createUser, _now, null, null);
+            // Act
+            var messageType = new MessageType(id, name, isRemove, createUserName, createDate, modifyUserName, modifyDate);
 
-            type.Update(_nameNext, false, _modifyUser, _nowNext);
-
-            Assert.Equal(_nameNext, type.Name);
-            Assert.False(type.IsRemove);
-            Assert.Equal(_modifyUser, type.ModifyUserName);
-            Assert.Equal(_nowNext, type.ModifyDate);
+            // Assert
+            Assert.Equal(id, messageType.Id);
+            Assert.Equal(name, messageType.Name);
+            Assert.Equal(isRemove, messageType.IsRemove);
+            Assert.Equal(createUserName, messageType.CreateUserName);
+            Assert.Equal(createDate, messageType.CreateDate);
+            Assert.Equal(modifyUserName, messageType.ModifyUserName);
+            Assert.Equal(modifyDate, messageType.ModifyDate);
         }
 
         [Fact]
-        public void TypeDeleteOk()
+        public void Constructor_Should_ThrowException_When_Id_Is_Empty()
         {
-            var type = new MessageType(_guidTest, _nameNext, false, _createUser, _now, null, null);
+            // Arrange
+            var name = "TestType";
+            var isRemove = false;
+            var createUserName = "Creator";
+            var createDate = DateTime.Now;
 
-            type.Delete(_createUser, _nowNext);
-
-            Assert.True(type.IsRemove);
-            Assert.Equal(_createUser, type.ModifyUserName);
-            Assert.Equal(_nowNext, type.ModifyDate);
-        }
-
-        [Fact]
-        public async Task ExceptionGuidEmpty()
-        {
-            await Assert.ThrowsAsync<MessageTypeGuidEmptyException>(() => MethodGuidEmpty());
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeGuidEmptyException>(() =>
+                new MessageType(Guid.Empty, name, isRemove, createUserName, createDate, null, null));
+            Assert.Equal(ExceptionStrings.ERROR_ID + $" (Parameter '{Guid.Empty}')", exception.Message);
         }
 
         [Fact]
-        public async Task ExceptionNameLength()
+        public void Constructor_Should_ThrowException_When_Name_Is_NullOrEmpty()
         {
-            await Assert.ThrowsAsync<MessageTypeNameLengthException>(() => MethodMessageTypeNameLength());
+            // Arrange
+            var id = Guid.NewGuid();
+            var isRemove = false;
+            var createUserName = "Creator";
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
+                new MessageType(id, string.Empty, isRemove, createUserName, createDate, null, null));
+            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME, exception.Message);
         }
 
         [Fact]
-        public async Task ExceptionNameNullOrEmpty()
+        public void Constructor_Should_ThrowException_When_Name_Exceeds_MaxLength()
         {
-            await Assert.ThrowsAsync<MessageTypeNameNullOrEmptyException>(() => MethodMessageTypeNameNullOrEmpty());
+            // Arrange
+            var id = Guid.NewGuid();
+            var name = new string('A', MessageType.MAX_NAME_LENG + 1);
+            var isRemove = false;
+            var createUserName = "Creator";
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeNameLengthException>(() =>
+                new MessageType(id, name, isRemove, createUserName, createDate, null, null));
+            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME_LENG + $" (Parameter '{MessageType.MAX_NAME_LENG + 1}')", exception.Message);
         }
+
         [Fact]
-        public async Task ExceptionUserNameNullOrEmpty()
+        public void Constructor_Should_ThrowException_When_CreateUserName_Is_NullOrEmpty()
         {
-            await Assert.ThrowsAsync<MessageTypeUserNameNullOrEmptyException>(() => MethodMessageTypeUserNameNullOrEmpty());
+            // Arrange
+            var id = Guid.NewGuid();
+            var name = "TestType";
+            var isRemove = false;
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
+                new MessageType(id, name, isRemove, string.Empty, createDate, null, null));
+            Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
         }
 
-        private Task MethodGuidEmpty()
+        [Fact]
+        public void Update_Should_Update_MessageType_When_Valid_Parameters()
         {
-            throw new MessageTypeGuidEmptyException("Null GUID", _guidTest.ToString());
-        }
-        private Task MethodMessageTypeNameLength()
-        {
-            throw new MessageTypeNameLengthException("Big Length TypeName", _name.Length.ToString());
-        }
-        private Task MethodMessageTypeNameNullOrEmpty()
-        {
-            throw new MessageTypeNameNullOrEmptyException("Null TypeName", _name);
-        }
-        private Task MethodMessageTypeUserNameNullOrEmpty()
-        {
-            throw new MessageTypeUserNameNullOrEmptyException("Null UserName", _createUser);
+            // Arrange
+            var id = Guid.NewGuid();
+            var messageType = new MessageType(id, "OldName", false, "Creator", DateTime.Now, null, null);
+            var newName = "NewName";
+            var isRemove = true;
+            var modifyUserName = "Modifier";
+            var modifyDate = DateTime.Now;
+
+            // Act
+            messageType.Update(newName, isRemove, modifyUserName, modifyDate);
+
+            // Assert
+            Assert.Equal(newName, messageType.Name);
+            Assert.Equal(isRemove, messageType.IsRemove);
+            Assert.Equal(modifyUserName, messageType.ModifyUserName);
+            Assert.Equal(modifyDate, messageType.ModifyDate);
         }
 
+        [Fact]
+        public void Update_Should_ThrowException_When_Name_Is_NullOrEmpty()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var messageType = new MessageType(id, "OldName", false, "Creator", DateTime.Now, null, null);
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
+                messageType.Update(string.Empty, false, "Modifier", DateTime.Now));
+            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME, exception.Message);
+        }
+
+        [Fact]
+        public void Delete_Should_Set_IsRemove_To_True_When_Valid_Parameters()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var messageType = new MessageType(id, "TestType", false, "Creator", DateTime.Now, null, null);
+            var modifyUserName = "Modifier";
+            var modifyDate = DateTime.Now;
+
+            // Act
+            messageType.Delete(modifyUserName, modifyDate);
+
+            // Assert
+            Assert.True(messageType.IsRemove);
+            Assert.Equal(modifyUserName, messageType.ModifyUserName);
+            Assert.Equal(modifyDate, messageType.ModifyDate);
+        }
+
+        [Fact]
+        public void Delete_Should_ThrowException_When_ModifyUserName_Is_NullOrEmpty()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var messageType = new MessageType(id, "TestType", false, "Creator", DateTime.Now, null, null);
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
+                messageType.Delete(string.Empty, DateTime.Now));
+            Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
+        }
     }
 }
