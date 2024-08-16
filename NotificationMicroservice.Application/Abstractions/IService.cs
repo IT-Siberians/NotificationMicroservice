@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.Domain.Interfaces.Services
+﻿namespace NotificationMicroservice.Application.Abstractions
 {
     /// <summary>
     /// 

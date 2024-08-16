@@ -1,7 +1,6 @@
 ﻿using NotificationMicroservice.Application.Model.Type;
-using NotificationMicroservice.Domain.Interfaces.Services;
 
-namespace NotificationMicroservice.Application.Interface
+namespace NotificationMicroservice.Application.Abstractions
 {
     public interface ITypeApplicationService : IService<TypeModel, CreateTypeModel, Guid>
     {

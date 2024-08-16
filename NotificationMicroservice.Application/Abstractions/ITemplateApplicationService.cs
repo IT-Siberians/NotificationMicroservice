@@ -1,7 +1,6 @@
 ﻿using NotificationMicroservice.Application.Model.Template;
-using NotificationMicroservice.Domain.Interfaces.Services;
 
-namespace NotificationMicroservice.Application.Interface
+namespace NotificationMicroservice.Application.Abstractions
 {
     public interface ITemplateApplicationService : IService<TemplateModel, CreateTemplateModel, Guid>
     {

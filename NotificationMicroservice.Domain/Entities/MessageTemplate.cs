@@ -158,7 +158,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         private static void ValidateUserName(string userName)
         {
-            if (string.IsNullOrEmpty(userName) || userName.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(userName))
             {
                 throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, userName);
             }
@@ -171,7 +171,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         private static void ValidateTemplate(string template)
         {
-            if (string.IsNullOrEmpty(template) || template.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(template))
             {
                 throw new MessageTemplateNullOrEmptyException(ExceptionString.ERROR_TEMPLATE, template);
             }
@@ -185,7 +185,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         private static void ValidateLanguage(string language)
         {
-            if (string.IsNullOrEmpty(language) || language.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(language))
             {
                 throw new MessageTemplateLanguageNullOrEmptyException(ExceptionString.ERROR_LANG_CODE);
             }

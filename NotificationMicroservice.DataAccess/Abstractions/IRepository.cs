@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.Domain.Interfaces.Repository
+﻿namespace NotificationMicroservice.DataAccess.Abstractions
 {
     /// <summary>
     /// Описания общих методов для всех репозиториев.

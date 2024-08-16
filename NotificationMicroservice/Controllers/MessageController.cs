@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using NotificationMicroservice.Application.Interface;
+using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Contracts.Message;
 
 namespace NotificationMicroservice.Controllers

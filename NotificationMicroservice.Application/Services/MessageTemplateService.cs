@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using NotificationMicroservice.Application.Interface;
+using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Model.Template;
-using NotificationMicroservice.DataAccess.Interfaces;
+using NotificationMicroservice.DataAccess.Abstractions;
 using NotificationMicroservice.Domain.Entities;
 
 

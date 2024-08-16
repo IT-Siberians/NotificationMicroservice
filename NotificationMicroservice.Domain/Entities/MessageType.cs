@@ -9,7 +9,6 @@ namespace NotificationMicroservice.Domain.Entities
     /// </summary>
     public class MessageType : IModifyEntity<string, Guid>
     {
-
         /// <summary>
         /// Максимальная длинна назнания для типа сообщения
         /// </summary>
@@ -130,7 +129,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTypeNameLengthException"></exception>
         private static void ValidateNameType(string name)
         {
-            if (string.IsNullOrEmpty(name) || name.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(name))
             {
                 throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
             }
@@ -148,7 +147,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         private static void ValidateUserName(string userName)
         {
-            if (string.IsNullOrEmpty(userName) || userName.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(userName))
             {
                 throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, userName);
             }

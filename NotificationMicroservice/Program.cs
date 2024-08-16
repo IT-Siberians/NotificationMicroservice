@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using NotificationMicroservice.Application.Interface;
+using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Mapper;
 using NotificationMicroservice.Application.Services;
 using NotificationMicroservice.DataAccess;
-using NotificationMicroservice.DataAccess.Interfaces;
+using NotificationMicroservice.DataAccess.Abstractions;
 using NotificationMicroservice.DataAccess.Repository;
 using NotificationMicroservice.Mapper;
 
