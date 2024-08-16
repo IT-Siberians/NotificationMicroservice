@@ -1,11 +1,12 @@
-﻿using NotificationMicroservice.Domain.Entity;
+﻿using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Interfaces.Repository;
 
-namespace NotificationMicroservice.Domain.Interfaces.Repository
+namespace NotificationMicroservice.DataAccess.Interfaces
 {
     /// <summary>
     /// Описания методов для репозитория Сообщений.
     /// </summary>
-    public interface IMessageRepository : IBaseRepository<Message, Guid>
+    public interface IMessageRepository : IRepository<Message, Guid>
     {
         /// <summary>
         /// Добавить в базу одну сущность.

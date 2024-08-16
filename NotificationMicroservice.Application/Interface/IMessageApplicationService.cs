@@ -3,7 +3,7 @@ using NotificationMicroservice.Domain.Interfaces.Services;
 
 namespace NotificationMicroservice.Application.Interface
 {
-    public interface IMessageApplicationService : IBaseService<MessageModel, CreateMessageModel, Guid>
+    public interface IMessageApplicationService : IService<MessageModel, CreateMessageModel, Guid>
     {
     }
 }

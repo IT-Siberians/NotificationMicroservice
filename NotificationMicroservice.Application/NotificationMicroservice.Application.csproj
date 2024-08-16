@@ -7,13 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NotificationMicroservice.DataAccess\NotificationMicroservice.DataAccess.csproj" />
-    <ProjectReference Include="..\NotificationMicroservice.Domain\NotificationMicroservice.Domain.csproj" />
+    <Compile Remove="Exception\**" />
+    <EmbeddedResource Remove="Exception\**" />
+    <None Remove="Exception\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Exception\" />
-    <Folder Include="Exception\" />
+    <ProjectReference Include="..\NotificationMicroservice.DataAccess\NotificationMicroservice.DataAccess.csproj" />
+    <ProjectReference Include="..\NotificationMicroservice.Domain\NotificationMicroservice.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

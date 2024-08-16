@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NotificationMicroservice.Domain.Entity;
+using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.DataAccess
 {

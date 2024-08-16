@@ -3,8 +3,8 @@ using NotificationMicroservice.Application.Interface;
 using NotificationMicroservice.Application.Mapper;
 using NotificationMicroservice.Application.Services;
 using NotificationMicroservice.DataAccess;
+using NotificationMicroservice.DataAccess.Interfaces;
 using NotificationMicroservice.DataAccess.Repository;
-using NotificationMicroservice.Domain.Interfaces.Repository;
 using NotificationMicroservice.Mapper;
 
 namespace NotificationMicroservice

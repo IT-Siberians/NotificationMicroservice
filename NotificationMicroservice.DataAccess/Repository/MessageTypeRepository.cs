@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NotificationMicroservice.Domain.Entity;
-using NotificationMicroservice.Domain.Interfaces.Repository;
+using NotificationMicroservice.DataAccess.Interfaces;
+using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {

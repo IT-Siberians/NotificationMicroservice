@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="TEntity"> Тип Entity для репозитория. </typeparam>
     /// <typeparam name="TKey"> Тип первичного ключа. </typeparam>
-    public interface IBaseRepository<TEntity, TKey>
+    public interface IRepository<TEntity, TKey> where TEntity : class where TKey : struct
     {
         /// <summary>
         /// Получить сущность коллекцию сущностей.

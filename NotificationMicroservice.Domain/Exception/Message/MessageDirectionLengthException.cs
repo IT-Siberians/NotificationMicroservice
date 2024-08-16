@@ -1,18 +1,17 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.Message
 {
-    internal class MessageDirectionLengthException : ArgumentException
+    /// <summary>
+    /// Исключение ограничения длинны направления отправки
+    /// </summary>
+    public class MessageDirectionLengthException : ArgumentException
     {
-        public MessageDirectionLengthException()
-        {
-        }
-
+        /// <summary>
+        /// Конструктор с информационным сообщением и значением параметра
+        /// </summary>
+        /// <param name="message">Информационное сообщение</param>
+        /// <param name="value">значение параметра вызвашвего исключение</param>
         public MessageDirectionLengthException(string? message, string? value)
             : base(message, value)
-        {
-        }
-
-        public MessageDirectionLengthException(string? message, ArgumentException? innerException) 
-            : base(message, innerException)
         {
         }
     }

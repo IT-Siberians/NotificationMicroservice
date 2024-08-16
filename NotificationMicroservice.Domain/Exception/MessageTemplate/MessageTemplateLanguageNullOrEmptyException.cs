@@ -1,18 +1,16 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
-    internal class MessageTemplateLanguageNullOrEmptyException : ArgumentException
+    /// <summary>
+    /// Исключение ограничения длинны кодировки языка
+    /// </summary>
+    public class MessageTemplateLanguageNullOrEmptyException : ArgumentNullException
     {
-        public MessageTemplateLanguageNullOrEmptyException()
-        {
-        }
-
-        public MessageTemplateLanguageNullOrEmptyException(string? message, string? value)
-            : base(message, value)
-        {
-        }
-
-        public MessageTemplateLanguageNullOrEmptyException(string? message, ArgumentException? innerException) 
-            : base(message, innerException)
+        /// <summary>
+        /// Конструктор с информационным сообщением и значением параметра
+        /// </summary>
+        /// <param name="message">Информационное сообщение</param>
+        public MessageTemplateLanguageNullOrEmptyException(string? message)
+            : base(message)
         {
         }
     }

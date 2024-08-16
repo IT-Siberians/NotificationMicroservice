@@ -1,8 +1,8 @@
-﻿using NotificationMicroservice.Domain.Exception.MessageTemplate;
-using NotificationMicroservice.Domain.Exception.Resources;
-using NotificationMicroservice.Domain.Interfaces.Model;
+﻿using NotificationMicroservice.Domain.Entities.Base;
+using NotificationMicroservice.Domain.Exception.MessageTemplate;
+using NotificationMicroservice.Domain.Exception.Helpers;
 
-namespace NotificationMicroservice.Domain.Entity
+namespace NotificationMicroservice.Domain.Entities
 {
     /// <summary>
     /// Шаблон сообщения
@@ -76,6 +76,11 @@ namespace NotificationMicroservice.Domain.Entity
         /// <param name="createDate">дата и время создания шаблона сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTemplateGuidEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageLengthException"></exception>
+        /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public MessageTemplate(Guid id, MessageType type, string language, string template, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
         {
 
@@ -84,25 +89,11 @@ namespace NotificationMicroservice.Domain.Entity
                 throw new MessageTemplateGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
             }
 
-            if (string.IsNullOrEmpty(language))
-            {
-                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionString.ERROR_LANG_CODE, language);
-            }
+            ValidateLanguage(language);
 
-            if (language.Length != LANGUAGE_LENG)
-            {
-                throw new MessageTemplateLanguageLengthException(ExceptionString.ERROR_LANG_CODE_LENG, language.Length.ToString());
-            }
+            ValidateTemplate(template);
 
-            if (string.IsNullOrEmpty(template))
-            {
-                throw new MessageTemplateNullOrEmptyException(ExceptionString.ERROR_TEMPLATE, template);
-            }
-
-            if (string.IsNullOrEmpty(createUserName))
-            {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, createUserName);
-            }
+            ValidateUserName(createUserName);
 
             Id = id;
             Type = type;
@@ -124,27 +115,17 @@ namespace NotificationMicroservice.Domain.Entity
         /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageLengthException"></exception>
+        /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public void Update(MessageType messageType, string language, string template, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
-            if (string.IsNullOrEmpty(language))
-            {
-                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionString.ERROR_LANG_CODE, language);
-            }
+            ValidateLanguage(language);
 
-            if (language.Length != LANGUAGE_LENG)
-            {
-                throw new MessageTemplateLanguageLengthException(ExceptionString.ERROR_LANG_CODE_LENG, language.Length.ToString());
-            }
+            ValidateTemplate(template);
 
-            if (string.IsNullOrEmpty(template))
-            {
-                throw new MessageTemplateNullOrEmptyException(ExceptionString.ERROR_TEMPLATE, template);
-            }
-
-            if (string.IsNullOrEmpty(modifyUserName))
-            {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
-            }
+            ValidateUserName(modifyUserName);
 
             Type = messageType;
             Language = language;
@@ -159,17 +140,60 @@ namespace NotificationMicroservice.Domain.Entity
         /// </summary>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public void Delete(string modifyUserName, DateTime modifyDate)
         {
 
-            if (string.IsNullOrEmpty(modifyUserName))
-            {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
-            }
+            ValidateUserName(modifyUserName);
 
             IsRemove = true;
             ModifyUserName = modifyUserName;
             ModifyDate = modifyDate;
+        }
+
+        /// <summary>
+        /// Валидация имени пользователя
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
+        private static void ValidateUserName(string userName)
+        {
+            if (string.IsNullOrEmpty(userName) || userName.Trim().Length == 0)
+            {
+                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, userName);
+            }
+        }
+
+        /// <summary>
+        /// Валидация текста шаблона
+        /// </summary>
+        /// <param name="template"></param>
+        /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
+        private static void ValidateTemplate(string template)
+        {
+            if (string.IsNullOrEmpty(template) || template.Trim().Length == 0)
+            {
+                throw new MessageTemplateNullOrEmptyException(ExceptionString.ERROR_TEMPLATE, template);
+            }
+        }
+
+        /// <summary>
+        /// Валидация значения кодирования языка
+        /// </summary>
+        /// <param name="language"></param>
+        /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageLengthException"></exception>
+        private static void ValidateLanguage(string language)
+        {
+            if (string.IsNullOrEmpty(language) || language.Trim().Length == 0)
+            {
+                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionString.ERROR_LANG_CODE);
+            }
+
+            if (language.Length != LANGUAGE_LENG)
+            {
+                throw new MessageTemplateLanguageLengthException(ExceptionString.ERROR_LANG_CODE_LENG, language.Length.ToString());
+            }
         }
     }
 }

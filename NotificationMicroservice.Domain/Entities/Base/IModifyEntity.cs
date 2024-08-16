@@ -1,21 +1,21 @@
-﻿namespace NotificationMicroservice.Domain.Interfaces.Model
+﻿namespace NotificationMicroservice.Domain.Entities.Base
 {
     /// <summary>
     /// Описание модифицируемой Entity 
     /// </summary>
-    /// <typeparam name="T"> Тип полей пользователей. </typeparam>
+    /// <typeparam name="TEntity"> Тип полей пользователей. </typeparam>
     /// <typeparam name="TKey"> Тип первичного ключа. </typeparam>
-    public interface IModifyEntity<T, TKey> : IEntity<TKey>
+    public interface IModifyEntity<TEntity, TKey> : IEntity<TKey> where TEntity : class where TKey : struct
     {
         /// <summary>
         /// Пользователь создавший запись
         /// </summary>
-        T CreateUserName { get; }
+        TEntity CreateUserName { get; }
 
         /// <summary>
         /// Пользователь изменивший запись
         /// </summary>
-        T? ModifyUserName { get; }
+        TEntity? ModifyUserName { get; }
 
         /// <summary>
         /// Дата и время изменения

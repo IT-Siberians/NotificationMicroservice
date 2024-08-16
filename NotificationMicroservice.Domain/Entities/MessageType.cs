@@ -1,8 +1,8 @@
-﻿using NotificationMicroservice.Domain.Exception.MessageType;
-using NotificationMicroservice.Domain.Exception.Resources;
-using NotificationMicroservice.Domain.Interfaces.Model;
+﻿using NotificationMicroservice.Domain.Entities.Base;
+using NotificationMicroservice.Domain.Exception.MessageType;
+using NotificationMicroservice.Domain.Exception.Helpers;
 
-namespace NotificationMicroservice.Domain.Entity
+namespace NotificationMicroservice.Domain.Entities
 {
     /// <summary>
     /// Тип шаблона сообщения
@@ -61,6 +61,10 @@ namespace NotificationMicroservice.Domain.Entity
         /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifyDate">дата и время изменения типа сообщения</param>
         /// <returns>Сущность</returns>
+        /// <exception cref="MessageTypeGuidEmptyException"></exception>
+        /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
+        /// <exception cref="MessageTypeNameLengthException"></exception>
+        /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         public MessageType(Guid id, string name, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
         {
             if (id == Guid.Empty)
@@ -68,20 +72,9 @@ namespace NotificationMicroservice.Domain.Entity
                 throw new MessageTypeGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
             }
 
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
-            }
+            ValidateNameType(name);
 
-            if (name.Length > MAX_NAME_LENG)
-            {
-                throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENG, name.Length.ToString());
-            }
-
-            if (string.IsNullOrEmpty(createUserName))
-            {
-                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, createUserName);
-            }
+            ValidateUserName(createUserName);
 
             Id = id;
             Name = name;
@@ -99,22 +92,14 @@ namespace NotificationMicroservice.Domain.Entity
         /// <param name="isRemove">признак удаления типа сообщения</param>
         /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifyDate">дата и время изменения типа сообщения</param>
+        /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
+        /// <exception cref="MessageTypeNameLengthException"></exception>
+        /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         public void Update(string name, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
-            }
+            ValidateNameType(name);
 
-            if (name.Length > MAX_NAME_LENG)
-            {
-                throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENG, name.Length.ToString());
-            }
-
-            if (string.IsNullOrEmpty(modifyUserName))
-            {
-                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
-            }
+            ValidateUserName(modifyUserName);
 
             Name = name;
             IsRemove = isRemove;
@@ -127,16 +112,46 @@ namespace NotificationMicroservice.Domain.Entity
         /// </summary>
         /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         public void Delete(string modifyUserName, DateTime modifyDate)
         {
-            if (string.IsNullOrEmpty(modifyUserName))
-            {
-                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, modifyUserName);
-            }
+            ValidateUserName(modifyUserName);
 
             IsRemove = true;
             ModifyUserName = modifyUserName;
             ModifyDate = modifyDate;
+        }
+
+        /// <summary>
+        /// Валидация названия
+        /// </summary>
+        /// <param name="name"></param>
+        /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
+        /// <exception cref="MessageTypeNameLengthException"></exception>
+        private static void ValidateNameType(string name)
+        {
+            if (string.IsNullOrEmpty(name) || name.Trim().Length == 0)
+            {
+                throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
+            }
+
+            if (name.Length > MAX_NAME_LENG)
+            {
+                throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENG, name.Length.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Валидация имени пользователя
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
+        private static void ValidateUserName(string userName)
+        {
+            if (string.IsNullOrEmpty(userName) || userName.Trim().Length == 0)
+            {
+                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, userName);
+            }
         }
 
     }

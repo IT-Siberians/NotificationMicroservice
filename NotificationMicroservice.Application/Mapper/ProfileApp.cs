@@ -2,7 +2,7 @@
 using NotificationMicroservice.Application.Model.Message;
 using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Application.Model.Type;
-using NotificationMicroservice.Domain.Entity;
+using NotificationMicroservice.Domain.Entities;
 
 
 namespace NotificationMicroservice.Application.Mapper

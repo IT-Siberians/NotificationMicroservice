@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using NotificationMicroservice.Application.Interface;
 using NotificationMicroservice.Application.Model.Type;
-using NotificationMicroservice.Domain.Entity;
-using NotificationMicroservice.Domain.Interfaces.Repository;
+using NotificationMicroservice.DataAccess.Interfaces;
+using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.Application.Services
 {

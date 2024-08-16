@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NotificationMicroservice.Domain.Entity;
+using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {

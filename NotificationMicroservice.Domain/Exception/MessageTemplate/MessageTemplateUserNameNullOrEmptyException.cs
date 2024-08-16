@@ -1,18 +1,17 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
-    internal class MessageTemplateUserNameNullOrEmptyException : ArgumentException
+    /// <summary>
+    /// Исключение пустого значения пользоватля
+    /// </summary>
+    public class MessageTemplateUserNameNullOrEmptyException : ArgumentNullException
     {
-        public MessageTemplateUserNameNullOrEmptyException()
-        {
-        }
-
+        /// <summary>
+        /// Конструктор с информационным сообщением и значением параметра
+        /// </summary>
+        /// <param name="message">Информационное сообщение</param>
+        /// <param name="value">значение параметра вызвашвего исключение</param>
         public MessageTemplateUserNameNullOrEmptyException(string? message, string? value)
-            : base(message, value)
-        {
-        }
-
-        public MessageTemplateUserNameNullOrEmptyException(string? message, ArgumentException? innerException) 
-            : base(message, innerException)
+            : base(value, message)
         {
         }
     }
