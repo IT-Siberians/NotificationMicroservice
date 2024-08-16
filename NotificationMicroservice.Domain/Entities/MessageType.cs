@@ -14,48 +14,40 @@ namespace NotificationMicroservice.Domain.Entities
         /// </summary>
         public const int MAX_NAME_LENG = 50;
 
-        private Guid _id;
-        private string _name;
-        private bool _isRemove;
-        private string _createUserName;
-        private DateTime _createDate;
-        private string? _modifyUserName;
-        private DateTime? _modifyDate;
-
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public Guid Id { get => _id; }
+        public Guid Id { get; }
 
         /// <summary>
         /// Название типа сообщения
         /// </summary>
-        public string Name { get => _name; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Статус удаления типа
         /// </summary>
-        public bool IsRemove { get => _isRemove; }
+        public bool IsRemove { get; private set; }
 
         /// <summary>
         /// Пользователь создавший тип сообщения
         /// </summary>
-        public string CreateUserName { get => _createUserName; }
+        public string CreateUserName { get; }
 
         /// <summary>
         /// Дата создания типа сообщения
         /// </summary>
-        public DateTime CreateDate { get => _createDate; }
+        public DateTime CreateDate { get; }
 
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
         /// </summary>
-        public string? ModifyUserName { get => _modifyUserName; }
+        public string? ModifyUserName { get; private set; }
 
         /// <summary>
         /// Дата изменения шаблона сообщения
         /// </summary>
-        public DateTime? ModifyDate { get => _modifyDate; }
+        public DateTime? ModifyDate { get; private set; }
 
         /// <summary>
         /// Основной конструктор класса (новая сущность)
@@ -76,20 +68,20 @@ namespace NotificationMicroservice.Domain.Entities
         {
             if (id == Guid.Empty)
             {
-                throw new MessageTypeGuidEmptyException(ExceptionStrings.ERROR_ID, id.ToString());
+                throw new MessageTypeGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
             }
 
             ValidateNameType(name);
 
             ValidateUserName(createUserName);
 
-            _id = id;
-            _name = name;
-            _isRemove = isRemove;
-            _createUserName = createUserName;
-            _createDate = createDate;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            Id = id;
+            Name = name;
+            IsRemove = isRemove;
+            CreateUserName = createUserName;
+            CreateDate = createDate;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
 
         /// <summary>
@@ -108,10 +100,10 @@ namespace NotificationMicroservice.Domain.Entities
 
             ValidateUserName(modifyUserName);
 
-            _name = name;
-            _isRemove = isRemove;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            Name = name;
+            IsRemove = isRemove;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
 
         /// <summary>
@@ -124,11 +116,10 @@ namespace NotificationMicroservice.Domain.Entities
         {
             ValidateUserName(modifyUserName);
 
-            _isRemove = true;
-            _modifyUserName = modifyUserName;
-            _modifyDate = modifyDate;
+            IsRemove = true;
+            ModifyUserName = modifyUserName;
+            ModifyDate = modifyDate;
         }
-
 
         /// <summary>
         /// Валидация названия
@@ -136,17 +127,16 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="name"></param>
         /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
         /// <exception cref="MessageTypeNameLengthException"></exception>
-
         private static void ValidateNameType(string name)
         {
-            if (string.IsNullOrEmpty(name) || name.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                throw new MessageTypeNameNullOrEmptyException(ExceptionStrings.ERROR_TYPE_NAME, name);
+                throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
             }
 
             if (name.Length > MAX_NAME_LENG)
             {
-                throw new MessageTypeNameLengthException(ExceptionStrings.ERROR_TYPE_NAME_LENG, name.Length.ToString());
+                throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENG, name.Length.ToString());
             }
         }
 
@@ -157,9 +147,9 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         private static void ValidateUserName(string userName)
         {
-            if (string.IsNullOrEmpty(userName) || userName.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new MessageTypeUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, userName);
+                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, userName);
             }
         }
 

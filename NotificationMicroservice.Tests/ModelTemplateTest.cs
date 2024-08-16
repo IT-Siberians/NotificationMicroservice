@@ -23,7 +23,7 @@ namespace NotificationMicroservice.Tests
 
             // Assert
             Assert.Equal(id, messageTemplate.Id);
-            Assert.Equal(type, messageTemplate.MessageType);
+            Assert.Equal(type, messageTemplate.Type);
             Assert.Equal(language, messageTemplate.Language);
             Assert.Equal(template, messageTemplate.Template);
             Assert.False(messageTemplate.IsRemove);
@@ -101,7 +101,7 @@ namespace NotificationMicroservice.Tests
             messageTemplate.Update(newMessageType, newLanguage, newTemplate, true, newUserName, createDate);
 
             // Assert
-            Assert.Equal(newMessageType, messageTemplate.MessageType);
+            Assert.Equal(newMessageType, messageTemplate.Type);
             Assert.Equal(newLanguage, messageTemplate.Language);
             Assert.Equal(newTemplate, messageTemplate.Template);
             Assert.True(messageTemplate.IsRemove);
@@ -145,7 +145,7 @@ namespace NotificationMicroservice.Tests
 
             // Act & Assert
             var exception = Assert.Throws<MessageTemplateUserNameNullOrEmptyException>(() => messageTemplate.Delete(string.Empty, createDate));
-            Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
+            Assert.Equal(ExceptionString.ERROR_USERNAME, exception.Message);
         }
 
         private MessageType GetType()

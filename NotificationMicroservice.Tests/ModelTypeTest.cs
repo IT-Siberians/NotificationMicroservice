@@ -44,7 +44,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeGuidEmptyException>(() =>
                 new MessageType(Guid.Empty, name, isRemove, createUserName, createDate, null, null));
-            Assert.Equal(ExceptionStrings.ERROR_ID + $" (Parameter '{Guid.Empty}')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_ID + $" (Parameter '{Guid.Empty}')", exception.Message);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
                 new MessageType(id, string.Empty, isRemove, createUserName, createDate, null, null));
-            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME, exception.Message);
+            Assert.Equal(ExceptionString.ERROR_TYPE_NAME, exception.Message);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
                 new MessageType(id, " ", isRemove, createUserName, createDate, null, null));
-            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME + " (Parameter ' ')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_TYPE_NAME + " (Parameter ' ')", exception.Message);
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeNameLengthException>(() =>
                 new MessageType(id, name, isRemove, createUserName, createDate, null, null));
-            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME_LENG + $" (Parameter '{MessageType.MAX_NAME_LENG + 1}')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_TYPE_NAME_LENG + $" (Parameter '{MessageType.MAX_NAME_LENG + 1}')", exception.Message);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 new MessageType(id, name, isRemove, string.Empty, createDate, null, null));
-            Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
+            Assert.Equal(ExceptionString.ERROR_USERNAME, exception.Message);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 new MessageType(id, name, isRemove, " ", createDate, null, null));
-            Assert.Equal(ExceptionStrings.ERROR_USERNAME + " (Parameter ' ')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_USERNAME + " (Parameter ' ')", exception.Message);
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
                 messageType.Update(string.Empty, false, "Modifier", DateTime.Now));
-            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME, exception.Message);
+            Assert.Equal(ExceptionString.ERROR_TYPE_NAME, exception.Message);
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
                 messageType.Update(" ", false, "Modifier", DateTime.Now));
-            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME + " (Parameter ' ')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_TYPE_NAME + " (Parameter ' ')", exception.Message);
         }
 
 
@@ -199,7 +199,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 messageType.Delete(string.Empty, DateTime.Now));
-            Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
+            Assert.Equal(ExceptionString.ERROR_USERNAME, exception.Message);
         }
 
         [Fact]
@@ -212,7 +212,7 @@ namespace NotificationMicroservice.Tests
             // Act & Assert
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 messageType.Delete(" ", DateTime.Now));
-            Assert.Equal(ExceptionStrings.ERROR_USERNAME + " (Parameter ' ')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_USERNAME + " (Parameter ' ')", exception.Message);
         }
     }
 }

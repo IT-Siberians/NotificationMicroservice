@@ -22,8 +22,8 @@ namespace NotificationMicroservice.Tests
 
             // Assert
             Assert.Equal(id, message.Id);
-            Assert.Equal(type, message.MessageType);
-            Assert.Equal(text, message.MessageText);
+            Assert.Equal(type, message.Type);
+            Assert.Equal(text, message.Text);
             Assert.Equal(direction, message.Direction);
             Assert.Equal(createDate, message.CreateDate);
         }
@@ -39,7 +39,7 @@ namespace NotificationMicroservice.Tests
 
             // Act & Assert
             var exception = Assert.Throws<MessageTextNullOrEmptyException>(() => new Message(id, type, string.Empty, direction, createDate));
-            Assert.Equal(ExceptionStrings.ERROR_TEXT, exception.Message);
+            Assert.Equal(ExceptionString.ERROR_TEXT, exception.Message);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace NotificationMicroservice.Tests
 
             // Act & Assert
             var exception = Assert.Throws<MessageTextNullOrEmptyException>(() => new Message(id, type, " ", direction, createDate));
-            Assert.Equal(ExceptionStrings.ERROR_TEXT + " (Parameter ' ')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_TEXT + " (Parameter ' ')", exception.Message);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace NotificationMicroservice.Tests
 
             // Act & Assert
             var exception = Assert.Throws<MessageDirectionNullOrEmptyException>(() => new Message(id, type, text, string.Empty, createDate));
-            Assert.Equal(ExceptionStrings.ERROR_DIRECTION, exception.Message);
+            Assert.Equal(ExceptionString.ERROR_DIRECTION, exception.Message);
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace NotificationMicroservice.Tests
 
             // Act & Assert
             var exception = Assert.Throws<MessageDirectionNullOrEmptyException>(() => new Message(id, type, text, "  ", createDate));
-            Assert.Equal(ExceptionStrings.ERROR_DIRECTION + " (Parameter '  ')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_DIRECTION + " (Parameter '  ')", exception.Message);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace NotificationMicroservice.Tests
 
             // Act & Assert
             var exception = Assert.Throws<MessageDirectionLengthException>(() => new Message(id, type, text, direction, createDate));
-            Assert.Equal(ExceptionStrings.ERROR_DIRECTION_LENG + $" (Parameter '{Message.MAX_DIRECTION_LENG + 1}')", exception.Message);
+            Assert.Equal(ExceptionString.ERROR_DIRECTION_LENG + $" (Parameter '{Message.MAX_DIRECTION_LENG + 1}')", exception.Message);
         }
 
 
