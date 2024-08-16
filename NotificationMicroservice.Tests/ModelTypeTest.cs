@@ -1,7 +1,6 @@
-﻿using NotificationMicroservice.Domain.Exception.Message;
+﻿using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Exception.Helpers;
 using NotificationMicroservice.Domain.Exception.MessageType;
-using NotificationMicroservice.Domain.Exception.Resources;
-using NotificationMicroservice.Domain.Models;
 using Xunit;
 
 namespace NotificationMicroservice.Tests
@@ -64,6 +63,21 @@ namespace NotificationMicroservice.Tests
         }
 
         [Fact]
+        public void Constructor_Should_ThrowException_When_Name_Is_WhiteSpace()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var isRemove = false;
+            var createUserName = "Creator";
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
+                new MessageType(id, " ", isRemove, createUserName, createDate, null, null));
+            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME + " (Parameter ' ')", exception.Message);
+        }
+
+        [Fact]
         public void Constructor_Should_ThrowException_When_Name_Exceeds_MaxLength()
         {
             // Arrange
@@ -92,6 +106,21 @@ namespace NotificationMicroservice.Tests
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 new MessageType(id, name, isRemove, string.Empty, createDate, null, null));
             Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
+        }
+
+        [Fact]
+        public void Constructor_Should_ThrowException_When_CreateUserName_Is_WhiteSpace()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var name = "TestType";
+            var isRemove = false;
+            var createDate = DateTime.Now;
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
+                new MessageType(id, name, isRemove, " ", createDate, null, null));
+            Assert.Equal(ExceptionStrings.ERROR_USERNAME + " (Parameter ' ')", exception.Message);
         }
 
         [Fact]
@@ -129,6 +158,20 @@ namespace NotificationMicroservice.Tests
         }
 
         [Fact]
+        public void Update_Should_ThrowException_When_Name_Is_WhiteSpace()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var messageType = new MessageType(id, "OldName", false, "Creator", DateTime.Now, null, null);
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
+                messageType.Update(" ", false, "Modifier", DateTime.Now));
+            Assert.Equal(ExceptionStrings.ERROR_TYPE_NAME + " (Parameter ' ')", exception.Message);
+        }
+
+
+        [Fact]
         public void Delete_Should_Set_IsRemove_To_True_When_Valid_Parameters()
         {
             // Arrange
@@ -157,6 +200,19 @@ namespace NotificationMicroservice.Tests
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 messageType.Delete(string.Empty, DateTime.Now));
             Assert.Equal(ExceptionStrings.ERROR_USERNAME, exception.Message);
+        }
+
+        [Fact]
+        public void Delete_Should_ThrowException_When_ModifyUserName_Is_WhiteSpace()
+        {
+            // Arrange
+            var id = Guid.NewGuid();
+            var messageType = new MessageType(id, "TestType", false, "Creator", DateTime.Now, null, null);
+
+            // Act & Assert
+            var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
+                messageType.Delete(" ", DateTime.Now));
+            Assert.Equal(ExceptionStrings.ERROR_USERNAME + " (Parameter ' ')", exception.Message);
         }
     }
 }

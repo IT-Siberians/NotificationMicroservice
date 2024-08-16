@@ -1,8 +1,8 @@
 ﻿using NotificationMicroservice.Domain.Exception.Message;
-using NotificationMicroservice.Domain.Exception.Resources;
-using NotificationMicroservice.Domain.Interfaces.Model;
+using NotificationMicroservice.Domain.Exception.Helpers;
+using NotificationMicroservice.Domain.Entities.Base;
 
-namespace NotificationMicroservice.Domain.Models
+namespace NotificationMicroservice.Domain.Entities
 {
     /// <summary>
     /// Сообщение
@@ -64,15 +64,14 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageGuidEmptyException(ExceptionStrings.ERROR_ID, id.ToString());
             }
 
-            if (string.IsNullOrEmpty(messageText))
+            if (string.IsNullOrEmpty(messageText) || messageText.Trim().Length == 0)
             {
                 throw new MessageTextNullOrEmptyException(ExceptionStrings.ERROR_TEXT, messageText);
             }
 
-            if (string.IsNullOrEmpty(direction))
+            if (string.IsNullOrEmpty(direction) || direction.Trim().Length == 0)
             {
                 throw new MessageDirectionNullOrEmptyException(ExceptionStrings.ERROR_DIRECTION, direction);
-
             }
 
             if (direction.Length > MAX_DIRECTION_LENG)

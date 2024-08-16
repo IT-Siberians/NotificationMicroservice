@@ -1,8 +1,9 @@
 ﻿using NotificationMicroservice.Domain.Exception.MessageTemplate;
-using NotificationMicroservice.Domain.Exception.Resources;
-using NotificationMicroservice.Domain.Interfaces.Model;
+using NotificationMicroservice.Domain.Exception.Helpers;
+using NotificationMicroservice.Domain.Entities.Base;
+using System.Xml.Linq;
 
-namespace NotificationMicroservice.Domain.Models
+namespace NotificationMicroservice.Domain.Entities
 {
     /// <summary>
     /// Шаблон сообщения
@@ -94,25 +95,11 @@ namespace NotificationMicroservice.Domain.Models
                 throw new MessageTemplateGuidEmptyException(ExceptionStrings.ERROR_ID, id.ToString());
             }
 
-            if (string.IsNullOrEmpty(language))
-            {
-                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionStrings.ERROR_LANG_CODE, language);
-            }
+            ValidateLanguage(language);
 
-            if (language.Length != LANGUAGE_LENG)
-            {
-                throw new MessageTemplateLanguageLengthException(ExceptionStrings.ERROR_LANG_CODE_LENG, language.Length.ToString());
-            }
+            ValidateTemplate(template);
 
-            if (string.IsNullOrEmpty(template))
-            {
-                throw new MessageTemplateNullOrEmptyException(ExceptionStrings.ERROR_TEMPLATE, template);
-            }
-
-            if (string.IsNullOrEmpty(createUserName))
-            {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, createUserName);
-            }
+            ValidateUserName(createUserName);
 
             _id = id;
             _messageType = messageType;
@@ -123,7 +110,7 @@ namespace NotificationMicroservice.Domain.Models
             _createDate = createDate;
             _modifyUserName = modifyUserName;
             _modifyDate = modifyDate;
-        }
+        }        
 
         /// <summary>
         /// Обновление класса
@@ -140,25 +127,12 @@ namespace NotificationMicroservice.Domain.Models
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public void Update(MessageType messageType, string language, string template, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
-            if (string.IsNullOrEmpty(language))
-            {
-                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionStrings.ERROR_LANG_CODE, language);
-            }
 
-            if (language.Length != LANGUAGE_LENG)
-            {
-                throw new MessageTemplateLanguageLengthException(ExceptionStrings.ERROR_LANG_CODE_LENG, language.Length.ToString());
-            }
+            ValidateLanguage(language);
 
-            if (string.IsNullOrEmpty(template))
-            {
-                throw new MessageTemplateNullOrEmptyException(ExceptionStrings.ERROR_TEMPLATE, template);
-            }
+            ValidateTemplate(template);            
 
-            if (string.IsNullOrEmpty(modifyUserName))
-            {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, modifyUserName);
-            }
+            ValidateUserName(modifyUserName);
 
             _messageType = messageType;
             _language = language;
@@ -177,14 +151,57 @@ namespace NotificationMicroservice.Domain.Models
         public void Delete(string modifyUserName, DateTime modifyDate)
         {
 
-            if (string.IsNullOrEmpty(modifyUserName))
-            {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, modifyUserName);
-            }
+            ValidateUserName(modifyUserName);
 
             _isRemove = true;
             _modifyUserName = modifyUserName;
             _modifyDate = modifyDate;
+        }
+
+
+        /// <summary>
+        /// Валидация имени пользователя
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
+        private static void ValidateUserName(string userName)
+        {
+            if (string.IsNullOrEmpty(userName) || userName.Trim().Length == 0)
+            {
+                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionStrings.ERROR_USERNAME, userName);
+            }
+        }
+
+        /// <summary>
+        /// Валидация текста шаблона
+        /// </summary>
+        /// <param name="template"></param>
+        /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
+        private static void ValidateTemplate(string template)
+        {
+            if (string.IsNullOrEmpty(template) || template.Trim().Length == 0)
+            {
+                throw new MessageTemplateNullOrEmptyException(ExceptionStrings.ERROR_TEMPLATE, template);
+            }
+        }
+
+        /// <summary>
+        /// Валидация значения кодирования языка
+        /// </summary>
+        /// <param name="language"></param>
+        /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
+        /// <exception cref="MessageTemplateLanguageLengthException"></exception>
+        private static void ValidateLanguage(string language)
+        {
+            if (string.IsNullOrEmpty(language) || language.Trim().Length == 0)
+            {
+                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionStrings.ERROR_LANG_CODE);
+            }
+
+            if (language.Length != LANGUAGE_LENG)
+            {
+                throw new MessageTemplateLanguageLengthException(ExceptionStrings.ERROR_LANG_CODE_LENG, language.Length.ToString());
+            }
         }
     }
 }

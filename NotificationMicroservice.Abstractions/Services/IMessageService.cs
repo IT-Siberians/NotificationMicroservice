@@ -1,4 +1,4 @@
-﻿using NotificationMicroservice.Domain.Models;
+﻿using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.Domain.Interfaces.Services
 {
@@ -11,13 +11,13 @@ namespace NotificationMicroservice.Domain.Interfaces.Services
         /// Получение всех сообщений
         /// </summary>
         /// <returns>Коллекция сущностей Сообщей</returns>
-        Task<IEnumerable<Message>> GetAllAsync();
+        Task<IEnumerable<Message>> GetAllAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Получение сообщения по идентификатору
         /// </summary>
         /// <param name="id">Идентификатор сущности</param>
         /// <returns>Сущность Сообщение</returns>
-        Task<Message>? GetByIdAsync(Guid id);
+        Task<Message>? GetByIdAsync(Guid id, CancellationToken cancellationToken);
     }
 }

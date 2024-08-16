@@ -1,7 +1,6 @@
-﻿using NotificationMicroservice.Domain.Exception.MessageTemplate;
-using NotificationMicroservice.Domain.Exception.Resources;
-using NotificationMicroservice.Domain.Models;
-using System;
+﻿using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Exception.Helpers;
+using NotificationMicroservice.Domain.Exception.MessageTemplate;
 using Xunit;
 
 namespace NotificationMicroservice.Tests

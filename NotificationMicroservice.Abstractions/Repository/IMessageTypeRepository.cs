@@ -1,11 +1,11 @@
-﻿using NotificationMicroservice.Domain.Models;
+﻿using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.Domain.Interfaces.Repository
 {
     /// <summary>
-    /// Описания методов для репозитория Шаблонов сообщений.
+    /// Описания методов для репозитория Типов сообщений.
     /// </summary>
-    public interface IMessageTemplateRepository : IBaseRepository<MessageTemplate, Guid>
+    public interface IMessageTypeRepository : IRepository<MessageType, Guid>
     {
         /// <summary>
         /// Добавить в базу одну сущность.
@@ -13,7 +13,7 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <param name="entity"> Сущность для добавления. </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Добавленная сущность. </returns>
-        Task<Guid> AddAsync(MessageTemplate entity, CancellationToken cancellationToken);
+        Task<Guid> AddAsync(MessageType entity, CancellationToken cancellationToken);
 
         /// <summary>
         /// Для сущности проставить состояние - что она изменена.
@@ -21,7 +21,7 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <param name="entity"> Сущность для изменения. </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Была ли сущность обновлена. </returns>
-        Task<bool> UpdateAsync(MessageTemplate entity, CancellationToken cancellationToken);
+        Task<bool> UpdateAsync(MessageType entity, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удалить сущность.
@@ -29,6 +29,6 @@ namespace NotificationMicroservice.Domain.Interfaces.Repository
         /// <param name="entity"> Сущность для "удаления". </param>
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Была ли сущность удалена. </returns>
-        Task<bool> DeleteAsync(MessageTemplate entity, CancellationToken cancellationToken);
+        Task<bool> DeleteAsync(MessageType entity, CancellationToken cancellationToken);
     }
 }
