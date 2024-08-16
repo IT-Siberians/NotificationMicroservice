@@ -64,12 +64,12 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageGuidEmptyException(ExceptionStrings.ERROR_ID, id.ToString());
             }
 
-            if (string.IsNullOrEmpty(messageText) || messageText.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(messageText))
             {
                 throw new MessageTextNullOrEmptyException(ExceptionStrings.ERROR_TEXT, messageText);
             }
 
-            if (string.IsNullOrEmpty(direction) || direction.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(direction))
             {
                 throw new MessageDirectionNullOrEmptyException(ExceptionStrings.ERROR_DIRECTION, direction);
             }
