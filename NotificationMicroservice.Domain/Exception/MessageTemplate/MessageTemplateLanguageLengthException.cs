@@ -1,18 +1,12 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageTemplate
 {
     /// <summary>
-    /// Исключение ограничения длинны кодировки языка
+    /// Конструктор с информационным сообщением и значением параметра
     /// </summary>
-    public class MessageTemplateLanguageLengthException : ArgumentException
+    /// <param name="message">Информационное сообщение</param>
+    /// <param name="value">значение параметра вызвашвего исключение</param>
+    public class MessageTemplateLanguageLengthException(string message, string value) : ArgumentException(message, value)
     {
-        /// <summary>
-        /// Конструктор с информационным сообщением и значением параметра
-        /// </summary>
-        /// <param name="message">Информационное сообщение</param>
-        /// <param name="value">значение параметра вызвашвего исключение</param>
-        public MessageTemplateLanguageLengthException(string? message, string? value) 
-            : base(message, value)
-        {
-        }
+
     }
 }
