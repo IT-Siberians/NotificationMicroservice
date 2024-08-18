@@ -89,11 +89,7 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageTemplateGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
             }
 
-            ValidateLanguage(language);
-
-            ValidateTemplate(template);
-
-            ValidateUserName(createUserName);
+            ValidateData(language, template, createUserName);
 
             Id = id;
             Type = type;
@@ -121,11 +117,8 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
         public void Update(MessageType messageType, string language, string template, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
-            ValidateLanguage(language);
 
-            ValidateTemplate(template);
-
-            ValidateUserName(modifyUserName);
+            ValidateData(language, template, modifyUserName);
 
             Type = messageType;
             Language = language;
@@ -165,26 +158,17 @@ namespace NotificationMicroservice.Domain.Entities
         }
 
         /// <summary>
-        /// Валидация текста шаблона
+        /// Валидация входных данных
         /// </summary>
         /// <param name="template"></param>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
-        private static void ValidateTemplate(string template)
+        private static void ValidateData(string language, string template, string userName)
         {
             if (string.IsNullOrWhiteSpace(template))
             {
                 throw new MessageTemplateNullOrEmptyException(ExceptionString.ERROR_TEMPLATE, template);
             }
-        }
 
-        /// <summary>
-        /// Валидация значения кодирования языка
-        /// </summary>
-        /// <param name="language"></param>
-        /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
-        /// <exception cref="MessageTemplateLanguageLengthException"></exception>
-        private static void ValidateLanguage(string language)
-        {
             if (string.IsNullOrWhiteSpace(language))
             {
                 throw new MessageTemplateLanguageNullOrEmptyException(ExceptionString.ERROR_LANG_CODE);
@@ -194,6 +178,8 @@ namespace NotificationMicroservice.Domain.Entities
             {
                 throw new MessageTemplateLanguageLengthException(ExceptionString.ERROR_LANG_CODE_LENG, language.Length.ToString());
             }
+
+            ValidateUserName(userName);
         }
     }
 }

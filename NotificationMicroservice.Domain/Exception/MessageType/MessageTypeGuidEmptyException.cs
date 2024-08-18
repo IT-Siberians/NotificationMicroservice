@@ -1,18 +1,12 @@
 ﻿namespace NotificationMicroservice.Domain.Exception.MessageType
 {
     /// <summary>
-    /// Исключение пустого значения идентификатора
+    /// Конструктор с информационным сообщением и значением параметра
     /// </summary>
-    public class MessageTypeGuidEmptyException : ArgumentException
+    /// <param name="message">Информационное сообщение</param>
+    /// <param name="value">значение параметра вызвашвего исключение</param>
+    public class MessageTypeGuidEmptyException(string message, string value) : ArgumentException(message, value)
     {
-        /// <summary>
-        /// Конструктор с информационным сообщением и значением параметра
-        /// </summary>
-        /// <param name="message">Информационное сообщение</param>
-        /// <param name="value">значение параметра вызвашвего исключение</param>
-        public MessageTypeGuidEmptyException(string? message, string? value)
-            : base(message, value)
-        {
-        }
+
     }
 }

@@ -5,7 +5,7 @@
     /// </summary>
     /// <typeparam name="TEntity"> Тип полей пользователей. </typeparam>
     /// <typeparam name="TKey"> Тип первичного ключа. </typeparam>
-    public interface IModifyEntity<TEntity, TKey> : IEntity<TKey> where TEntity : class where TKey : struct
+    public interface IModifyEntity<TEntity, out TKey> : IEntity<TKey> where TEntity : class where TKey : struct
     {
         /// <summary>
         /// Пользователь создавший запись

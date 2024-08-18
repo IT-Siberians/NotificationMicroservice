@@ -71,9 +71,7 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageTypeGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
             }
 
-            ValidateNameType(name);
-
-            ValidateUserName(createUserName);
+            ValidateData(name, createUserName);
 
             Id = id;
             Name = name;
@@ -96,9 +94,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
         public void Update(string name, bool isRemove, string modifyUserName, DateTime modifyDate)
         {
-            ValidateNameType(name);
-
-            ValidateUserName(modifyUserName);
+            ValidateData(name, modifyUserName);
 
             Name = name;
             IsRemove = isRemove;
@@ -122,12 +118,12 @@ namespace NotificationMicroservice.Domain.Entities
         }
 
         /// <summary>
-        /// Валидация названия
+        /// Валидация входных данных
         /// </summary>
         /// <param name="name"></param>
         /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
         /// <exception cref="MessageTypeNameLengthException"></exception>
-        private static void ValidateNameType(string name)
+        private static void ValidateData(string name, string userName)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -138,6 +134,8 @@ namespace NotificationMicroservice.Domain.Entities
             {
                 throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENG, name.Length.ToString());
             }
+
+            ValidateUserName(userName);
         }
 
         /// <summary>
