@@ -151,9 +151,11 @@ namespace NotificationMicroservice.Tests
             var id = Guid.NewGuid();
             var messageType = new MessageType(id, "OldName", false, "Creator", DateTime.Now, null, null);
 
-            // Act & Assert
+            // Act
             var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
                 messageType.Update(string.Empty, false, "Modifier", DateTime.Now));
+            
+            // Assert
             Assert.Equal(ExceptionString.ERROR_TYPE_NAME, exception.Message);
         }
 
@@ -164,9 +166,11 @@ namespace NotificationMicroservice.Tests
             var id = Guid.NewGuid();
             var messageType = new MessageType(id, "OldName", false, "Creator", DateTime.Now, null, null);
 
-            // Act & Assert
+            // Act
             var exception = Assert.Throws<MessageTypeNameNullOrEmptyException>(() =>
                 messageType.Update(" ", false, "Modifier", DateTime.Now));
+            
+            // Assert
             Assert.Equal(ExceptionString.ERROR_TYPE_NAME + " (Parameter ' ')", exception.Message);
         }
 
@@ -196,9 +200,11 @@ namespace NotificationMicroservice.Tests
             var id = Guid.NewGuid();
             var messageType = new MessageType(id, "TestType", false, "Creator", DateTime.Now, null, null);
 
-            // Act & Assert
+            // Act
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 messageType.Delete(string.Empty, DateTime.Now));
+
+            // Assert
             Assert.Equal(ExceptionString.ERROR_USERNAME, exception.Message);
         }
 
@@ -209,9 +215,11 @@ namespace NotificationMicroservice.Tests
             var id = Guid.NewGuid();
             var messageType = new MessageType(id, "TestType", false, "Creator", DateTime.Now, null, null);
 
-            // Act & Assert
+            // Act
             var exception = Assert.Throws<MessageTypeUserNameNullOrEmptyException>(() =>
                 messageType.Delete(" ", DateTime.Now));
+
+            // Assert 
             Assert.Equal(ExceptionString.ERROR_USERNAME + " (Parameter ' ')", exception.Message);
         }
     }
