@@ -32,13 +32,11 @@ namespace NotificationMicroservice.Application.Services
             return dbEntity is null ? null : _mapper.Map<TypeModel>(dbEntity);
         }
 
-        public async Task<Guid> AddAsync(CreateTypeModel type)
+        public async Task<Guid?> AddAsync(CreateTypeModel type)
         {
             var typeNew = new MessageType(Guid.NewGuid(), type.Name, false, type.CreateUserName, DateTime.UtcNow, null, null);
 
-            var typeId = await _messageTypeRepository.AddAsync(typeNew, cancelTokenSource.Token);
-
-            return typeId;
+            return await _messageTypeRepository.AddAsync(typeNew, cancelTokenSource.Token);
         }
 
         public async Task<bool> UpdateAsync(EditTypeModel type1)

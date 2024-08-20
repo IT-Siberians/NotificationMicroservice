@@ -2,9 +2,8 @@
 
 namespace NotificationMicroservice.Application.Abstractions
 {
-    public interface ITemplateApplicationService : IService<TemplateModel, CreateTemplateModel, Guid>
+    public interface ITemplateApplicationService : IModifyService<TemplateModel, CreateTemplateModel, EditTemplateModel, Guid>
     {
-        Task<bool> UpdateAsync(EditTemplateModel messageTemplate);
-        Task<bool> DeleteAsync(EditTemplateModel messageTemplate);
+
     }
 }

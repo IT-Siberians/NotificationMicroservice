@@ -35,13 +35,13 @@ namespace NotificationMicroservice.Application.Services
             return dbEntity is null ? null : _mapper.Map<TemplateModel>(dbEntity);
         }
 
-        public async Task<Guid> AddAsync(CreateTemplateModel messageTemplate)
+        public async Task<Guid?> AddAsync(CreateTemplateModel messageTemplate)
         {
             var type = await _typeRepository.GetByIdAsync(messageTemplate.MessageTypeId, _cancelTokenSource.Token);
 
             if (type is null)
             {
-                throw new Exception ($"MessageType {messageTemplate.MessageTypeId} not found!");
+                return null;
             }     
 
             var template = new MessageTemplate(Guid.NewGuid(), type, messageTemplate.Language, messageTemplate.Template, false, messageTemplate.CreateUserName, DateTime.UtcNow, null, null);
@@ -55,14 +55,14 @@ namespace NotificationMicroservice.Application.Services
 
             if (type is null)
             {
-                throw new Exception($"MessageType {messageTemplate.MessageTypeId} not found!");
+                return false;
             }
 
             var template = await _templateRepository.GetByIdAsync(messageTemplate.Id, _cancelTokenSource.Token);
 
             if (template is null)
             {
-                throw new Exception($"MessageTemplate {messageTemplate.Id} not found!");
+                return false;
             }
 
             template.Update(type, messageTemplate.Language, messageTemplate.Template, messageTemplate.IsRemove, messageTemplate.ModifyUserName, DateTime.UtcNow);
@@ -78,7 +78,7 @@ namespace NotificationMicroservice.Application.Services
 
             if (template is null)
             {
-                throw new Exception($"MessageTemplate {messageTemplate.Id} not found!");
+                return false;
             }
 
             template.Delete(messageTemplate.ModifyUserName, DateTime.UtcNow);

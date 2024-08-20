@@ -20,20 +20,18 @@ namespace NotificationMicroservice.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> AddAsync(CreateMessageModel messageCreate)
+        public async Task<Guid?> AddAsync(CreateMessageModel messageCreate)
         {
             var type = await _typeRepository.GetByIdAsync(messageCreate.MessageTypeId, _cancellationTokenSource.Token);
             
             if (type is null)
             {
-                throw new ArgumentNullException($"MessageType {messageCreate.MessageTypeId} not found!");
+                return null;
             }
 
             var message = new Message(Guid.NewGuid(), type, messageCreate.MessageText, messageCreate.Direction, DateTime.UtcNow);
 
-            var messageId = await _messageRepository.AddAsync(message, _cancellationTokenSource.Token);
-
-            return messageId;
+            return await _messageRepository.AddAsync(message, _cancellationTokenSource.Token);
         }
 
         public async Task<IEnumerable<MessageModel>> GetAllAsync()

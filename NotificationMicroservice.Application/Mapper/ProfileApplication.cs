@@ -7,9 +7,9 @@ using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.Application.Mapper
 {
-    public class ProfileApp : Profile
+    public class ProfileApplication : Profile
     {
-        public ProfileApp() 
+        public ProfileApplication() 
         {
             CreateMap<MessageType, TypeModel>().ReverseMap();
             CreateMap<MessageTemplate, TemplateModel>().ReverseMap();

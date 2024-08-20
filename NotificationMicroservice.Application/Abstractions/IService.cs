@@ -29,6 +29,6 @@
         /// <param name="messageTemplate"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<TKey> AddAsync(TEntityCreate messageTemplate);
+        Task<TKey?> AddAsync(TEntityCreate messageTemplate);
     }
 }
