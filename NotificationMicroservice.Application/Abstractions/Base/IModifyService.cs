@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.Application.Abstractions
+﻿namespace NotificationMicroservice.Application.Abstractions.Base
 {
     /// <summary>
     /// Интерфейс для сервисов с возможностью изменения сущностей

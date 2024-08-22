@@ -40,7 +40,7 @@ namespace NotificationMicroservice.DataAccess.Repository
             await _context.SaveChangesAsync(cancellationToken);
 
             return entity.Id;
-        }           
+        }
 
         public async Task<bool> UpdateAsync(MessageTemplate entity, CancellationToken cancellationToken)
         {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.Contracts.Type;
+using NotificationMicroservice.Validator.Type;
 
 namespace NotificationMicroservice.Controllers
 {
@@ -35,16 +36,25 @@ namespace NotificationMicroservice.Controllers
         {
             var type = await _messageTypeService.GetByIdAsync(id);
 
-            return type is null 
-                ? NotFound($"Type {id} not found!") 
+            return type is null
+                ? NotFound($"Type {id} not found!")
                 : Ok(_mapper.Map<TypeResponse>(type));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), 201)]
         [ProducesResponseType(typeof(string), 400)]
-        public async Task<ActionResult<Guid>> AddAsync([FromBody] TypeRequestAdd request)
+        public async Task<ActionResult<Guid>> AddAsync([FromBody] TypeAddRequest request)
         {
+            var validator = new TypeAddValidator();
+
+            var result = validator.Validate(request);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToString("\n"));
+            }
+
             var typeId = await _messageTypeService.AddAsync(_mapper.Map<CreateTypeModel>(request));
 
             if (typeId == Guid.Empty)
@@ -57,24 +67,48 @@ namespace NotificationMicroservice.Controllers
 
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(bool), 200)]
-        [ProducesResponseType(typeof(string), 404)]
-        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TypeRequestUp request)
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TypeEditRequest request)
         {
-            var type = _mapper.Map<EditTypeModel>(request);
+            var validator = new TypeEditValidator();
 
-            type.Id = id;
+            var result = validator.Validate(request);
 
-           return await _messageTypeService.UpdateAsync(type) is true ? Ok(true) : NotFound($"Type {id} not found or remove!");
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToString("\n"));
+            }
+
+            var type = new EditTypeModel()
+            {
+                Id = id,
+                Name = request.Name,
+                ModifyUserName = request.ModifyUserName
+            };
+            
+
+            return await _messageTypeService.UpdateAsync(type) is true ? Ok(true) : NotFound($"Type {id} not found or remove!");
         }
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(bool), 200)]
-        [ProducesResponseType(typeof(string), 404)]
-        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TypeRequestDelete request)
+        [ProducesResponseType(typeof(string), 400)]
+        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TypeDeleteRequest request)
         {
-            var type = _mapper.Map<EditTypeModel>(request);
+            var validator = new TypeDeleteValidator();
+            
+            var result = validator.Validate(request);
+            
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToString("\n"));
+            }
 
-            type.Id = id;
+            var type = new EditTypeModel()
+            {
+                Id = id,
+                ModifyUserName = request.ModifyUserName
+            };
 
             return await _messageTypeService.DeleteAsync(type) is true ? Ok(true) : NotFound($"Type {id} not found!");
         }

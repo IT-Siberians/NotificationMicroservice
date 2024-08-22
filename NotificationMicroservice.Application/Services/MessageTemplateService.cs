@@ -25,7 +25,7 @@ namespace NotificationMicroservice.Application.Services
         {
             var dbEntities = await _templateRepository.GetAllAsync(_cancelTokenSource.Token, true);
 
-            return  dbEntities.Select(_mapper.Map<TemplateModel>);
+            return dbEntities.Select(_mapper.Map<TemplateModel>);
         }
 
         public async Task<TemplateModel?> GetByIdAsync(Guid id)
@@ -42,7 +42,7 @@ namespace NotificationMicroservice.Application.Services
             if (type is null)
             {
                 return null;
-            }     
+            }
 
             var template = new MessageTemplate(Guid.NewGuid(), type, messageTemplate.Language, messageTemplate.Template, false, messageTemplate.CreateUserName, DateTime.UtcNow, null, null);
 
@@ -73,7 +73,7 @@ namespace NotificationMicroservice.Application.Services
 
         public async Task<bool> DeleteAsync(EditTemplateModel messageTemplate)
         {
-            
+
             var template = await _templateRepository.GetByIdAsync(messageTemplate.Id, _cancelTokenSource.Token);
 
             if (template is null)

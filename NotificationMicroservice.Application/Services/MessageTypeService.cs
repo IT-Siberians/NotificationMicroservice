@@ -10,7 +10,7 @@ namespace NotificationMicroservice.Application.Services
     {
         private readonly IMessageTypeRepository _messageTypeRepository;
         private readonly IMapper _mapper;
-        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();        
+        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
 
         public MessageTypeService(IMessageTypeRepository messageTypeRepository, IMapper mapper)
         {

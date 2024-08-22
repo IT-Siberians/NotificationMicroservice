@@ -1,6 +1,6 @@
 ﻿namespace NotificationMicroservice.Contracts.Template
 {
-    public record TemplateRequestAdd(
+    public record TemplateAddRequest(
         Guid MessageTypeId,
         string Language,
         string Template,

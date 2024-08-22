@@ -23,7 +23,7 @@ namespace NotificationMicroservice.Application.Services
         public async Task<Guid?> AddAsync(CreateMessageModel messageCreate)
         {
             var type = await _typeRepository.GetByIdAsync(messageCreate.MessageTypeId, _cancellationTokenSource.Token);
-            
+
             if (type is null)
             {
                 return null;

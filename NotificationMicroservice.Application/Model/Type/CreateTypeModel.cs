@@ -2,7 +2,7 @@
 {
     public class CreateTypeModel
     {
-        public string Name { get; set; } = string.Empty;
-        public string CreateUserName { get; set; } = string.Empty;
+        public string Name { get; init; }
+        public string CreateUserName { get; init; }
     }
 }

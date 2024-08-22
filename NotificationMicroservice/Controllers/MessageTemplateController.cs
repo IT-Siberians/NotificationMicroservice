@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Contracts.Template;
+using NotificationMicroservice.Validator.Template;
 
 namespace NotificationMicroservice.Controllers
 {
@@ -24,7 +25,7 @@ namespace NotificationMicroservice.Controllers
         public async Task<ActionResult<List<TemplateResponse>>> GetAllAsync()
         {
             var templates = await _messageTemplateService.GetAllAsync();
-            
+
             return Ok(templates.Select(_mapper.Map<TemplateResponse>));
         }
 
@@ -36,15 +37,24 @@ namespace NotificationMicroservice.Controllers
             var template = await _messageTemplateService.GetByIdAsync(id);
 
             return template is null
-                ? NotFound($"Template {id} not found!") 
+                ? NotFound($"Template {id} not found!")
                 : Ok(_mapper.Map<TemplateResponse>(template));
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(Guid), 201)]
         [ProducesResponseType(typeof(string), 400)]
-        public async Task<ActionResult<Guid>> AddAsync([FromBody] TemplateRequestAdd request)
+        public async Task<ActionResult<Guid>> AddAsync([FromBody] TemplateAddRequest request)
         {
+            var validator = new TemplateAddValidator();
+
+            var result = validator.Validate(request);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToString("\n"));
+            }
+
             var templateId = await _messageTemplateService.AddAsync(_mapper.Map<CreateTemplateModel>(request));
 
             if (templateId == Guid.Empty)
@@ -58,30 +68,47 @@ namespace NotificationMicroservice.Controllers
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(bool), 400)]
-        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TemplateRequestUp request)
+        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TemplateEditRequest request)
         {
-            var editTemplate = _mapper.Map<EditTemplateModel>(request);
-            editTemplate.Id = id;
+            var validator = new TemplateEditValidator();
 
-            var result = await _messageTemplateService.UpdateAsync(editTemplate);
+            var result = validator.Validate(request);
 
-            return result is true ? Ok(true) : BadRequest(false);
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToString("\n"));
+            }
+
+            var editTemplate = new EditTemplateModel
+            {
+                Id = id,
+                ModifyUserName = request.ModifyUserName
+            };
+
+            return await _messageTemplateService.UpdateAsync(editTemplate) is true ? Ok(true) : BadRequest(false);
         }
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(bool), 200)]
         [ProducesResponseType(typeof(bool), 400)]
-        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TemplateDelete request)
+        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TemplateDeleteRequest request)
         {
-            var editTemplate = new EditTemplateModel 
-            { 
-                Id = id, 
+            var validator = new TemplateDeleteValidator();
+
+            var result = validator.Validate(request);
+            
+            if (!result.IsValid)
+            {
+                return BadRequest(result.ToString("\n"));
+            }
+
+            var editTemplate = new EditTemplateModel
+            {
+                Id = id,
                 ModifyUserName = request.ModifyUserName
             };
-            
-            var result = await _messageTemplateService.DeleteAsync(editTemplate);
 
-            return result is true ? Ok(true) : BadRequest(false);
+            return await _messageTemplateService.DeleteAsync(editTemplate) is true ? Ok(true) : BadRequest(false);
         }
     }
 }

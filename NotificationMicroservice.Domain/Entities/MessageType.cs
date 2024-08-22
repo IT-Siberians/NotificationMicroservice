@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
-using NotificationMicroservice.Domain.Exception.MessageType;
 using NotificationMicroservice.Domain.Exception.Helpers;
+using NotificationMicroservice.Domain.Exception.MessageType;
 
 namespace NotificationMicroservice.Domain.Entities
 {

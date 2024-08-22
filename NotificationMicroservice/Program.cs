@@ -34,7 +34,7 @@ namespace NotificationMicroservice
             builder.Services.AddScoped<IMessageApplicationService, MessageService>();
             builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
-            builder.Services.AddAutoMapper(typeof(ProfilePre), typeof(ProfileApplication));
+            builder.Services.AddAutoMapper(typeof(PresentationProfile), typeof(ApplicationProfile));
 
             var app = builder.Build();
 

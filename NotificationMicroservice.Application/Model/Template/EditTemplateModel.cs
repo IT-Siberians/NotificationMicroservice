@@ -2,11 +2,11 @@
 {
     public class EditTemplateModel
     {
-        public Guid Id { get; set; }
-        public Guid MessageTypeId { get; set; } = Guid.Empty;
-        public string Language { get; set; } = string.Empty;
-        public string Template { get; set; } = string.Empty;
-        public bool IsRemove { get; set; }
-        public string ModifyUserName { get; set; } = string.Empty;
+        public Guid Id { get; init; }
+        public Guid MessageTypeId { get; init; }
+        public string Language { get; init; }
+        public string Template { get; init; }
+        public bool IsRemove { get; init; }
+        public string ModifyUserName { get; init; }
     }
 }

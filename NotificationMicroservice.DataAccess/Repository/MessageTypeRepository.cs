@@ -64,6 +64,6 @@ namespace NotificationMicroservice.DataAccess.Repository
                     .SetProperty(a => a.ModifyDate, a => entity.ModifyDate), cancellationToken);
 
             return true;
-        }        
+        }
     }
 }

@@ -34,8 +34,8 @@ namespace NotificationMicroservice.Controllers
         {
             var message = await _messageService.GetByIdAsync(id);
 
-            return message is null 
-                ? NotFound($"Message id:{id} not found!") 
+            return message is null
+                ? NotFound($"Message id:{id} not found!")
                 : Ok(_mapper.Map<MessageResponse>(message));
         }
     }

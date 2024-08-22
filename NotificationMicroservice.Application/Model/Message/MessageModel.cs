@@ -4,10 +4,10 @@ namespace NotificationMicroservice.Application.Model.Message
 {
     public class MessageModel
     {
-        public Guid Id { get; set; }
-        public string MessageText { get; set; } = string.Empty;
-        public string Direction { get; set; } = string.Empty;
-        public DateTime CreateDate { get; set; }
+        public Guid Id { get; init; }
+        public string MessageText { get; init; }
+        public string Direction { get; init; }
+        public DateTime CreateDate { get; init; }
         public TypeModel Type { get; set; } = new TypeModel();
     }
 }

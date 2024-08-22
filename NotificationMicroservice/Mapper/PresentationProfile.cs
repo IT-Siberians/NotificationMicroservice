@@ -8,20 +8,20 @@ using NotificationMicroservice.Contracts.Type;
 
 namespace NotificationMicroservice.Mapper
 {
-    public class ProfilePre : Profile
+    public class PresentationProfile : Profile
     {
-        public ProfilePre() 
+        public PresentationProfile()
         {
-            CreateMap<TypeRequestAdd, CreateTypeModel>();
-            CreateMap<TypeRequestUp, EditTypeModel>();
-            CreateMap<TypeRequestDelete, EditTypeModel>();
+            CreateMap<TypeAddRequest, CreateTypeModel>();
+            CreateMap<TypeEditRequest, EditTypeModel>();
+            CreateMap<TypeDeleteRequest, EditTypeModel>();
             CreateMap<TypeModel, TypeResponse>();
 
             CreateMap<MessageModel, MessageResponse>();
 
             CreateMap<TemplateModel, TemplateResponse>();
-            CreateMap<TemplateRequestAdd, CreateTemplateModel>();
-            CreateMap<TemplateRequestUp, EditTemplateModel>();
-        }        
+            CreateMap<TemplateAddRequest, CreateTemplateModel>();
+            CreateMap<TemplateEditRequest, EditTemplateModel>();
+        }
     }
 }

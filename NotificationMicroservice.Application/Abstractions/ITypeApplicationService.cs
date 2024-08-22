@@ -1,4 +1,5 @@
-﻿using NotificationMicroservice.Application.Model.Type;
+﻿using NotificationMicroservice.Application.Abstractions.Base;
+using NotificationMicroservice.Application.Model.Type;
 
 namespace NotificationMicroservice.Application.Abstractions
 {
