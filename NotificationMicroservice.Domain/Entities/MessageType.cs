@@ -32,22 +32,22 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пользователь создавший тип сообщения
         /// </summary>
-        public string CreateUserName { get; }
+        public string CreatedUserName { get; }
 
         /// <summary>
         /// Дата создания типа сообщения
         /// </summary>
-        public DateTime CreateDate { get; }
+        public DateTime CreatedDate { get; }
 
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
         /// </summary>
-        public string? ModifyUserName { get; private set; }
+        public string? ModifiedUserName { get; private set; }
 
         /// <summary>
         /// Дата изменения шаблона сообщения
         /// </summary>
-        public DateTime? ModifyDate { get; private set; }
+        public DateTime? ModifiedDate { get; private set; }
 
         /// <summary>
         /// Основной конструктор класса (новая сущность)
@@ -55,31 +55,31 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="id">идентификатор записи</param>
         /// <param name="name">название типа сообщения</param>
         /// <param name="isRemove">признак удаления типа сообщения</param>
-        /// <param name="createUserName">пользователь создавший тип сообщения</param>
-        /// <param name="createDate">дата и время создания типа сообщения</param>
-        /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
-        /// <param name="modifyDate">дата и время изменения типа сообщения</param>
+        /// <param name="createdUserName">пользователь создавший тип сообщения</param>
+        /// <param name="createdDate">дата и время создания типа сообщения</param>
+        /// <param name="modifiedUserName">пользователь изменивший тип сообщения</param>
+        /// <param name="modifiedDate">дата и время изменения типа сообщения</param>
         /// <returns>Сущность</returns>
         /// <exception cref="MessageTypeGuidEmptyException"></exception>
         /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
         /// <exception cref="MessageTypeNameLengthException"></exception>
         /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
-        public MessageType(Guid id, string name, bool isRemove, string createUserName, DateTime createDate, string? modifyUserName, DateTime? modifyDate)
+        public MessageType(Guid id, string name, bool isRemove, string createdUserName, DateTime createdDate, string? modifiedUserName, DateTime? modifiedDate)
         {
             if (id == Guid.Empty)
             {
                 throw new MessageTypeGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
             }
 
-            ValidateData(name, createUserName);
+            ValidateData(name, createdUserName);
 
             Id = id;
             Name = name;
             IsRemove = isRemove;
-            CreateUserName = createUserName;
-            CreateDate = createDate;
-            ModifyUserName = modifyUserName;
-            ModifyDate = modifyDate;
+            CreatedUserName = createdUserName;
+            CreatedDate = createdDate;
+            ModifiedUserName = modifiedUserName;
+            ModifiedDate = modifiedDate;
         }
 
         /// <summary>
@@ -87,34 +87,34 @@ namespace NotificationMicroservice.Domain.Entities
         /// </summary>
         /// <param name="name">название типа сообщения</param>
         /// <param name="isRemove">признак удаления типа сообщения</param>
-        /// <param name="modifyUserName">пользователь изменивший тип сообщения</param>
-        /// <param name="modifyDate">дата и время изменения типа сообщения</param>
+        /// <param name="modifiedUserName">пользователь изменивший тип сообщения</param>
+        /// <param name="modifiedDate">дата и время изменения типа сообщения</param>
         /// <exception cref="MessageTypeNameNullOrEmptyException"></exception>
         /// <exception cref="MessageTypeNameLengthException"></exception>
         /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
-        public void Update(string name, bool isRemove, string modifyUserName, DateTime modifyDate)
+        public void Update(string name, bool isRemove, string modifiedUserName, DateTime modifiedDate)
         {
-            ValidateData(name, modifyUserName);
+            ValidateData(name, modifiedUserName);
 
             Name = name;
             IsRemove = isRemove;
-            ModifyUserName = modifyUserName;
-            ModifyDate = modifyDate;
+            ModifiedUserName = modifiedUserName;
+            ModifiedDate = modifiedDate;
         }
 
         /// <summary>
         /// Деактивация "Удаление"
         /// </summary>
-        /// <param name="modifyUserName">пользователь изменивший шаблон сообщения</param>
-        /// <param name="modifyDate">дата и время изменения шаблона сообщения</param>
+        /// <param name="modifiedUserName">пользователь изменивший шаблон сообщения</param>
+        /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
         /// <exception cref="MessageTypeUserNameNullOrEmptyException"></exception>
-        public void Delete(string modifyUserName, DateTime modifyDate)
+        public void Delete(string modifiedUserName, DateTime modifiedDate)
         {
-            ValidateUserName(modifyUserName);
+            ValidateUserName(modifiedUserName);
 
             IsRemove = true;
-            ModifyUserName = modifyUserName;
-            ModifyDate = modifyDate;
+            ModifiedUserName = modifiedUserName;
+            ModifiedDate = modifiedDate;
         }
 
         /// <summary>

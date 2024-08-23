@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.Application.Abstractions.Base
+﻿namespace NotificationMicroservice.Application.Services.Abstractions.Base
 {
     /// <summary>
     /// Интерфейс для сервисов с возможностью изменения сущностей
@@ -7,7 +7,11 @@
     /// <typeparam name="TEntityCreate">Модель для создания</typeparam>
     /// <typeparam name="TEntityEdit">Модель для изменения</typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public interface IModifyService<TEntity, TEntityCreate, TEntityEdit, TKey> : IService<TEntity, TEntityCreate, TKey> where TEntity : class where TEntityCreate : class where TEntityEdit : class where TKey : struct
+    public interface IModifyService<TEntity, TEntityCreate, TEntityEdit, TKey> : IService<TEntity, TEntityCreate, TKey> 
+        where TEntity : class 
+        where TEntityCreate : class 
+        where TEntityEdit : class 
+        where TKey : struct
     {
         /// <summary>
         /// Изменение сущности

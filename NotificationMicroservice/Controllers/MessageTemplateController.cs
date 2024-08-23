@@ -66,7 +66,7 @@ namespace NotificationMicroservice.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(typeof(bool), 400)]
         public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TemplateEditRequest request)
         {
@@ -85,11 +85,11 @@ namespace NotificationMicroservice.Controllers
                 ModifyUserName = request.ModifyUserName
             };
 
-            return await _messageTemplateService.UpdateAsync(editTemplate) is true ? Ok(true) : BadRequest(false);
+            return await _messageTemplateService.UpdateAsync(editTemplate) is true ? NoContent() : BadRequest(false);
         }
 
         [HttpDelete("{id:guid}")]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(typeof(bool), 400)]
         public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TemplateDeleteRequest request)
         {
@@ -108,7 +108,7 @@ namespace NotificationMicroservice.Controllers
                 ModifyUserName = request.ModifyUserName
             };
 
-            return await _messageTemplateService.DeleteAsync(editTemplate) is true ? Ok(true) : BadRequest(false);
+            return await _messageTemplateService.DeleteAsync(editTemplate) is true ? NoContent() : BadRequest(false);
         }
     }
 }

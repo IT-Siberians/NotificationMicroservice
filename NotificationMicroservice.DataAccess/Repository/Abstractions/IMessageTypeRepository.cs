@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Entities;
 
-namespace NotificationMicroservice.DataAccess.Abstractions
+namespace NotificationMicroservice.DataAccess.Repository.Abstractions
 {
     /// <summary>
     /// Описания методов для репозитория Типов сообщений.

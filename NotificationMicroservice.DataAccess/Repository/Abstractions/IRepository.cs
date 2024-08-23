@@ -1,11 +1,15 @@
-﻿namespace NotificationMicroservice.DataAccess.Abstractions
+﻿using NotificationMicroservice.Domain.Entities.Base;
+
+namespace NotificationMicroservice.DataAccess.Repository.Abstractions
 {
     /// <summary>
     /// Описания общих методов для всех репозиториев.
     /// </summary>
     /// <typeparam name="TEntity"> Тип Entity для репозитория. </typeparam>
     /// <typeparam name="TKey"> Тип первичного ключа. </typeparam>
-    public interface IRepository<TEntity, TKey> where TEntity : class where TKey : struct
+    public interface IRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
+        where TKey : struct
     {
         /// <summary>
         /// Получить сущность коллекцию сущностей.

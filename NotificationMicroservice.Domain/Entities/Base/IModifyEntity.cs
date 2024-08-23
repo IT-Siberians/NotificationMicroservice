@@ -10,16 +10,16 @@
         /// <summary>
         /// Пользователь создавший запись
         /// </summary>
-        TEntity CreateUserName { get; }
+        TEntity CreatedUserName { get; }
 
         /// <summary>
         /// Пользователь изменивший запись
         /// </summary>
-        TEntity? ModifyUserName { get; }
+        TEntity? ModifiedUserName { get; }
 
         /// <summary>
         /// Дата и время изменения
         /// </summary>
-        DateTime? ModifyDate { get; }
+        DateTime? ModifiedDate { get; }
     }
 }

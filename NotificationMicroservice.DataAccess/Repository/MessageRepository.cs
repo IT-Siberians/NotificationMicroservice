@@ -1,36 +1,53 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NotificationMicroservice.DataAccess.Abstractions;
+using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {
-    public class MessageRepository : IMessageRepository
+    /// <summary>
+    /// Репозиторий для работы с сообщениями в базе данных.
+    /// Реализует интерфейс <see cref="IMessageRepository"/>.
+    /// </summary>
+    /// <param name="context">Контекст базы данных для работы с сообщениями.</param>
+    public class MessageRepository(NotificationMicroserviceDbContext context) : IMessageRepository
     {
-        private readonly NotificationMicroserviceDbContext _context;
 
-        public MessageRepository(NotificationMicroserviceDbContext context)
-        {
-            _context = context;
-        }
-
+        /// <summary>
+        /// Добавляет новое сообщение в базу данных.
+        /// </summary>
+        /// <param name="entity">Сущность сообщения для добавления.</param>
+        /// <param name="cancellationToken">Токен отмены операции.</param>
+        /// <returns>Идентификатор добавленного сообщения.</returns>
         public async Task<Guid> AddAsync(Message entity, CancellationToken cancellationToken)
         {
-            _context.Types.Attach(entity.Type);
-            await _context.Messages.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            context.Types.Attach(entity.Type);
+            await context.Messages.AddAsync(entity);
+            await context.SaveChangesAsync();
 
             return entity.Id;
         }
 
+        /// <summary>
+        /// Запрашивает все сообщения из базы данных.
+        /// </summary>
+        /// <param name="cancellationToken">Токен отмены операции.</param>
+        /// <param name="asNoTracking">Указывает, следует ли использовать режим <c>AsNoTracking</c> для запросов.</param>
+        /// <returns>Список всех сущностей типа <see cref="Message"/>.</returns>
         public async Task<IEnumerable<Message>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false)
         {
-            return await (asNoTracking ? _context.Messages.AsNoTracking() : _context.Messages)
+            return await (asNoTracking ? context.Messages.AsNoTracking() : context.Messages)
                 .ToListAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Запрашивает сообщение по идентификатору.
+        /// </summary>
+        /// <param name="id">Идентификатор сообщения.</param>
+        /// <param name="cancellationToken">Токен отмены операции.</param>
+        /// <returns>Сущность типа <see cref="Message"/> с заданным идентификатором или <c>null</c>, если не найдено.</returns>
         public async Task<Message?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _context.Messages
+            return await context.Messages
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync(cancellationToken);
         }

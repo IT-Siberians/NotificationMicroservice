@@ -23,16 +23,16 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(x => x.IsRemove)
                 .IsRequired();
 
-            builder.Property(x => x.CreateUserName)
+            builder.Property(x => x.CreatedUserName)
                 .IsRequired();
 
-            builder.Property(x => x.CreateDate)
+            builder.Property(x => x.CreatedDate)
                 .IsRequired();
 
-            builder.Property(x => x.ModifyUserName)
+            builder.Property(x => x.ModifiedUserName)
                 .IsRequired(false);
 
-            builder.Property(x => x.ModifyDate)
+            builder.Property(x => x.ModifiedDate)
                 .IsRequired(false);
 
             builder.HasOne(x => x.Type)

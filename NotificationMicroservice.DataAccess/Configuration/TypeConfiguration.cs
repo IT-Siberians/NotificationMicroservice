@@ -17,17 +17,17 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .HasMaxLength(MessageType.MAX_NAME_LENG)
                 .IsRequired();
 
-            builder.Property(x => x.CreateUserName)
+            builder.Property(x => x.CreatedUserName)
                 .IsRequired();
 
-            builder.Property(x => x.CreateDate)
+            builder.Property(x => x.CreatedDate)
                 .IsRequired();
 
-            builder.Property(e => e.ModifyUserName)
-                  .IsRequired(false);
+            builder.Property(e => e.ModifiedUserName)
+                .IsRequired(false);
 
-            builder.Property(e => e.ModifyDate)
-                  .IsRequired(false);
+            builder.Property(e => e.ModifiedDate)
+                .IsRequired(false);
 
             builder.HasMany<Message>()
                 .WithOne(x => x.Type);

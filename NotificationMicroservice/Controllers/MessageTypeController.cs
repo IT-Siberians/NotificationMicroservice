@@ -66,7 +66,7 @@ namespace NotificationMicroservice.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TypeEditRequest request)
         {
@@ -87,11 +87,11 @@ namespace NotificationMicroservice.Controllers
             };
             
 
-            return await _messageTypeService.UpdateAsync(type) is true ? Ok(true) : NotFound($"Type {id} not found or remove!");
+            return await _messageTypeService.UpdateAsync(type) is true ? NoContent() : NotFound($"Type {id} not found or remove!");
         }
 
         [HttpDelete("{id:guid}")]
-        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TypeDeleteRequest request)
         {
@@ -110,7 +110,7 @@ namespace NotificationMicroservice.Controllers
                 ModifyUserName = request.ModifyUserName
             };
 
-            return await _messageTypeService.DeleteAsync(type) is true ? Ok(true) : NotFound($"Type {id} not found!");
+            return await _messageTypeService.DeleteAsync(type) is true ? NoContent() : NotFound($"Type {id} not found!");
         }
 
     }
