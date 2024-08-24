@@ -2,7 +2,7 @@
 {
     public record TypeEditRequest(
         string Name,
-        string ModifyUserName
+        string ModifiedUserName
         );
 
 }

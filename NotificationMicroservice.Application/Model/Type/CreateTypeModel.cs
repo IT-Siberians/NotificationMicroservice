@@ -3,6 +3,6 @@
     public class CreateTypeModel
     {
         public string Name { get; init; }
-        public string CreateUserName { get; init; }
+        public string CreatedUserName { get; init; }
     }
 }

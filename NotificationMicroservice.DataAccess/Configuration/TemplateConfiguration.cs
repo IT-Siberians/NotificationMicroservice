@@ -14,13 +14,13 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .ValueGeneratedOnAdd();
 
             builder.Property(x => x.Language)
-                .HasMaxLength(MessageTemplate.LANGUAGE_LENG)
+                .HasMaxLength(MessageTemplate.LANGUAGE_LENGTH)
                 .IsRequired();
 
             builder.Property(x => x.Template)
                 .IsRequired();
 
-            builder.Property(x => x.IsRemove)
+            builder.Property(x => x.IsRemoved)
                 .IsRequired();
 
             builder.Property(x => x.CreatedUserName)

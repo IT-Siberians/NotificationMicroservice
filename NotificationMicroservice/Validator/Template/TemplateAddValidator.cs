@@ -18,7 +18,7 @@ namespace NotificationMicroservice.Validator.Template
             RuleFor(template => template.Template)
                 .SetValidator(new TemplateValidator());
 
-            RuleFor(template => template.CreateUserName)
+            RuleFor(template => template.CreatedUserName)
                 .SetValidator(new UserNameValidator());
         }
     }

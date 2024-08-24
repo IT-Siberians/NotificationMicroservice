@@ -82,7 +82,7 @@ namespace NotificationMicroservice.Controllers
             var editTemplate = new EditTemplateModel
             {
                 Id = id,
-                ModifyUserName = request.ModifyUserName
+                ModifiedUserName = request.ModifiedUserName
             };
 
             return await _messageTemplateService.UpdateAsync(editTemplate) is true ? NoContent() : BadRequest(false);
@@ -105,7 +105,7 @@ namespace NotificationMicroservice.Controllers
             var editTemplate = new EditTemplateModel
             {
                 Id = id,
-                ModifyUserName = request.ModifyUserName
+                ModifiedUserName = request.ModifiedUserName
             };
 
             return await _messageTemplateService.DeleteAsync(editTemplate) is true ? NoContent() : BadRequest(false);

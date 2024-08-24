@@ -6,5 +6,5 @@
         Guid MessageTypeId,
         string MessageText,
         string Direction,
-        DateTime CreateDate);
+        DateTime CreatedDate);
 }

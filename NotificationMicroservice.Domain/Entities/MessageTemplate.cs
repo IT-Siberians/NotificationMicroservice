@@ -12,7 +12,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Длинна кодировки языка шаблона сообщения (ISO 639-3)
         /// </summary>
-        public const int LANGUAGE_LENG = 3;
+        public const int LANGUAGE_LENGTH = 3;
 
         /// <summary>
         /// Идентификатор
@@ -37,7 +37,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Статус удаления шааблона
         /// </summary>
-        public bool IsRemove { get; private set; }
+        public bool IsRemoved { get; private set; }
 
         /// <summary>
         /// Пользователь создавший шаблон сообщения
@@ -71,7 +71,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="type">тип сообщения</param>
         /// <param name="language">язык шаблона</param>
         /// <param name="template">текст шаблона сообщения</param>
-        /// <param name="isRemove">признак удаления типа сообщения</param>
+        /// <param name="isRemoved">признак удаления типа сообщения</param>
         /// <param name="createdUserName">пользователь создавший шаблон сообщения</param>
         /// <param name="createdDate">дата и время создания шаблона сообщения</param>
         /// <param name="modifiedUserName">пользователь изменивший шаблон сообщения</param>
@@ -81,7 +81,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public MessageTemplate(Guid id, MessageType type, string language, string template, bool isRemove, string createdUserName, DateTime createdDate, string? modifiedUserName, DateTime? modifiedDate)
+        public MessageTemplate(Guid id, MessageType type, string language, string template, bool isRemoved, string createdUserName, DateTime createdDate, string? modifiedUserName, DateTime? modifiedDate)
         {
 
             if (id == Guid.Empty)
@@ -95,7 +95,7 @@ namespace NotificationMicroservice.Domain.Entities
             Type = type;
             Language = language;
             Template = template;
-            IsRemove = isRemove;
+            IsRemoved = isRemoved;
             CreatedUserName = createdUserName;
             CreatedDate = createdDate;
             ModifiedUserName = modifiedUserName;
@@ -108,14 +108,14 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="messageType">тип сообщения</param>
         /// <param name="language">язык шаблона</param>
         /// <param name="template">текст шаблона сообщения</param>
-        /// <param name="isRemove">признак удаления типа сообщения</param>
+        /// <param name="isRemoved">признак удаления типа сообщения</param>
         /// <param name="modifiedUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
         /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public void Update(MessageType messageType, string language, string template, bool isRemove, string modifiedUserName, DateTime modifiedDate)
+        public void Update(MessageType messageType, string language, string template, bool isRemoved, string modifiedUserName, DateTime modifiedDate)
         {
 
             ValidateData(language, template, modifiedUserName);
@@ -123,7 +123,7 @@ namespace NotificationMicroservice.Domain.Entities
             Type = messageType;
             Language = language;
             Template = template;
-            IsRemove = isRemove;
+            IsRemoved = isRemoved;
             ModifiedUserName = modifiedUserName;
             ModifiedDate = modifiedDate;
         }
@@ -139,7 +139,7 @@ namespace NotificationMicroservice.Domain.Entities
 
             ValidateUserName(modifiedUserName);
 
-            IsRemove = true;
+            IsRemoved = true;
             ModifiedUserName = modifiedUserName;
             ModifiedDate = modifiedDate;
         }
@@ -174,9 +174,9 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageTemplateLanguageNullOrEmptyException(ExceptionString.ERROR_LANG_CODE);
             }
 
-            if (language.Length != LANGUAGE_LENG)
+            if (language.Length != LANGUAGE_LENGTH)
             {
-                throw new MessageTemplateLanguageLengthException(ExceptionString.ERROR_LANG_CODE_LENG, language.Length.ToString());
+                throw new MessageTemplateLanguageLengthException(ExceptionString.ERROR_LANG_CODE_LENGTH, language.Length.ToString());
             }
 
             ValidateUserName(userName);

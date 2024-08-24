@@ -44,7 +44,7 @@ namespace NotificationMicroservice.Application.Services
                 return null;
             }
 
-            var template = new MessageTemplate(Guid.NewGuid(), type, messageTemplate.Language, messageTemplate.Template, false, messageTemplate.CreateUserName, DateTime.UtcNow, null, null);
+            var template = new MessageTemplate(Guid.NewGuid(), type, messageTemplate.Language, messageTemplate.Template, false, messageTemplate.CreatedUserName, DateTime.UtcNow, null, null);
 
             return await _templateRepository.AddAsync(template, _cancelTokenSource.Token);
         }
@@ -65,7 +65,7 @@ namespace NotificationMicroservice.Application.Services
                 return false;
             }
 
-            template.Update(type, messageTemplate.Language, messageTemplate.Template, messageTemplate.IsRemove, messageTemplate.ModifyUserName, DateTime.UtcNow);
+            template.Update(type, messageTemplate.Language, messageTemplate.Template, messageTemplate.IsRemoved, messageTemplate.ModifiedUserName, DateTime.UtcNow);
 
             return await _templateRepository.UpdateAsync(template, _cancelTokenSource.Token);
 
@@ -81,7 +81,7 @@ namespace NotificationMicroservice.Application.Services
                 return false;
             }
 
-            template.Delete(messageTemplate.ModifyUserName, DateTime.UtcNow);
+            template.Delete(messageTemplate.ModifiedUserName, DateTime.UtcNow);
 
             return await _templateRepository.DeleteAsync(template, _cancelTokenSource.Token);
         }

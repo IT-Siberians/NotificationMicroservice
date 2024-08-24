@@ -14,7 +14,10 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .ValueGeneratedOnAdd();
 
             builder.Property(x => x.Name)
-                .HasMaxLength(MessageType.MAX_NAME_LENG)
+                .HasMaxLength(MessageType.MAX_NAME_LENGTH)
+                .IsRequired();
+
+            builder.Property(x => x.IsRemoved)
                 .IsRequired();
 
             builder.Property(x => x.CreatedUserName)

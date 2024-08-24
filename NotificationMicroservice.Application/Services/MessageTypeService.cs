@@ -34,7 +34,7 @@ namespace NotificationMicroservice.Application.Services
 
         public async Task<Guid?> AddAsync(CreateTypeModel type)
         {
-            var typeNew = new MessageType(Guid.NewGuid(), type.Name, false, type.CreateUserName, DateTime.UtcNow, null, null);
+            var typeNew = new MessageType(Guid.NewGuid(), type.Name, false, type.CreatedUserName, DateTime.UtcNow, null, null);
 
             return await _messageTypeRepository.AddAsync(typeNew, cancelTokenSource.Token);
         }
@@ -43,14 +43,14 @@ namespace NotificationMicroservice.Application.Services
         {
             var type = await GetByIdAsync(type1.Id);
 
-            if (type is null || type.IsRemove)
+            if (type is null || type.IsRemoved)
             {
                 return false;
             }
 
             var typeNew = _mapper.Map<MessageType>(type);
 
-            typeNew.Update(type1.Name, false, type1.ModifyUserName, DateTime.UtcNow);
+            typeNew.Update(type1.Name, false, type1.ModifiedUserName, DateTime.UtcNow);
 
             var result = await _messageTypeRepository.UpdateAsync(typeNew, cancelTokenSource.Token);
 
@@ -68,7 +68,7 @@ namespace NotificationMicroservice.Application.Services
 
             var typeNew = _mapper.Map<MessageType>(type);
 
-            typeNew.Delete(type1.ModifyUserName, DateTime.UtcNow);
+            typeNew.Delete(type1.ModifiedUserName, DateTime.UtcNow);
 
             var result = await _messageTypeRepository.DeleteAsync(typeNew, cancelTokenSource.Token);
 

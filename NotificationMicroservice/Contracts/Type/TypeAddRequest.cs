@@ -2,7 +2,7 @@
 {
     public record TypeAddRequest(
         string Name,
-        string CreateUserName
+        string CreatedUserName
         );
 
 }

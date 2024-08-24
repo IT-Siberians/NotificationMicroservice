@@ -9,7 +9,7 @@ namespace NotificationMicroservice.Validator.Template
         public TemplateDeleteValidator()
         {
 
-            RuleFor(template => template.ModifyUserName)
+            RuleFor(template => template.ModifiedUserName)
                 .SetValidator(new UserNameValidator());
         }
     }

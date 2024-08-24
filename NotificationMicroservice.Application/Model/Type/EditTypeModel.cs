@@ -4,6 +4,6 @@
     {
         public Guid Id { get; init; }
         public string Name { get; init; }
-        public string ModifyUserName { get; init; }
+        public string ModifiedUserName { get; init; }
     }
 }

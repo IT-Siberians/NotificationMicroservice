@@ -6,7 +6,7 @@
         public Guid MessageTypeId { get; init; }
         public string Language { get; init; }
         public string Template { get; init; }
-        public bool IsRemove { get; init; }
-        public string ModifyUserName { get; init; }
+        public bool IsRemoved { get; init; }
+        public string ModifiedUserName { get; init; }
     }
 }

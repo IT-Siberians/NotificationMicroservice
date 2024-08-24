@@ -60,14 +60,9 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <returns>Возвращает <c>true</c> после успешного обновления.</returns>
         public async Task<bool> UpdateAsync(MessageType entity, CancellationToken cancellationToken)
         {
-            await context.Types
-                .Where(x => x.Id == entity.Id)
-                .ExecuteUpdateAsync(z => z
-                    .SetProperty(a => a.Name, a => entity.Name)
-                    .SetProperty(a => a.ModifiedUserName, a => entity.ModifiedUserName)
-                    .SetProperty(a => a.ModifiedDate, a => entity.ModifiedDate), cancellationToken);
+            context.Types.Update(entity);
 
-            return true;
+            return await context.SaveChangesAsync(cancellationToken) == 1;
         }
 
         /// <summary>
@@ -78,14 +73,7 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <returns>Возвращает <c>true</c> после успешного удаления.</returns>
         public async Task<bool> DeleteAsync(MessageType entity, CancellationToken cancellationToken)
         {
-            await context.Types
-                .Where(x => x.Id == entity.Id)
-                .ExecuteUpdateAsync(z => z
-                    .SetProperty(a => a.IsRemove, a => entity.IsRemove)
-                    .SetProperty(a => a.ModifiedUserName, a => entity.ModifiedUserName)
-                    .SetProperty(a => a.ModifiedDate, a => entity.ModifiedDate), cancellationToken);
-
-            return true;
+            return await UpdateAsync(entity, cancellationToken);
         }
     }
 }

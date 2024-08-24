@@ -83,7 +83,7 @@ namespace NotificationMicroservice.Controllers
             {
                 Id = id,
                 Name = request.Name,
-                ModifyUserName = request.ModifyUserName
+                ModifiedUserName = request.ModifiedUserName
             };
             
 
@@ -107,7 +107,7 @@ namespace NotificationMicroservice.Controllers
             var type = new EditTypeModel()
             {
                 Id = id,
-                ModifyUserName = request.ModifyUserName
+                ModifiedUserName = request.ModifiedUserName
             };
 
             return await _messageTypeService.DeleteAsync(type) is true ? NoContent() : NotFound($"Type {id} not found!");

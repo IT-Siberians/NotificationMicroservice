@@ -3,11 +3,11 @@
     public record TypeResponse(
         Guid Id,
         string Name,
-        bool IsRemove,
-        string CreateUserName,
-        DateTime CreateDate,
-        string? ModifyUserName,
-        DateTime? ModifyDate
+        bool IsRemoved,
+        string CreatedUserName,
+        DateTime CreatedDate,
+        string? ModifiedUserName,
+        DateTime? ModifiedDate
         );
 
 }
