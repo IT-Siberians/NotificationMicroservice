@@ -86,7 +86,7 @@ namespace NotificationMicroservice.Domain.Entities
 
             if (id == Guid.Empty)
             {
-                throw new MessageTemplateGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
+                throw new MessageTemplateGuidEmptyException(ExceptionMessages.ERROR_ID, id.ToString());
             }
 
             ValidateData(language, template, createdUserName);
@@ -153,7 +153,7 @@ namespace NotificationMicroservice.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, userName);
+                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionMessages.ERROR_USERNAME, userName);
             }
         }
 
@@ -166,17 +166,17 @@ namespace NotificationMicroservice.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(template))
             {
-                throw new MessageTemplateNullOrEmptyException(ExceptionString.ERROR_TEMPLATE, template);
+                throw new MessageTemplateNullOrEmptyException(ExceptionMessages.ERROR_TEMPLATE, template);
             }
 
             if (string.IsNullOrWhiteSpace(language))
             {
-                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionString.ERROR_LANG_CODE);
+                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionMessages.ERROR_LANG_CODE);
             }
 
             if (language.Length != LANGUAGE_LENGTH)
             {
-                throw new MessageTemplateLanguageLengthException(ExceptionString.ERROR_LANG_CODE_LENGTH, language.Length.ToString());
+                throw new MessageTemplateLanguageLengthException(ExceptionMessages.ERROR_LANG_CODE_LENGTH, language.Length.ToString());
             }
 
             ValidateUserName(userName);

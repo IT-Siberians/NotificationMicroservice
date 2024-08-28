@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Mapper;
@@ -16,13 +18,24 @@ namespace NotificationMicroservice
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+            builder.Services.AddFluentValidationAutoValidation();
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<NotificationMicroserviceDbContext>(
                 options =>
                 {
-                    options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(NotificationMicroserviceDbContext)));
+                    var connectionString = builder.Configuration.GetConnectionString(nameof(NotificationMicroserviceDbContext));
+
+                    if (string.IsNullOrEmpty(connectionString))
+                    {
+                        throw new InvalidOperationException("Connection string for NotificationMicroserviceDbContext is not configured.");
+                    }
+
+                    options.UseNpgsql(connectionString);
                 });
 
             builder.Services.AddScoped<ITypeApplicationService, MessageTypeService>();

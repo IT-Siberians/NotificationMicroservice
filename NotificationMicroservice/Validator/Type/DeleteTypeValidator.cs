@@ -4,15 +4,12 @@ using NotificationMicroservice.Validator.Base;
 
 namespace NotificationMicroservice.Validator.Type
 {
-    public class TypeAddValidator : AbstractValidator<TypeAddRequest>
+    public class DeleteTypeValidator : AbstractValidator<DeleteTypeRequest>
     {
-        public TypeAddValidator()
+        public DeleteTypeValidator()
         {
 
-            RuleFor(type => type.Name)
-                .SetValidator(new TypeNameValidator());
-
-            RuleFor(type => type.CreatedUserName)
+            RuleFor(type => type.ModifiedUserName)
                 .SetValidator(new UserNameValidator());
         }
     }

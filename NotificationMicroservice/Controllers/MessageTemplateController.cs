@@ -44,22 +44,13 @@ namespace NotificationMicroservice.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Guid), 201)]
         [ProducesResponseType(typeof(string), 400)]
-        public async Task<ActionResult<Guid>> AddAsync([FromBody] TemplateAddRequest request)
+        public async Task<ActionResult<Guid>> AddAsync([FromBody] AddTemplateRequest request)
         {
-            var validator = new TemplateAddValidator();
-
-            var result = validator.Validate(request);
-
-            if (!result.IsValid)
-            {
-                return BadRequest(result.ToString("\n"));
-            }
-
             var templateId = await _messageTemplateService.AddAsync(_mapper.Map<CreateTemplateModel>(request));
 
-            if (templateId == Guid.Empty)
+            if (templateId is null)
             {
-                return BadRequest("Type can not be created");
+                return BadRequest("Template can not be created");
             }
 
             return Created("", templateId);
@@ -68,47 +59,23 @@ namespace NotificationMicroservice.Controllers
         [HttpPut("{id:guid}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(bool), 400)]
-        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TemplateEditRequest request)
+        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] EditTemplateRequest request)
         {
-            var validator = new TemplateEditValidator();
+            var template = _mapper.Map<EditTemplateModel>(request);
+            template.Id = id;
 
-            var result = validator.Validate(request);
-
-            if (!result.IsValid)
-            {
-                return BadRequest(result.ToString("\n"));
-            }
-
-            var editTemplate = new EditTemplateModel
-            {
-                Id = id,
-                ModifiedUserName = request.ModifiedUserName
-            };
-
-            return await _messageTemplateService.UpdateAsync(editTemplate) is true ? NoContent() : BadRequest(false);
+            return await _messageTemplateService.UpdateAsync(template) is true ? NoContent() : BadRequest(false);
         }
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(bool), 400)]
-        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TemplateDeleteRequest request)
+        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] DeleteTemplateRequest request)
         {
-            var validator = new TemplateDeleteValidator();
+            var template = _mapper.Map<EditTemplateModel>(request);
+            template.Id = id;
 
-            var result = validator.Validate(request);
-            
-            if (!result.IsValid)
-            {
-                return BadRequest(result.ToString("\n"));
-            }
-
-            var editTemplate = new EditTemplateModel
-            {
-                Id = id,
-                ModifiedUserName = request.ModifiedUserName
-            };
-
-            return await _messageTemplateService.DeleteAsync(editTemplate) is true ? NoContent() : BadRequest(false);
+            return await _messageTemplateService.DeleteAsync(template) is true ? NoContent() : BadRequest(false);
         }
     }
 }

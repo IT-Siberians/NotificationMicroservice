@@ -2,7 +2,7 @@
 {
     public class EditTemplateModel
     {
-        public Guid Id { get; init; }
+        public Guid Id { get; set; }
         public Guid MessageTypeId { get; init; }
         public string Language { get; init; }
         public string Template { get; init; }

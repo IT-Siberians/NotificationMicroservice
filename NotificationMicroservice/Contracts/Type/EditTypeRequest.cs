@@ -1,8 +1,8 @@
 ﻿namespace NotificationMicroservice.Contracts.Type
 {
-    public record TypeAddRequest(
+    public record EditTypeRequest(
         string Name,
-        string CreatedUserName
+        string ModifiedUserName
         );
 
 }

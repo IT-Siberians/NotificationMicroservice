@@ -60,23 +60,23 @@ namespace NotificationMicroservice.Domain.Entities
         {
             if (id == Guid.Empty)
             {
-                throw new MessageGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
+                throw new MessageGuidEmptyException(ExceptionMessages.ERROR_ID, id.ToString());
             }
 
             if (string.IsNullOrWhiteSpace(text))
             {
-                throw new MessageTextNullOrEmptyException(ExceptionString.ERROR_TEXT, text);
+                throw new MessageTextNullOrEmptyException(ExceptionMessages.ERROR_TEXT, text);
             }
 
             if (string.IsNullOrWhiteSpace(direction))
             {
-                throw new MessageDirectionNullOrEmptyException(ExceptionString.ERROR_DIRECTION, direction);
+                throw new MessageDirectionNullOrEmptyException(ExceptionMessages.ERROR_DIRECTION, direction);
 
             }
 
             if (direction.Length > MAX_DIRECTION_LENG)
             {
-                throw new MessageDirectionLengthException(ExceptionString.ERROR_DIRECTION_LENG, direction.Length.ToString());
+                throw new MessageDirectionLengthException(ExceptionMessages.ERROR_DIRECTION_LENG, direction.Length.ToString());
             }
 
             Id = id;

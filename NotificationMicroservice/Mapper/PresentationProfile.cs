@@ -12,16 +12,16 @@ namespace NotificationMicroservice.Mapper
     {
         public PresentationProfile()
         {
-            CreateMap<TypeAddRequest, CreateTypeModel>();
-            CreateMap<TypeEditRequest, EditTypeModel>();
-            CreateMap<TypeDeleteRequest, EditTypeModel>();
+            CreateMap<AddTypeRequest, CreateTypeModel>();
+            CreateMap<EditTypeRequest, EditTypeModel>();
+            CreateMap<DeleteTypeRequest, EditTypeModel>();
             CreateMap<TypeModel, TypeResponse>();
 
             CreateMap<MessageModel, MessageResponse>();
 
             CreateMap<TemplateModel, TemplateResponse>();
-            CreateMap<TemplateAddRequest, CreateTemplateModel>();
-            CreateMap<TemplateEditRequest, EditTemplateModel>();
+            CreateMap<AddTemplateRequest, CreateTemplateModel>();
+            CreateMap<EditTemplateRequest, EditTemplateModel>();
         }
     }
 }

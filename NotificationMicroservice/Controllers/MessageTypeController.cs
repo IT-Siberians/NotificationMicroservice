@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NotificationMicroservice.Application.Abstractions;
+using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.Contracts.Type;
-using NotificationMicroservice.Validator.Type;
 
 namespace NotificationMicroservice.Controllers
 {
@@ -44,17 +44,8 @@ namespace NotificationMicroservice.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(Guid), 201)]
         [ProducesResponseType(typeof(string), 400)]
-        public async Task<ActionResult<Guid>> AddAsync([FromBody] TypeAddRequest request)
+        public async Task<ActionResult<Guid>> AddAsync([FromBody] AddTypeRequest request)
         {
-            var validator = new TypeAddValidator();
-
-            var result = validator.Validate(request);
-
-            if (!result.IsValid)
-            {
-                return BadRequest(result.ToString("\n"));
-            }
-
             var typeId = await _messageTypeService.AddAsync(_mapper.Map<CreateTypeModel>(request));
 
             if (typeId == Guid.Empty)
@@ -68,24 +59,10 @@ namespace NotificationMicroservice.Controllers
         [HttpPut("{id:guid}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(string), 400)]
-        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] TypeEditRequest request)
+        public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] EditTypeRequest request)
         {
-            var validator = new TypeEditValidator();
-
-            var result = validator.Validate(request);
-
-            if (!result.IsValid)
-            {
-                return BadRequest(result.ToString("\n"));
-            }
-
-            var type = new EditTypeModel()
-            {
-                Id = id,
-                Name = request.Name,
-                ModifiedUserName = request.ModifiedUserName
-            };
-            
+            var type = _mapper.Map<EditTypeModel>(request);
+            type.Id = id;
 
             return await _messageTypeService.UpdateAsync(type) is true ? NoContent() : NotFound($"Type {id} not found or remove!");
         }
@@ -93,22 +70,10 @@ namespace NotificationMicroservice.Controllers
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(typeof(string), 400)]
-        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] TypeDeleteRequest request)
+        public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] DeleteTypeRequest request)
         {
-            var validator = new TypeDeleteValidator();
-            
-            var result = validator.Validate(request);
-            
-            if (!result.IsValid)
-            {
-                return BadRequest(result.ToString("\n"));
-            }
-
-            var type = new EditTypeModel()
-            {
-                Id = id,
-                ModifiedUserName = request.ModifiedUserName
-            };
+            var type = _mapper.Map<EditTypeModel>(request);
+            type.Id = id;
 
             return await _messageTypeService.DeleteAsync(type) is true ? NoContent() : NotFound($"Type {id} not found!");
         }

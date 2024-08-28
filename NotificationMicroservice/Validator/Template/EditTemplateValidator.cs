@@ -4,9 +4,9 @@ using NotificationMicroservice.Validator.Base;
 
 namespace NotificationMicroservice.Validator.Template
 {
-    public class TemplateEditValidator : AbstractValidator<TemplateEditRequest>
+    public class EditTemplateValidator : AbstractValidator<EditTemplateRequest>
     {
-        public TemplateEditValidator()
+        public EditTemplateValidator()
         {
 
             RuleFor(template => template.MessageTypeId)

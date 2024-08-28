@@ -4,9 +4,9 @@ using NotificationMicroservice.Validator.Base;
 
 namespace NotificationMicroservice.Validator.Template
 {
-    public class TemplateDeleteValidator : AbstractValidator<TemplateDeleteRequest>
+    public class DeleteTemplateValidator : AbstractValidator<DeleteTemplateRequest>
     {
-        public TemplateDeleteValidator()
+        public DeleteTemplateValidator()
         {
 
             RuleFor(template => template.ModifiedUserName)

@@ -63,7 +63,7 @@ namespace NotificationMicroservice.Domain.Entities
         {
             if (id == Guid.Empty)
             {
-                throw new MessageTypeGuidEmptyException(ExceptionString.ERROR_ID, id.ToString());
+                throw new MessageTypeGuidEmptyException(ExceptionMessages.ERROR_ID, id.ToString());
             }
 
             ValidateData(name, createdUserName);
@@ -117,12 +117,12 @@ namespace NotificationMicroservice.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new MessageTypeNameNullOrEmptyException(ExceptionString.ERROR_TYPE_NAME, name);
+                throw new MessageTypeNameNullOrEmptyException(ExceptionMessages.ERROR_TYPE_NAME, name);
             }
 
             if (name.Length > MAX_NAME_LENGTH)
             {
-                throw new MessageTypeNameLengthException(ExceptionString.ERROR_TYPE_NAME_LENGTH, name.Length.ToString());
+                throw new MessageTypeNameLengthException(ExceptionMessages.ERROR_TYPE_NAME_LENGTH, name.Length.ToString());
             }
 
             ValidateUserName(userName);
@@ -136,7 +136,7 @@ namespace NotificationMicroservice.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                throw new MessageTypeUserNameNullOrEmptyException(ExceptionString.ERROR_USERNAME, userName);
+                throw new MessageTypeUserNameNullOrEmptyException(ExceptionMessages.ERROR_USERNAME, userName);
             }
         }
     }
