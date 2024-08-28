@@ -39,7 +39,7 @@ namespace NotificationMicroservice.Application.Services
         {
             var type = await _typeRepository.GetByIdAsync(messageTemplate.MessageTypeId, _cancelTokenSource.Token);
 
-            if (type is null)
+            if (type is null || type.IsRemoved)
             {
                 return null;
             }
@@ -53,7 +53,7 @@ namespace NotificationMicroservice.Application.Services
         {
             var type = await _typeRepository.GetByIdAsync(messageTemplate.MessageTypeId, _cancelTokenSource.Token);
 
-            if (type is null)
+            if (type is null || type.IsRemoved)
             {
                 return false;
             }
