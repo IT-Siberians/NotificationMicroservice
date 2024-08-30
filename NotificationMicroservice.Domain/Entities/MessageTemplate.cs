@@ -47,7 +47,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Дата создания шаблона сообщения
         /// </summary>
-        public DateTime CreatedDate { get; }
+        public DateTime CreationDate { get; }
 
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
@@ -73,7 +73,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="template">текст шаблона сообщения</param>
         /// <param name="isRemoved">признак удаления типа сообщения</param>
         /// <param name="createdUserName">пользователь создавший шаблон сообщения</param>
-        /// <param name="createdDate">дата и время создания шаблона сообщения</param>
+        /// <param name="creationDate">дата и время создания шаблона сообщения</param>
         /// <param name="modifiedUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
         /// <exception cref="MessageTemplateGuidEmptyException"></exception>
@@ -81,7 +81,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public MessageTemplate(Guid id, MessageType type, string language, string template, bool isRemoved, string createdUserName, DateTime createdDate, string? modifiedUserName, DateTime? modifiedDate)
+        public MessageTemplate(Guid id, MessageType type, string language, string template, bool isRemoved, string createdUserName, DateTime creationDate, string? modifiedUserName, DateTime? modifiedDate)
         {
 
             if (id == Guid.Empty)
@@ -97,7 +97,7 @@ namespace NotificationMicroservice.Domain.Entities
             Template = template;
             IsRemoved = isRemoved;
             CreatedUserName = createdUserName;
-            CreatedDate = createdDate;
+            CreationDate = creationDate;
             ModifiedUserName = modifiedUserName;
             ModifiedDate = modifiedDate;
         }

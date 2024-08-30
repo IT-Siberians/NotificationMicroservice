@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Mapper;
 using NotificationMicroservice.Application.Services;
@@ -23,7 +24,16 @@ namespace NotificationMicroservice
             builder.Services.AddFluentValidationAutoValidation();
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(
+                c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo
+                    {
+                        Version = "v1",
+                        Title = "Notification API",
+                        Description = "The Notification API for managing message types, templates, and viewing the log of sent messages."
+                    });
+                });
 
             builder.Services.AddDbContext<NotificationMicroserviceDbContext>(
                 options =>

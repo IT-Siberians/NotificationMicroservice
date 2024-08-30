@@ -37,7 +37,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Дата создания типа сообщения
         /// </summary>
-        public DateTime CreatedDate { get; }
+        public DateTime CreationDate { get; }
 
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
@@ -56,10 +56,10 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="name">название типа сообщения</param>
         /// <param name="isRemoved">признак удаления типа сообщения</param>
         /// <param name="createdUserName">пользователь создавший тип сообщения</param>
-        /// <param name="createdDate">дата и время создания типа сообщения</param>
+        /// <param name="creationDate">дата и время создания типа сообщения</param>
         /// <param name="modifiedUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifiedDate">дата и время изменения типа сообщения</param>
-        public MessageType(Guid id, string name, bool isRemoved, string createdUserName, DateTime createdDate, string? modifiedUserName, DateTime? modifiedDate)
+        public MessageType(Guid id, string name, bool isRemoved, string createdUserName, DateTime creationDate, string? modifiedUserName, DateTime? modifiedDate)
         {
             if (id == Guid.Empty)
             {
@@ -72,7 +72,7 @@ namespace NotificationMicroservice.Domain.Entities
             Name = name;
             IsRemoved = isRemoved;
             CreatedUserName = createdUserName;
-            CreatedDate = createdDate;
+            CreationDate = creationDate;
             ModifiedUserName = modifiedUserName;
             ModifiedDate = modifiedDate;
         }

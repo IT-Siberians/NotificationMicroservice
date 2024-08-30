@@ -19,7 +19,7 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(x => x.Direction)
                 .IsRequired();
 
-            builder.Property(x => x.CreatedDate)
+            builder.Property(x => x.CreationDate)
                 .IsRequired();
 
             builder.HasOne(x => x.Type)

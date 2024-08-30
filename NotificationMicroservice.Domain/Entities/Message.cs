@@ -37,7 +37,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Дата отправки сообщения
         /// </summary>
-        public DateTime CreatedDate { get; }
+        public DateTime CreationDate { get; }
 
         /// <summary>
         /// Пустой конструктор для EF Core
@@ -51,12 +51,12 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="type">сущность типа сообщения</param>
         /// <param name="text">текст сообщения</param>
         /// <param name="direction">отправление отправки сообщения</param>
-        /// <param name="createdDate">дата и время отправки сообщения</param>
+        /// <param name="creationDate">дата и время отправки сообщения</param>
         /// <exception cref="MessageGuidEmptyException"></exception>
         /// <exception cref="MessageTextNullOrEmptyException"></exception>
         /// <exception cref="MessageDirectionNullOrEmptyException"></exception>
         /// <exception cref="MessageDirectionLengthException"></exception>
-        public Message(Guid id, MessageType type, string text, string direction, DateTime createdDate)
+        public Message(Guid id, MessageType type, string text, string direction, DateTime creationDate)
         {
             if (id == Guid.Empty)
             {
@@ -83,7 +83,7 @@ namespace NotificationMicroservice.Domain.Entities
             Type = type;
             Text = text;
             Direction = direction;
-            CreatedDate = createdDate;
+            CreationDate = creationDate;
         }
     }
 }
