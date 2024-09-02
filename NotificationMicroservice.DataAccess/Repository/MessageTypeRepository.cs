@@ -46,8 +46,6 @@ namespace NotificationMicroservice.DataAccess.Repository
         public async Task<Guid> AddAsync(MessageType entity, CancellationToken cancellationToken)
         {
             context.Users.Attach(entity.CreatedUser);
-            context.Entry(entity.CreatedUser).State = EntityState.Unchanged;
-
             context.Types.Add(entity);
 
             await context.SaveChangesAsync(cancellationToken);
