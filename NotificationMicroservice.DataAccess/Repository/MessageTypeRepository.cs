@@ -61,13 +61,9 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <returns>Возвращает <c>true</c> после успешного обновления.</returns>
         public async Task<bool> UpdateAsync(MessageType entity, CancellationToken cancellationToken)
         {
-            context.Users.Attach(entity.ModifiedUser);
-            context.Entry(entity.ModifiedUser).State = EntityState.Unchanged;
-            context.Entry(entity.CreatedUser).State = EntityState.Unchanged;
             context.Entry(entity).State = EntityState.Modified;
-            context.Types.Update(entity);
-
-            return await context.SaveChangesAsync(cancellationToken) == 1;
+            context.Users.Attach(entity.ModifiedUser);
+            return await context.SaveChangesAsync(cancellationToken) > 0;
         }
 
         /// <summary>

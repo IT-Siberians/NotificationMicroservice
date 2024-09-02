@@ -36,13 +36,15 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .AutoInclude();
 
             builder.HasOne(x => x.CreatedUser)
-                .WithMany();
+                .WithMany()
+                .IsRequired();
 
             builder.Navigation(x => x.CreatedUser)
                 .AutoInclude();
 
             builder.HasOne(x => x.ModifiedUser)
-                .WithMany();
+                .WithMany()
+                .IsRequired(false);
 
             builder.Navigation(x => x.ModifiedUser)
                 .AutoInclude();
