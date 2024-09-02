@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
-using System.Reflection.Metadata;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {

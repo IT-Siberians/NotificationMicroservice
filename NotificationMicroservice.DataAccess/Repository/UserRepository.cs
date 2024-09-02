@@ -1,7 +1,6 @@
-﻿using NotificationMicroservice.DataAccess.Repository.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System.Threading;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {
@@ -33,7 +32,7 @@ namespace NotificationMicroservice.DataAccess.Repository
         {
             context.Users.Update(entity);
 
-            return await context.SaveChangesAsync(cancellationToken) == 1;
+            return await context.SaveChangesAsync(cancellationToken) > 0;
         }
 
         public async Task<bool> DeleteAsync(User entity, CancellationToken cancellationToken)
