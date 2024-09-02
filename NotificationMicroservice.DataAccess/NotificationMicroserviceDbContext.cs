@@ -5,6 +5,11 @@ namespace NotificationMicroservice.DataAccess
 {
     public class NotificationMicroserviceDbContext : DbContext
     {
+        public DbSet<MessageTemplate> Templates { get; set; }
+        public DbSet<MessageType> Types { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<User> Users { get; set; }
+
         public NotificationMicroserviceDbContext(DbContextOptions<NotificationMicroserviceDbContext> options)
             : base(options)
         {
@@ -18,10 +23,6 @@ namespace NotificationMicroservice.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-        }
-
-        public DbSet<MessageTemplate> Templates { get; set; }
-        public DbSet<MessageType> Types { get; set; }
-        public DbSet<Message> Messages { get; set; }
+        }        
     }
 }

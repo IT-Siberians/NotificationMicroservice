@@ -7,7 +7,7 @@ namespace NotificationMicroservice.Domain.Entities
     /// <summary>
     /// Тип шаблона сообщения
     /// </summary>
-    public class MessageType : IModifyEntity<string, Guid>
+    public class MessageType : IModifyEntity<User, Guid>
     {
         /// <summary>
         /// Максимальная длина названия для типа сообщения
@@ -17,7 +17,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Идентификатор
         /// </summary>
-        public Guid Id { get; }
+        public Guid Id { get; private set; }
 
         /// <summary>
         /// Название типа сообщения
@@ -32,7 +32,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пользователь создавший тип сообщения
         /// </summary>
-        public string CreatedUserName { get; }
+        public User CreatedUser { get; }
 
         /// <summary>
         /// Дата создания типа сообщения
@@ -42,7 +42,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
         /// </summary>
-        public string? ModifiedUserName { get; private set; }
+        public User? ModifiedUser { get; private set; }
 
         /// <summary>
         /// Дата изменения шаблона сообщения
@@ -50,30 +50,28 @@ namespace NotificationMicroservice.Domain.Entities
         public DateTime? ModifiedDate { get; private set; }
 
         /// <summary>
+        /// Пустой конструктор для EF Core
+        /// </summary>
+        protected MessageType() { }
+
+        /// <summary>
         /// Основной конструктор класса (новая сущность)
         /// </summary>
-        /// <param name="id">идентификатор записи</param>
         /// <param name="name">название типа сообщения</param>
         /// <param name="isRemoved">признак удаления типа сообщения</param>
         /// <param name="createdUserName">пользователь создавший тип сообщения</param>
         /// <param name="creationDate">дата и время создания типа сообщения</param>
         /// <param name="modifiedUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifiedDate">дата и время изменения типа сообщения</param>
-        public MessageType(Guid id, string name, bool isRemoved, string createdUserName, DateTime creationDate, string? modifiedUserName, DateTime? modifiedDate)
+        public MessageType(string name, bool isRemoved, User createdUserName, DateTime creationDate, User? modifiedUserName, DateTime? modifiedDate)
         {
-            if (id == Guid.Empty)
-            {
-                throw new MessageTypeGuidEmptyException(ExceptionMessages.ERROR_ID, id.ToString());
-            }
-
             ValidateData(name, createdUserName);
 
-            Id = id;
             Name = name;
             IsRemoved = isRemoved;
-            CreatedUserName = createdUserName;
+            CreatedUser = createdUserName;
             CreationDate = creationDate;
-            ModifiedUserName = modifiedUserName;
+            ModifiedUser = modifiedUserName;
             ModifiedDate = modifiedDate;
         }
 
@@ -84,13 +82,13 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="isRemoved">признак удаления типа сообщения</param>
         /// <param name="modifiedUserName">пользователь изменивший тип сообщения</param>
         /// <param name="modifiedDate">дата и время изменения типа сообщения</param>
-        public void Update(string name, bool isRemoved, string modifiedUserName, DateTime modifiedDate)
+        public void Update(string name, bool isRemoved, User modifiedUserName, DateTime modifiedDate)
         {
             ValidateData(name, modifiedUserName);
 
             Name = name;
             IsRemoved = isRemoved;
-            ModifiedUserName = modifiedUserName;
+            ModifiedUser = modifiedUserName;
             ModifiedDate = modifiedDate;
         }
 
@@ -99,12 +97,12 @@ namespace NotificationMicroservice.Domain.Entities
         /// </summary>
         /// <param name="modifiedUserName">пользователь изменивший шаблон сообщения</param>
         /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
-        public void Delete(string modifiedUserName, DateTime modifiedDate)
+        public void Delete(User modifiedUserName, DateTime modifiedDate)
         {
             ValidateUserName(modifiedUserName);
 
             IsRemoved = true;
-            ModifiedUserName = modifiedUserName;
+            ModifiedUser = modifiedUserName;
             ModifiedDate = modifiedDate;
         }
 
@@ -112,8 +110,8 @@ namespace NotificationMicroservice.Domain.Entities
         /// Валидация входных данных
         /// </summary>
         /// <param name="name">название типа сообщения</param>
-        /// <param name="userName">имя пользователя</param>
-        private static void ValidateData(string name, string userName)
+        /// <param name="user">имя пользователя</param>
+        private static void ValidateData(string name, User user)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -125,18 +123,18 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageTypeNameLengthException(ExceptionMessages.ERROR_TYPE_NAME_LENGTH, name.Length.ToString());
             }
 
-            ValidateUserName(userName);
+            ValidateUserName(user);
         }
 
         /// <summary>
         /// Валидация имени пользователя
         /// </summary>
-        /// <param name="userName">имя пользователя</param>
-        private static void ValidateUserName(string userName)
+        /// <param name="user">имя пользователя</param>
+        private static void ValidateUserName(User user)
         {
-            if (string.IsNullOrWhiteSpace(userName))
+            if (string.IsNullOrWhiteSpace(user.UserName))
             {
-                throw new MessageTypeUserNameNullOrEmptyException(ExceptionMessages.ERROR_USERNAME, userName);
+                throw new MessageTypeUserNameNullOrEmptyException(ExceptionMessages.ERROR_USERNAME, user.UserName);
             }
         }
     }

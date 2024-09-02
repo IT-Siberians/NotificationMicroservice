@@ -4,9 +4,9 @@
         Guid Id,
         string Name,
         bool IsRemoved,
-        string CreatedUserName,
-        DateTime CreatedDate,
-        string? ModifiedUserName,
+        Guid CreatedUserId,
+        DateTime CreationDate,
+        Guid? ModifiedUserId,
         DateTime? ModifiedDate
         );
 

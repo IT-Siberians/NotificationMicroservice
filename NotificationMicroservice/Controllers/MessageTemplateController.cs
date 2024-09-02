@@ -72,7 +72,7 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(bool), 400)]
         public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] DeleteTemplateRequest request)
         {
-            var template = _mapper.Map<EditTemplateModel>(request);
+            var template = _mapper.Map<DeleteTemplateModel>(request);
             template.Id = id;
 
             return await _messageTemplateService.DeleteAsync(template) is true ? NoContent() : BadRequest(false);

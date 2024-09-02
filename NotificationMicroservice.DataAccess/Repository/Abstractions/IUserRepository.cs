@@ -4,9 +4,9 @@ using NotificationMicroservice.Domain.Entities;
 namespace NotificationMicroservice.DataAccess.Repository.Abstractions
 {
     /// <summary>
-    /// Интерфейс репозитория для управления объектами типа <see cref="MessageTemplate"/>.
+    /// Интерфейс репозитория для управления объектами типа <see cref="User"/>.
     /// </summary>
-    public interface IMessageTemplateRepository : IModifyRepository<MessageTemplate, Guid>
+    public interface IUserRepository : IModifyRepository<User, Guid>
     {
     }
 }

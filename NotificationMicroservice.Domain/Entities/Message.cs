@@ -47,22 +47,15 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Основной конструктор класса
         /// </summary>
-        /// <param name="id">идентификатор записи</param>
         /// <param name="type">сущность типа сообщения</param>
         /// <param name="text">текст сообщения</param>
         /// <param name="direction">отправление отправки сообщения</param>
         /// <param name="creationDate">дата и время отправки сообщения</param>
-        /// <exception cref="MessageGuidEmptyException"></exception>
         /// <exception cref="MessageTextNullOrEmptyException"></exception>
         /// <exception cref="MessageDirectionNullOrEmptyException"></exception>
         /// <exception cref="MessageDirectionLengthException"></exception>
-        public Message(Guid id, MessageType type, string text, string direction, DateTime creationDate)
+        public Message(MessageType type, string text, string direction, DateTime creationDate)
         {
-            if (id == Guid.Empty)
-            {
-                throw new MessageGuidEmptyException(ExceptionMessages.ERROR_ID, id.ToString());
-            }
-
             if (string.IsNullOrWhiteSpace(text))
             {
                 throw new MessageTextNullOrEmptyException(ExceptionMessages.ERROR_TEXT, text);
@@ -79,7 +72,6 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageDirectionLengthException(ExceptionMessages.ERROR_DIRECTION_LENG, direction.Length.ToString());
             }
 
-            Id = id;
             Type = type;
             Text = text;
             Direction = direction;

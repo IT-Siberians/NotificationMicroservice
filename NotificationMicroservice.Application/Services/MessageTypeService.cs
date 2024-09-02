@@ -9,70 +9,85 @@ namespace NotificationMicroservice.Application.Services
     public class MessageTypeService : ITypeApplicationService
     {
         private readonly IMessageTypeRepository _messageTypeRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
 
-        public MessageTypeService(IMessageTypeRepository messageTypeRepository, IMapper mapper)
+        public MessageTypeService(IMessageTypeRepository messageTypeRepository, IUserRepository userRepository, IMapper mapper)
         {
             _messageTypeRepository = messageTypeRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<TypeModel>> GetAllAsync()
         {
-            var dbEntities = await _messageTypeRepository.GetAllAsync(cancelTokenSource.Token, true);
+            var dbEntities = await _messageTypeRepository.GetAllAsync(_cancelTokenSource.Token, true);
 
             return dbEntities.Select(_mapper.Map<TypeModel>);
         }
 
         public async Task<TypeModel?> GetByIdAsync(Guid id)
         {
-            var dbEntity = await _messageTypeRepository.GetByIdAsync(id, cancelTokenSource.Token);
+            var dbEntity = await _messageTypeRepository.GetByIdAsync(id, _cancelTokenSource.Token);
 
             return dbEntity is null ? null : _mapper.Map<TypeModel>(dbEntity);
         }
 
         public async Task<Guid?> AddAsync(CreateTypeModel type)
         {
-            var typeNew = new MessageType(Guid.NewGuid(), type.Name, false, type.CreatedUserName, DateTime.UtcNow, null, null);
+            var user = await _userRepository.GetByIdAsync(type.CreatedUserId, _cancelTokenSource.Token);
 
-            return await _messageTypeRepository.AddAsync(typeNew, cancelTokenSource.Token);
+            if (user is null)
+            {
+                return null;
+            }
+
+            var typeNew = new MessageType(type.Name, false, user, DateTime.UtcNow, null, null);
+
+            return await _messageTypeRepository.AddAsync(typeNew, _cancelTokenSource.Token);
         }
 
-        public async Task<bool> UpdateAsync(EditTypeModel type1)
+        public async Task<bool> UpdateAsync(EditTypeModel messageType)
         {
-            var type = await GetByIdAsync(type1.Id);
+            var user = await _userRepository.GetByIdAsync(messageType.ModifiedUserId, _cancelTokenSource.Token);
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            var type = await _messageTypeRepository.GetByIdAsync(messageType.Id, _cancelTokenSource.Token);
 
             if (type is null || type.IsRemoved)
             {
                 return false;
             }
 
-            var typeNew = _mapper.Map<MessageType>(type);
+            type.Update(messageType.Name, false, user, DateTime.UtcNow);
 
-            typeNew.Update(type1.Name, false, type1.ModifiedUserName, DateTime.UtcNow);
-
-            var result = await _messageTypeRepository.UpdateAsync(typeNew, cancelTokenSource.Token);
-
-            return result;
+            return await _messageTypeRepository.UpdateAsync(type, _cancelTokenSource.Token);
         }
 
-        public async Task<bool> DeleteAsync(EditTypeModel type1)
+        public async Task<bool> DeleteAsync(DeleteTypeModel messageType)
         {
-            var type = await GetByIdAsync(type1.Id);
+            var user = await _userRepository.GetByIdAsync(messageType.ModifiedUserId, _cancelTokenSource.Token);
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            var type = await _messageTypeRepository.GetByIdAsync(messageType.Id, _cancelTokenSource.Token);
 
             if (type is null)
             {
                 return false;
             }
 
-            var typeNew = _mapper.Map<MessageType>(type);
+            type.Delete(user, DateTime.UtcNow);
 
-            typeNew.Delete(type1.ModifiedUserName, DateTime.UtcNow);
-
-            var result = await _messageTypeRepository.DeleteAsync(typeNew, cancelTokenSource.Token);
-
-            return result;
+            return await _messageTypeRepository.DeleteAsync(type, _cancelTokenSource.Token);
         }
 
     }

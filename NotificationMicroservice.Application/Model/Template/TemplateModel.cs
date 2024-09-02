@@ -1,4 +1,5 @@
 ﻿using NotificationMicroservice.Application.Model.Type;
+using NotificationMicroservice.Application.Model.User;
 
 namespace NotificationMicroservice.Application.Model.Template
 {
@@ -8,10 +9,10 @@ namespace NotificationMicroservice.Application.Model.Template
         public string Language { get; init; }
         public string Template { get; init; }
         public bool IsRemoved { get; init; }
-        public string CreatedUserName { get; init; }
-        public DateTime CreatedDate { get; init; }
-        public string? ModifiedUserName { get; init; }
+        public UserModel CreatedUser { get; init; } = new UserModel();
+        public DateTime CreationDate { get; init; }
+        public UserModel? ModifiedUser { get; init; } = new UserModel();
         public DateTime? ModifiedDate { get; init; }
-        public TypeModel Type { get; set; } = new TypeModel();
+        public TypeModel Type { get; init; } = new TypeModel();
     }
 }

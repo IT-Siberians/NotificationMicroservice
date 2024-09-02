@@ -7,6 +7,6 @@
         public string Language { get; init; }
         public string Template { get; init; }
         public bool IsRemoved { get; init; }
-        public string ModifiedUserName { get; init; }
+        public Guid ModifiedUserId { get; init; }
     }
 }

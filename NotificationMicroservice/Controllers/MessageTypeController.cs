@@ -48,7 +48,7 @@ namespace NotificationMicroservice.Controllers
         {
             var typeId = await _messageTypeService.AddAsync(_mapper.Map<CreateTypeModel>(request));
 
-            if (typeId == Guid.Empty)
+            if (typeId is null)
             {
                 return BadRequest("Type can not be created");
             }
@@ -72,10 +72,10 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] DeleteTypeRequest request)
         {
-            var type = _mapper.Map<EditTypeModel>(request);
+            var type = _mapper.Map<DeleteTypeModel>(request);
             type.Id = id;
 
-            return await _messageTypeService.DeleteAsync(type) is true ? NoContent() : NotFound($"Type {id} not found!");
+            return await _messageTypeService.DeleteAsync(type) is true ? NoContent() : NotFound($"Type {id} NOT delete!");
         }
 
     }

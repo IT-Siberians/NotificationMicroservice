@@ -1,4 +1,4 @@
 ﻿namespace NotificationMicroservice.Contracts.Type
 {
-    public record DeleteTypeRequest(string ModifiedUserName);
+    public record DeleteTypeRequest(Guid ModifiedUserId);
 }

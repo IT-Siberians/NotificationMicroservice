@@ -33,9 +33,8 @@ namespace NotificationMicroservice.DataAccess.Repository
         public async Task<MessageType?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await context.Types
-                .Where(x => x.Id == id)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         /// <summary>
@@ -46,7 +45,11 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <returns>Идентификатор добавленного типа сообщения.</returns>
         public async Task<Guid> AddAsync(MessageType entity, CancellationToken cancellationToken)
         {
-            await context.Types.AddAsync(entity, cancellationToken);
+            context.Users.Attach(entity.CreatedUser);
+            context.Entry(entity.CreatedUser).State = EntityState.Unchanged;
+
+            context.Types.Add(entity);
+
             await context.SaveChangesAsync(cancellationToken);
 
             return entity.Id;
@@ -60,6 +63,10 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <returns>Возвращает <c>true</c> после успешного обновления.</returns>
         public async Task<bool> UpdateAsync(MessageType entity, CancellationToken cancellationToken)
         {
+            context.Users.Attach(entity.ModifiedUser);
+            context.Entry(entity.ModifiedUser).State = EntityState.Unchanged;
+            context.Entry(entity.CreatedUser).State = EntityState.Unchanged;
+            context.Entry(entity).State = EntityState.Modified;
             context.Types.Update(entity);
 
             return await context.SaveChangesAsync(cancellationToken) == 1;

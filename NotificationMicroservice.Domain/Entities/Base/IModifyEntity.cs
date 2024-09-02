@@ -10,12 +10,12 @@
         /// <summary>
         /// Пользователь создавший запись
         /// </summary>
-        TEntity CreatedUserName { get; }
+        TEntity CreatedUser { get; }
 
         /// <summary>
         /// Пользователь изменивший запись
         /// </summary>
-        TEntity? ModifiedUserName { get; }
+        TEntity? ModifiedUser { get; }
 
         /// <summary>
         /// Дата и время изменения

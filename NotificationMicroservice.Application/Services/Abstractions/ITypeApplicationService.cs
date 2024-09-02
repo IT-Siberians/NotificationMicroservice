@@ -6,7 +6,7 @@ namespace NotificationMicroservice.Application.Abstractions
     /// <summary>
     /// Интерефейс для сервиса работы с типами
     /// </summary>
-    public interface ITypeApplicationService : IModifyService<TypeModel, CreateTypeModel, EditTypeModel, Guid>
+    public interface ITypeApplicationService : IModifyService<TypeModel, CreateTypeModel, EditTypeModel, DeleteTypeModel, Guid>
     {
     }
 }

@@ -11,22 +11,6 @@ namespace NotificationMicroservice.DataAccess.Repository
     /// <param name="context">Контекст базы данных для работы с сообщениями.</param>
     public class MessageRepository(NotificationMicroserviceDbContext context) : IMessageRepository
     {
-
-        /// <summary>
-        /// Добавляет новое сообщение в базу данных.
-        /// </summary>
-        /// <param name="entity">Сущность сообщения для добавления.</param>
-        /// <param name="cancellationToken">Токен отмены операции.</param>
-        /// <returns>Идентификатор добавленного сообщения.</returns>
-        public async Task<Guid> AddAsync(Message entity, CancellationToken cancellationToken)
-        {
-            context.Types.Attach(entity.Type);
-            await context.Messages.AddAsync(entity);
-            await context.SaveChangesAsync();
-
-            return entity.Id;
-        }
-
         /// <summary>
         /// Запрашивает все сообщения из базы данных.
         /// </summary>
@@ -48,8 +32,23 @@ namespace NotificationMicroservice.DataAccess.Repository
         public async Task<Message?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await context.Messages
-                .Where(x => x.Id == id)
-                .FirstOrDefaultAsync(cancellationToken);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        }
+
+        /// <summary>
+        /// Добавляет новое сообщение в базу данных.
+        /// </summary>
+        /// <param name="entity">Сущность сообщения для добавления.</param>
+        /// <param name="cancellationToken">Токен отмены операции.</param>
+        /// <returns>Идентификатор добавленного сообщения.</returns>
+        public async Task<Guid> AddAsync(Message entity, CancellationToken cancellationToken)
+        {
+            context.Types.Attach(entity.Type);
+            await context.Messages.AddAsync(entity);
+            await context.SaveChangesAsync();
+
+            return entity.Id;
         }
     }
 }

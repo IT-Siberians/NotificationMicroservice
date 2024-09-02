@@ -4,7 +4,7 @@ using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
-    internal class TemplateConfiguration : IEntityTypeConfiguration<MessageTemplate>
+    public class TemplateConfiguration : IEntityTypeConfiguration<MessageTemplate>
     {
         public void Configure(EntityTypeBuilder<MessageTemplate> builder)
         {
@@ -23,14 +23,8 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(x => x.IsRemoved)
                 .IsRequired();
 
-            builder.Property(x => x.CreatedUserName)
-                .IsRequired();
-
             builder.Property(x => x.CreationDate)
                 .IsRequired();
-
-            builder.Property(x => x.ModifiedUserName)
-                .IsRequired(false);
 
             builder.Property(x => x.ModifiedDate)
                 .IsRequired(false);
@@ -41,6 +35,17 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Navigation(x => x.Type)
                 .AutoInclude();
 
+            builder.HasOne(x => x.CreatedUser)
+                .WithMany();
+
+            builder.Navigation(x => x.CreatedUser)
+                .AutoInclude();
+
+            builder.HasOne(x => x.ModifiedUser)
+                .WithMany();
+
+            builder.Navigation(x => x.ModifiedUser)
+                .AutoInclude();
         }
     }
 }

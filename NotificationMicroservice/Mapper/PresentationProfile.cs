@@ -14,7 +14,7 @@ namespace NotificationMicroservice.Mapper
         {
             CreateMap<AddTypeRequest, CreateTypeModel>();
             CreateMap<EditTypeRequest, EditTypeModel>();
-            CreateMap<DeleteTypeRequest, EditTypeModel>();
+            CreateMap<DeleteTypeRequest, DeleteTypeModel>();
             CreateMap<TypeModel, TypeResponse>();
 
             CreateMap<MessageModel, MessageResponse>();
@@ -22,6 +22,7 @@ namespace NotificationMicroservice.Mapper
             CreateMap<TemplateModel, TemplateResponse>();
             CreateMap<AddTemplateRequest, CreateTemplateModel>();
             CreateMap<EditTemplateRequest, EditTemplateModel>();
+            CreateMap<DeleteTemplateRequest, DeleteTemplateModel>();
         }
     }
 }

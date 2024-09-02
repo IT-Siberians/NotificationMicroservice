@@ -2,7 +2,7 @@
 {
     public record EditTypeRequest(
         string Name,
-        string ModifiedUserName
+        Guid ModifiedUserId
         );
 
 }

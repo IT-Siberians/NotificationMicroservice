@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
+using System.Reflection.Metadata;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {
@@ -33,9 +34,8 @@ namespace NotificationMicroservice.DataAccess.Repository
         public async Task<MessageTemplate?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await context.Templates
-                .Where(x => x.Id == id)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
         /// <summary>
@@ -45,9 +45,12 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Идентификатор добавленного шаблона сообщения.</returns>
         public async Task<Guid> AddAsync(MessageTemplate entity, CancellationToken cancellationToken)
-        {
-            context.Types.Attach(entity.Type);
-            await context.Templates.AddAsync(entity, cancellationToken);
+        {            
+            context.Entry(entity.Type).State = EntityState.Modified;
+
+            context.Users.Attach(entity.CreatedUser);
+            context.Templates.Add(entity);
+
             await context.SaveChangesAsync(cancellationToken);
 
             return entity.Id;
@@ -61,7 +64,12 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <returns>Возвращает <c>true</c>, если обновление прошло успешно.</returns>
         public async Task<bool> UpdateAsync(MessageTemplate entity, CancellationToken cancellationToken)
         {
-            context.Types.Attach(entity.Type);
+            context.Entry(entity.Type).State = EntityState.Modified;
+            context.Entry(entity.CreatedUser).State = EntityState.Unchanged;
+            context.Entry(entity.ModifiedUser).State = EntityState.Unchanged;
+            context.Entry(entity).State = EntityState.Modified;
+
+            context.Users.Attach(entity.ModifiedUser);
             context.Templates.Update(entity);
 
             return await context.SaveChangesAsync(cancellationToken) == 1;

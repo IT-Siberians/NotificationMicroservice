@@ -20,14 +20,8 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(x => x.IsRemoved)
                 .IsRequired();
 
-            builder.Property(x => x.CreatedUserName)
-                .IsRequired();
-
             builder.Property(x => x.CreationDate)
                 .IsRequired();
-
-            builder.Property(e => e.ModifiedUserName)
-                .IsRequired(false);
 
             builder.Property(e => e.ModifiedDate)
                 .IsRequired(false);
@@ -38,6 +32,17 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.HasMany<MessageTemplate>()
                 .WithOne(x => x.Type);
 
+            builder.HasOne(x => x.CreatedUser)
+                .WithMany();
+
+            builder.Navigation(x => x.CreatedUser)
+                .AutoInclude();
+
+            builder.HasOne(x => x.ModifiedUser)
+                .WithMany();
+
+            builder.Navigation(x => x.ModifiedUser)
+                .AutoInclude();
         }
     }
 }

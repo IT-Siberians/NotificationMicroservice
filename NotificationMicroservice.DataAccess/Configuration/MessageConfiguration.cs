@@ -4,7 +4,7 @@ using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
-    internal class MessageConfiguration : IEntityTypeConfiguration<Message>
+    public class MessageConfiguration : IEntityTypeConfiguration<Message>
     {
         public void Configure(EntityTypeBuilder<Message> builder)
         {

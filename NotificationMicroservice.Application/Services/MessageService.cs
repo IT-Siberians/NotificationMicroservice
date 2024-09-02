@@ -29,7 +29,7 @@ namespace NotificationMicroservice.Application.Services
                 return null;
             }
 
-            var message = new Message(Guid.NewGuid(), type, messageCreate.MessageText, messageCreate.Direction, DateTime.UtcNow);
+            var message = new Message(type, messageCreate.MessageText, messageCreate.Direction, DateTime.UtcNow);
 
             return await _messageRepository.AddAsync(message, _cancellationTokenSource.Token);
         }

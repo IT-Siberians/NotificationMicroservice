@@ -7,7 +7,7 @@ namespace NotificationMicroservice.Application.Model.Message
         public Guid Id { get; init; }
         public string MessageText { get; init; }
         public string Direction { get; init; }
-        public DateTime CreatedDate { get; init; }
-        public TypeModel Type { get; set; } = new TypeModel();
+        public DateTime CreationDate { get; init; }
+        public TypeModel Type { get; init; } = new TypeModel();
     }
 }

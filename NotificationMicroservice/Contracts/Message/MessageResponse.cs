@@ -1,9 +1,10 @@
-﻿namespace NotificationMicroservice.Contracts.Message
+﻿using NotificationMicroservice.Contracts.Type;
+
+namespace NotificationMicroservice.Contracts.Message
 {
     public record MessageResponse(
         Guid Id,
-        string MessageTypeName,
-        Guid MessageTypeId,
+        TypeResponse Type,
         string MessageText,
         string Direction,
         DateTime CreatedDate);
