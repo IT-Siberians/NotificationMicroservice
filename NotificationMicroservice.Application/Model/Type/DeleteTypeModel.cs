@@ -1,8 +1,8 @@
 ﻿namespace NotificationMicroservice.Application.Model.Type
 {
-    public class DeleteTypeModel
+    public class DeleteTypeModel : IBaseModel<Guid>
     {
         public Guid Id { get; set; }
-        public Guid ModifiedUserId { get; set; }
+        public Guid ModifiedByUserId { get; set; }
     }
 }

@@ -7,5 +7,5 @@ namespace NotificationMicroservice.Contracts.Message
         TypeResponse Type,
         string MessageText,
         string Direction,
-        DateTime CreatedDate);
+        DateTime CreationDate);
 }

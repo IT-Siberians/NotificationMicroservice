@@ -23,7 +23,7 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.Property(x => x.CreationDate)
                 .IsRequired();
 
-            builder.Property(e => e.ModifiedDate)
+            builder.Property(e => e.ModificationDate)
                 .IsRequired(false);
 
             builder.HasMany<Message>()
@@ -32,18 +32,18 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.HasMany<MessageTemplate>()
                 .WithOne(x => x.Type);
 
-            builder.HasOne(x => x.CreatedUser)
+            builder.HasOne(x => x.CreatedByUser)
                 .WithMany()
                 .IsRequired();
 
-            builder.Navigation(x => x.CreatedUser)
+            builder.Navigation(x => x.CreatedByUser)
                 .AutoInclude();
 
-            builder.HasOne(x => x.ModifiedUser)
+            builder.HasOne(x => x.ModifiedByUser)
                 .WithMany()
                 .IsRequired(false);
 
-            builder.Navigation(x => x.ModifiedUser)
+            builder.Navigation(x => x.ModifiedByUser)
                 .AutoInclude();
         }
     }

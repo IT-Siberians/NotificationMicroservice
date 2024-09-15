@@ -2,5 +2,5 @@
 {
     public record CreateTypeModel(
         string Name,
-        Guid CreatedUserId);
+        Guid CreatedByUserId);
 }

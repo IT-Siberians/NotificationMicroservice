@@ -1,4 +1,5 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Domain.Entities
 {
@@ -8,6 +9,16 @@ namespace NotificationMicroservice.Domain.Entities
     public class User : IEntity<Guid>
     {
         /// <summary>
+        /// Минимальная длина Username
+        /// </summary>
+        public const int MIN_USERNAME_LENGTH = 3;
+
+        /// <summary>
+        /// Максимальная длина Username
+        /// </summary>
+        public const int MAX_USERNAME_LENGTH = 30;
+
+        /// <summary>
         /// Получает идентификатор пользователя.
         /// </summary>
         public Guid Id { get; }
@@ -15,17 +26,17 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Получает имя пользователя.
         /// </summary>
-        public string UserName { get; }
+        public Username Username { get; }
 
         /// <summary>
         /// Получает ФИО пользователя.
         /// </summary>
-        public string FullName { get; }
+        public string FullName { get; private set; }
 
         /// <summary>
         /// Получает адрес электронной почты пользователя.
         /// </summary>
-        public string Email { get; }
+        public Email Email { get; private set; }
 
         /// <summary>
         /// Получает дату и время создания пользователя.
@@ -35,22 +46,35 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пустой конструктор для EF Core
         /// </summary>
+#pragma warning disable CS8618
         protected User() { }
+#pragma warning disable CS8618
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="User"/> с указанными параметрами.
         /// </summary>
         /// <param name="id">Идентификатор пользователя.</param>
-        /// <param name="userName">Имя пользователя.</param>
+        /// <param name="username">Имя пользователя.</param>
         /// <param name="fullName">Имя пользователя.</param>
         /// <param name="email">Адрес электронной почты пользователя.</param>
-        public User(Guid id, string userName, string fullName, string email)
+        public User(Guid id, Username username, string fullName, Email email)
         {
             Id = id;
-            UserName = userName;
+            Username = username;
             FullName = fullName;
             Email = email;
             CreationDate = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Обновление экземпляра класса <see cref="User"/> с указанными параметрами.
+        /// </summary>
+        /// <param name="fullName">Имя пользователя.</param>
+        /// <param name="email">Адрес электронной почты пользователя.</param>
+        public void Update(string fullName, Email email)
+        {
+            FullName = fullName;
+            Email = email;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace NotificationMicroservice.DataAccess.Repository.Abstractions.Base
 {
-    public interface IModifyRepository<TEntity, TKey> : IRepository<TEntity, TKey> 
+    public interface IModifyRepository<TEntity, TKey> : IRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
         where TKey : struct
     {

@@ -1,4 +1,6 @@
-﻿namespace NotificationMicroservice.Application.Services.Abstractions.Base
+﻿using NotificationMicroservice.Application.Model;
+
+namespace NotificationMicroservice.Application.Services.Abstractions.Base
 {
     /// <summary>
     /// Интерфейс для сервисов, обеспечивающих базовые операции с сущностями.
@@ -6,9 +8,9 @@
     /// <typeparam name="TEntity">Тип сущности, с которой производится работа.</typeparam>
     /// <typeparam name="TEntityCreate">Тип сущности, используемый для создания новых записей.</typeparam>
     /// <typeparam name="TKey">Тип ключа сущности.</typeparam>
-    public interface IService<TEntity, TEntityCreate, TKey> 
-        where TEntity : class 
-        where TEntityCreate : class 
+    public interface IService<TEntity, TEntityCreate, TKey>
+        where TEntity : class, IBaseModel<TKey>
+        where TEntityCreate : class
         where TKey : struct
     {
         /// <summary>
@@ -27,8 +29,8 @@
         /// <summary>
         /// Добавляет новую сущность в источник данных.
         /// </summary>
-        /// <param name="entityCreate">Сущность, используемая для создания новой записи.</param>
+        /// <param name="entity">Сущность, используемая для создания новой записи.</param>
         /// <returns>Идентификатор новой сущности типа <typeparamref name="TKey"/>.</returns>
-        Task<TKey?> AddAsync(TEntityCreate messageTemplate);
+        Task<TKey?> AddAsync(TEntityCreate entity);
     }
 }

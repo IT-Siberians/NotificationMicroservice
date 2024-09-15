@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Mapper;
 using NotificationMicroservice.Application.Services;
+using NotificationMicroservice.Application.Services.Abstractions;
 using NotificationMicroservice.DataAccess;
 using NotificationMicroservice.DataAccess.Repository;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
@@ -57,6 +58,7 @@ namespace NotificationMicroservice
             builder.Services.AddScoped<IMessageApplicationService, MessageService>();
             builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
+            builder.Services.AddScoped<IUserApplicationService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             builder.Services.AddAutoMapper(typeof(PresentationProfile), typeof(ApplicationProfile));

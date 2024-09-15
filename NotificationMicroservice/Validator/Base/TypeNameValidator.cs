@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.Validator.Base
 {
@@ -9,7 +10,7 @@ namespace NotificationMicroservice.Validator.Base
             RuleFor(request => request)
                 .NotNull()
                 .NotEmpty()
-                .Length(20, 50);
+                .Length(MessageType.MIN_NAME_LENGTH, MessageType.MAX_NAME_LENGTH);
         }
 
     }

@@ -1,15 +1,16 @@
 ﻿using FluentValidation;
+using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.Validator.Base
 {
     public class TemplateValidator : AbstractValidator<string>
     {
-        public TemplateValidator() 
+        public TemplateValidator()
         {
             RuleFor(request => request)
-                .MinimumLength(20)
                 .NotEmpty()
-                .NotNull();
+                .NotNull()
+                .Length(MessageTemplate.TEMPLATE_MIN_LENGTH, MessageTemplate.TEMPLATE_MAX_LENGTH);
         }
     }
 }

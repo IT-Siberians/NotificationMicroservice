@@ -1,5 +1,5 @@
-﻿using NotificationMicroservice.Application.Services.Abstractions.Base;
-using NotificationMicroservice.Application.Model.Message;
+﻿using NotificationMicroservice.Application.Model.Message;
+using NotificationMicroservice.Application.Services.Abstractions.Base;
 
 namespace NotificationMicroservice.Application.Abstractions
 {

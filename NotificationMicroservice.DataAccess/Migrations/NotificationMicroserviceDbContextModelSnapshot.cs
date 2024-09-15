@@ -55,7 +55,7 @@ namespace NotificationMicroservice.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CreatedUserId")
+                    b.Property<Guid>("CreatedByUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationDate")
@@ -69,10 +69,10 @@ namespace NotificationMicroservice.DataAccess.Migrations
                         .HasMaxLength(3)
                         .HasColumnType("character varying(3)");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("ModifiedUserId")
+                    b.Property<Guid?>("ModifiedByUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Template")
@@ -84,9 +84,9 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedUserId");
+                    b.HasIndex("CreatedByUserId");
 
-                    b.HasIndex("ModifiedUserId");
+                    b.HasIndex("ModifiedByUserId");
 
                     b.HasIndex("TypeId");
 
@@ -99,7 +99,7 @@ namespace NotificationMicroservice.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CreatedUserId")
+                    b.Property<Guid>("CreatedByUserId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationDate")
@@ -108,10 +108,10 @@ namespace NotificationMicroservice.DataAccess.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("ModifiedUserId")
+                    b.Property<Guid?>("ModifiedByUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -121,9 +121,9 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedUserId");
+                    b.HasIndex("CreatedByUserId");
 
-                    b.HasIndex("ModifiedUserId");
+                    b.HasIndex("ModifiedByUserId");
 
                     b.ToTable("Types");
                 });
@@ -145,7 +145,7 @@ namespace NotificationMicroservice.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -167,15 +167,15 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
             modelBuilder.Entity("NotificationMicroservice.Domain.Entities.MessageTemplate", b =>
                 {
-                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "CreatedUser")
+                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "CreatedByUser")
                         .WithMany()
-                        .HasForeignKey("CreatedUserId")
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "ModifiedUser")
+                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedUserId");
+                        .HasForeignKey("ModifiedByUserId");
 
                     b.HasOne("NotificationMicroservice.Domain.Entities.MessageType", "Type")
                         .WithMany()
@@ -183,28 +183,28 @@ namespace NotificationMicroservice.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedUser");
+                    b.Navigation("CreatedByUser");
 
-                    b.Navigation("ModifiedUser");
+                    b.Navigation("ModifiedByUser");
 
                     b.Navigation("Type");
                 });
 
             modelBuilder.Entity("NotificationMicroservice.Domain.Entities.MessageType", b =>
                 {
-                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "CreatedUser")
+                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "CreatedByUser")
                         .WithMany()
-                        .HasForeignKey("CreatedUserId")
+                        .HasForeignKey("CreatedByUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "ModifiedUser")
+                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "ModifiedByUser")
                         .WithMany()
-                        .HasForeignKey("ModifiedUserId");
+                        .HasForeignKey("ModifiedByUserId");
 
-                    b.Navigation("CreatedUser");
+                    b.Navigation("CreatedByUser");
 
-                    b.Navigation("ModifiedUser");
+                    b.Navigation("ModifiedByUser");
                 });
 #pragma warning restore 612, 618
         }

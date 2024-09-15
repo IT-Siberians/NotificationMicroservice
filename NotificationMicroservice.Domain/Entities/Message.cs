@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
-using NotificationMicroservice.Domain.Exception.Helpers;
 using NotificationMicroservice.Domain.Exception.Message;
+using NotificationMicroservice.Domain.Helpers;
 
 namespace NotificationMicroservice.Domain.Entities
 {
@@ -12,7 +12,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Длинна строки описывающий направление отправки
         /// </summary>
-        public const int MAX_DIRECTION_LENG = 10;
+        public const int MAX_DIRECTION_LENGTH = 10;
 
         /// <summary>
         /// Идентификатор
@@ -42,7 +42,9 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пустой конструктор для EF Core
         /// </summary>
+#pragma warning disable CS8618
         protected Message() { }
+#pragma warning disable CS8618
 
         /// <summary>
         /// Основной конструктор класса
@@ -67,9 +69,9 @@ namespace NotificationMicroservice.Domain.Entities
 
             }
 
-            if (direction.Length > MAX_DIRECTION_LENG)
+            if (direction.Length > MAX_DIRECTION_LENGTH)
             {
-                throw new MessageDirectionLengthException(ExceptionMessages.ERROR_DIRECTION_LENG, direction.Length.ToString());
+                throw new MessageDirectionLengthException(ExceptionMessages.ERROR_DIRECTION_LENGTH, MAX_DIRECTION_LENGTH, direction.Length.ToString());
             }
 
             Type = type;

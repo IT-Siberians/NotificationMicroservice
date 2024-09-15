@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
-using NotificationMicroservice.Domain.Exception.Helpers;
 using NotificationMicroservice.Domain.Exception.MessageType;
+using NotificationMicroservice.Domain.Helpers;
 
 namespace NotificationMicroservice.Domain.Entities
 {
@@ -9,6 +9,11 @@ namespace NotificationMicroservice.Domain.Entities
     /// </summary>
     public class MessageType : IModifyEntity<User, Guid>
     {
+        /// <summary>
+        /// Минимальная длина названия для типа сообщения
+        /// </summary>
+        public const int MIN_NAME_LENGTH = 20;
+
         /// <summary>
         /// Максимальная длина названия для типа сообщения
         /// </summary>
@@ -32,7 +37,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пользователь создавший тип сообщения
         /// </summary>
-        public User CreatedUser { get; }
+        public User CreatedByUser { get; }
 
         /// <summary>
         /// Дата создания типа сообщения
@@ -42,37 +47,39 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
         /// </summary>
-        public User? ModifiedUser { get; private set; }
+        public User? ModifiedByUser { get; private set; }
 
         /// <summary>
         /// Дата изменения шаблона сообщения
         /// </summary>
-        public DateTime? ModifiedDate { get; private set; }
+        public DateTime? ModificationDate { get; private set; }
 
         /// <summary>
         /// Пустой конструктор для EF Core
         /// </summary>
+#pragma warning disable CS8618
         protected MessageType() { }
+#pragma warning disable CS8618
 
         /// <summary>
         /// Основной конструктор класса (новая сущность)
         /// </summary>
         /// <param name="name">название типа сообщения</param>
         /// <param name="isRemoved">признак удаления типа сообщения</param>
-        /// <param name="createdUserName">пользователь создавший тип сообщения</param>
+        /// <param name="createdByUser">пользователь создавший тип сообщения</param>
         /// <param name="creationDate">дата и время создания типа сообщения</param>
-        /// <param name="modifiedUserName">пользователь изменивший тип сообщения</param>
-        /// <param name="modifiedDate">дата и время изменения типа сообщения</param>
-        public MessageType(string name, bool isRemoved, User createdUserName, DateTime creationDate, User? modifiedUserName, DateTime? modifiedDate)
+        /// <param name="modifiedByUser">пользователь изменивший тип сообщения</param>
+        /// <param name="modificationDate">дата и время изменения типа сообщения</param>
+        public MessageType(string name, bool isRemoved, User createdByUser, DateTime creationDate, User? modifiedByUser, DateTime? modificationDate)
         {
-            ValidateData(name, createdUserName);
+            ValidateData(name, createdByUser);
 
             Name = name;
             IsRemoved = isRemoved;
-            CreatedUser = createdUserName;
+            CreatedByUser = createdByUser;
             CreationDate = creationDate;
-            ModifiedUser = modifiedUserName;
-            ModifiedDate = modifiedDate;
+            ModifiedByUser = modifiedByUser;
+            ModificationDate = modificationDate;
         }
 
         /// <summary>
@@ -80,30 +87,28 @@ namespace NotificationMicroservice.Domain.Entities
         /// </summary>
         /// <param name="name">название типа сообщения</param>
         /// <param name="isRemoved">признак удаления типа сообщения</param>
-        /// <param name="modifiedUserName">пользователь изменивший тип сообщения</param>
-        /// <param name="modifiedDate">дата и время изменения типа сообщения</param>
-        public void Update(string name, bool isRemoved, User modifiedUserName, DateTime modifiedDate)
+        /// <param name="modifiedByUser">пользователь изменивший тип сообщения</param>
+        /// <param name="modificationDate">дата и время изменения типа сообщения</param>
+        public void Update(string name, bool isRemoved, User modifiedByUser, DateTime modificationDate)
         {
-            ValidateData(name, modifiedUserName);
+            ValidateData(name, modifiedByUser);
 
             Name = name;
             IsRemoved = isRemoved;
-            ModifiedUser = modifiedUserName;
-            ModifiedDate = modifiedDate;
+            ModifiedByUser = modifiedByUser;
+            ModificationDate = modificationDate;
         }
 
         /// <summary>
         /// Деактивация типа сообщения (пометить как удалённый)
         /// </summary>
-        /// <param name="modifiedUserName">пользователь изменивший шаблон сообщения</param>
-        /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
-        public void Delete(User modifiedUserName, DateTime modifiedDate)
+        /// <param name="modifiedByUser">пользователь изменивший шаблон сообщения</param>
+        /// <param name="modificationDate">дата и время изменения шаблона сообщения</param>
+        public void Delete(User modifiedByUser, DateTime modificationDate)
         {
-            ValidateUserName(modifiedUserName);
-
             IsRemoved = true;
-            ModifiedUser = modifiedUserName;
-            ModifiedDate = modifiedDate;
+            ModifiedByUser = modifiedByUser;
+            ModificationDate = modificationDate;
         }
 
         /// <summary>
@@ -118,25 +123,10 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageTypeNameNullOrEmptyException(ExceptionMessages.ERROR_TYPE_NAME, name);
             }
 
-            if (name.Length > MAX_NAME_LENGTH)
+            if (name.Length < MIN_NAME_LENGTH && name.Length > MAX_NAME_LENGTH)
             {
-                throw new MessageTypeNameLengthException(ExceptionMessages.ERROR_TYPE_NAME_LENGTH, name.Length.ToString());
-            }
-
-            ValidateUserName(user);
-        }
-
-        /// <summary>
-        /// Валидация имени пользователя
-        /// </summary>
-        /// <param name="user">имя пользователя</param>
-        private static void ValidateUserName(User user)
-        {
-            if (string.IsNullOrWhiteSpace(user.UserName))
-            {
-                throw new MessageTypeUserNameNullOrEmptyException(ExceptionMessages.ERROR_USERNAME, user.UserName);
+                throw new MessageTypeNameLengthException(ExceptionMessages.ERROR_TYPE_NAME_LENGTH, MIN_NAME_LENGTH, MAX_NAME_LENGTH, name.Length.ToString());
             }
         }
     }
-
 }

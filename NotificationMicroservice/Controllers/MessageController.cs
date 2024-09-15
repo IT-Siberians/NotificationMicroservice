@@ -7,24 +7,15 @@ namespace NotificationMicroservice.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class MessageController : ControllerBase
+    public class MessageController(IMessageApplicationService messageService, IMapper mapper) : ControllerBase
     {
-        private readonly IMessageApplicationService _messageService;
-        private readonly IMapper _mapper;
-
-        public MessageController(IMessageApplicationService messageService, IMapper mapper)
-        {
-            _messageService = messageService;
-            _mapper = mapper;
-        }
-
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<MessageResponse>), 200)]
         public async Task<ActionResult<List<MessageResponse>>> GetAllAsync()
         {
-            var messages = await _messageService.GetAllAsync();
+            var messages = await messageService.GetAllAsync();
 
-            return Ok(messages.Select(_mapper.Map<MessageResponse>));
+            return Ok(messages.Select(mapper.Map<MessageResponse>));
         }
 
         [HttpGet("{id:guid}")]
@@ -32,11 +23,11 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<MessageResponse>> GetByIdAsync(Guid id)
         {
-            var message = await _messageService.GetByIdAsync(id);
+            var message = await messageService.GetByIdAsync(id);
 
             return message is null
                 ? NotFound($"Message id:{id} not found!")
-                : Ok(_mapper.Map<MessageResponse>(message));
+                : Ok(mapper.Map<MessageResponse>(message));
         }
     }
 }

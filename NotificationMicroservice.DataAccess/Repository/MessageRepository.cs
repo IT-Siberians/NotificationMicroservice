@@ -39,16 +39,16 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <summary>
         /// Добавляет новое сообщение в базу данных.
         /// </summary>
-        /// <param name="entity">Сущность сообщения для добавления.</param>
+        /// <param name="message">Сущность сообщения для добавления.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Идентификатор добавленного сообщения.</returns>
-        public async Task<Guid> AddAsync(Message entity, CancellationToken cancellationToken)
+        public async Task<Guid> AddAsync(Message message, CancellationToken cancellationToken)
         {
-            context.Types.Attach(entity.Type);
-            await context.Messages.AddAsync(entity);
+            context.Types.Attach(message.Type);
+            await context.Messages.AddAsync(message);
             await context.SaveChangesAsync();
 
-            return entity.Id;
+            return message.Id;
         }
     }
 }

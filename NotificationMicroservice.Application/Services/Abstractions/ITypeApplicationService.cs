@@ -1,12 +1,12 @@
-﻿using NotificationMicroservice.Application.Services.Abstractions.Base;
-using NotificationMicroservice.Application.Model.Type;
+﻿using NotificationMicroservice.Application.Model.Type;
+using NotificationMicroservice.Application.Services.Abstractions.Base;
 
 namespace NotificationMicroservice.Application.Abstractions
 {
     /// <summary>
     /// Интерефейс для сервиса работы с типами
     /// </summary>
-    public interface ITypeApplicationService : IModifyService<TypeModel, CreateTypeModel, EditTypeModel, DeleteTypeModel, Guid>
+    public interface ITypeApplicationService : IFullModifyService<TypeModel, CreateTypeModel, UpdateTypeModel, DeleteTypeModel, Guid>
     {
     }
 }

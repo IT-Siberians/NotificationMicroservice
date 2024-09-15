@@ -12,7 +12,7 @@ namespace NotificationMicroservice.Validator.Type
             RuleFor(type => type.Name)
                 .SetValidator(new TypeNameValidator());
 
-            RuleFor(type => type.CreatedUserId)
+            RuleFor(type => type.CreatedByUserId)
                 .SetValidator(new GuidValidator());
         }
     }

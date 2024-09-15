@@ -40,41 +40,41 @@ namespace NotificationMicroservice.DataAccess.Repository
         /// <summary>
         /// Добавляет новый тип сообщения в базу данных.
         /// </summary>
-        /// <param name="entity">Сущность типа сообщения для добавления.</param>
+        /// <param name="type">Сущность типа сообщения для добавления.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Идентификатор добавленного типа сообщения.</returns>
-        public async Task<Guid> AddAsync(MessageType entity, CancellationToken cancellationToken)
+        public async Task<Guid> AddAsync(MessageType type, CancellationToken cancellationToken)
         {
-            context.Users.Attach(entity.CreatedUser);
-            context.Types.Add(entity);
+            context.Users.Attach(type.CreatedByUser);
+            context.Types.Add(type);
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return entity.Id;
+            return type.Id;
         }
 
         /// <summary>
         /// Обновляет существующий тип сообщения в базе данных.
         /// </summary>
-        /// <param name="entity">Сущность типа сообщения с обновленными данными.</param>
+        /// <param name="type">Сущность типа сообщения с обновленными данными.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Возвращает <c>true</c> после успешного обновления.</returns>
-        public async Task<bool> UpdateAsync(MessageType entity, CancellationToken cancellationToken)
+        public async Task<bool> UpdateAsync(MessageType type, CancellationToken cancellationToken)
         {
-            context.Entry(entity).State = EntityState.Modified;
-            context.Users.Attach(entity.ModifiedUser);
+            context.Entry(type).State = EntityState.Modified;
+            context.Users.Attach(type.ModifiedByUser!);
             return await context.SaveChangesAsync(cancellationToken) > 0;
         }
 
         /// <summary>
         /// Помечает тип сообщения как удаленный в базе данных.
         /// </summary>
-        /// <param name="entity">Сущность типа сообщения с обновленными данными.</param>
+        /// <param name="type">Сущность типа сообщения с обновленными данными.</param>
         /// <param name="cancellationToken">Токен отмены операции.</param>
         /// <returns>Возвращает <c>true</c> после успешного удаления.</returns>
-        public async Task<bool> DeleteAsync(MessageType entity, CancellationToken cancellationToken)
+        public async Task<bool> DeleteAsync(MessageType type, CancellationToken cancellationToken)
         {
-            return await UpdateAsync(entity, cancellationToken);
+            return await UpdateAsync(type, cancellationToken);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NotificationMicroservice.Application.Abstractions;
-using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.Contracts.Type;
 
@@ -9,24 +8,15 @@ namespace NotificationMicroservice.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class MessageTypeController : ControllerBase
+    public class MessageTypeController(ITypeApplicationService messageTypeService, IMapper mapper) : ControllerBase
     {
-        private readonly ITypeApplicationService _messageTypeService;
-        private readonly IMapper _mapper;
-
-        public MessageTypeController(ITypeApplicationService messageTypeService, IMapper mapper)
-        {
-            _messageTypeService = messageTypeService;
-            _mapper = mapper;
-        }
-
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<TypeResponse>), 200)]
         public async Task<ActionResult<List<TypeResponse>>> GetAllAsync()
         {
-            var types = await _messageTypeService.GetAllAsync();
+            var types = await messageTypeService.GetAllAsync();
 
-            return Ok(types.Select(_mapper.Map<TypeResponse>));
+            return Ok(types.Select(mapper.Map<TypeResponse>));
         }
 
         [HttpGet("{id:guid}")]
@@ -34,11 +24,11 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<TypeResponse>> GetByIdAsync(Guid id)
         {
-            var type = await _messageTypeService.GetByIdAsync(id);
+            var type = await messageTypeService.GetByIdAsync(id);
 
             return type is null
                 ? NotFound($"Type {id} not found!")
-                : Ok(_mapper.Map<TypeResponse>(type));
+                : Ok(mapper.Map<TypeResponse>(type));
         }
 
         [HttpPost]
@@ -46,13 +36,12 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<Guid>> AddAsync([FromBody] AddTypeRequest request)
         {
-            var typeId = await _messageTypeService.AddAsync(_mapper.Map<CreateTypeModel>(request));
+            var typeId = await messageTypeService.AddAsync(mapper.Map<CreateTypeModel>(request));
 
             if (typeId is null)
             {
                 return BadRequest("Type can not be created");
             }
-
             return Created("", typeId);
         }
 
@@ -61,10 +50,9 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<bool>> UpdateAsync(Guid id, [FromBody] EditTypeRequest request)
         {
-            var type = _mapper.Map<EditTypeModel>(request);
+            var type = mapper.Map<UpdateTypeModel>(request);
             type.Id = id;
-
-            return await _messageTypeService.UpdateAsync(type) is true ? NoContent() : NotFound($"Type {id} not found or remove!");
+            return await messageTypeService.UpdateAsync(type) is true ? NoContent() : NotFound($"Type {id} not found or remove!");
         }
 
         [HttpDelete("{id:guid}")]
@@ -72,10 +60,9 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 400)]
         public async Task<ActionResult<bool>> DeleteAsync(Guid id, [FromBody] DeleteTypeRequest request)
         {
-            var type = _mapper.Map<DeleteTypeModel>(request);
+            var type = mapper.Map<DeleteTypeModel>(request);
             type.Id = id;
-
-            return await _messageTypeService.DeleteAsync(type) is true ? NoContent() : NotFound($"Type {id} NOT delete!");
+            return await messageTypeService.DeleteAsync(type) is true ? NoContent() : NotFound($"Type {id} NOT delete!");
         }
 
     }

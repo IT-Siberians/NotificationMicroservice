@@ -4,7 +4,7 @@
         Guid MessageTypeId,
         string Language,
         string Template,
-        Guid ModifiedUserId
+        Guid ModifiedByUserId
         );
 
 }

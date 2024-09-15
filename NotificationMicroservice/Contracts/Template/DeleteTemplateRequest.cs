@@ -1,5 +1,5 @@
 ﻿namespace NotificationMicroservice.Contracts.Template
 {
-    public record DeleteTemplateRequest(Guid ModifiedUserId);
+    public record DeleteTemplateRequest(Guid ModifiedByUserId);
 
 }

@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
-using NotificationMicroservice.Domain.Exception.Helpers;
 using NotificationMicroservice.Domain.Exception.MessageTemplate;
+using NotificationMicroservice.Domain.Helpers;
 
 namespace NotificationMicroservice.Domain.Entities
 {
@@ -13,6 +13,16 @@ namespace NotificationMicroservice.Domain.Entities
         /// Длинна кодировки языка шаблона сообщения (ISO 639-3)
         /// </summary>
         public const int LANGUAGE_LENGTH = 3;
+
+        /// <summary>
+        /// Минимальная длина названия для шаблона сообщения
+        /// </summary>
+        public const int TEMPLATE_MIN_LENGTH = 30;
+
+        /// <summary>
+        /// Максимальная длина названия для шаблона сообщения
+        /// </summary>
+        public const int TEMPLATE_MAX_LENGTH = 250;
 
         /// <summary>
         /// Идентификатор
@@ -42,7 +52,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пользователь создавший шаблон сообщения
         /// </summary>
-        public User CreatedUser { get; }
+        public User CreatedByUser { get; }
 
         /// <summary>
         /// Дата создания шаблона сообщения
@@ -52,17 +62,19 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Пользователь изменивший шаблон сообщения
         /// </summary>
-        public User? ModifiedUser { get; private set; }
+        public User? ModifiedByUser { get; private set; }
 
         /// <summary>
         /// Дата изменения шаблона сообщения
         /// </summary>
-        public DateTime? ModifiedDate { get; private set; }
+        public DateTime? ModificationDate { get; private set; }
 
         /// <summary>
         /// Пустой конструктор для EF Core
         /// </summary>
+#pragma warning disable CS8618
         protected MessageTemplate() { }
+#pragma warning disable CS8618
 
         /// <summary>
         /// Основной конструктор класса
@@ -71,26 +83,26 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="language">язык шаблона</param>
         /// <param name="template">текст шаблона сообщения</param>
         /// <param name="isRemoved">признак удаления типа сообщения</param>
-        /// <param name="createdUser">пользователь создавший шаблон сообщения</param>
+        /// <param name="createdByUser">пользователь создавший шаблон сообщения</param>
         /// <param name="creationDate">дата и время создания шаблона сообщения</param>
-        /// <param name="modifiedUser">пользователь изменивший шаблон сообщения</param>
-        /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
+        /// <param name="modifiedByUser">пользователь изменивший шаблон сообщения</param>
+        /// <param name="modificationDate">дата и время изменения шаблона сообщения</param>
         /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public MessageTemplate(MessageType type, string language, string template, bool isRemoved, User createdUser, DateTime creationDate, User? modifiedUser, DateTime? modifiedDate)
+        public MessageTemplate(MessageType type, string language, string template, bool isRemoved, User createdByUser, DateTime creationDate, User? modifiedByUser, DateTime? modificationDate)
         {
-            ValidateData(language, template, createdUser);
+            ValidateData(language, template, createdByUser);
 
             Type = type;
             Language = language;
             Template = template;
             IsRemoved = isRemoved;
-            CreatedUser = createdUser;
+            CreatedByUser = createdByUser;
             CreationDate = creationDate;
-            ModifiedUser = modifiedUser;
-            ModifiedDate = modifiedDate;
+            ModifiedByUser = modifiedByUser;
+            ModificationDate = modificationDate;
         }
 
         /// <summary>
@@ -100,52 +112,36 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="language">язык шаблона</param>
         /// <param name="template">текст шаблона сообщения</param>
         /// <param name="isRemoved">признак удаления типа сообщения</param>
-        /// <param name="modifiedUser">пользователь изменивший шаблон сообщения</param>
-        /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
+        /// <param name="modifiedByUser">пользователь изменивший шаблон сообщения</param>
+        /// <param name="modificationDate">дата и время изменения шаблона сообщения</param>
         /// <exception cref="MessageTemplateLanguageNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public void Update(MessageType messageType, string language, string template, bool isRemoved, User modifiedUser, DateTime modifiedDate)
+        public void Update(MessageType messageType, string language, string template, bool isRemoved, User modifiedByUser, DateTime modificationDate)
         {
 
-            ValidateData(language, template, modifiedUser);
+            ValidateData(language, template, modifiedByUser);
 
             Type = messageType;
             Language = language;
             Template = template;
             IsRemoved = isRemoved;
-            ModifiedUser = modifiedUser;
-            ModifiedDate = modifiedDate;
+            ModifiedByUser = modifiedByUser;
+            ModificationDate = modificationDate;
         }
 
         /// <summary>
         /// Деактивация "Удаление"
         /// </summary>
-        /// <param name="modifiedUser">пользователь изменивший шаблон сообщения</param>
-        /// <param name="modifiedDate">дата и время изменения шаблона сообщения</param>
+        /// <param name="modifiedByUser">пользователь изменивший шаблон сообщения</param>
+        /// <param name="modificationDate">дата и время изменения шаблона сообщения</param>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public void Delete(User modifiedUser, DateTime modifiedDate)
+        public void Delete(User modifiedByUser, DateTime modificationDate)
         {
-
-            ValidateUserName(modifiedUser);
-
             IsRemoved = true;
-            ModifiedUser = modifiedUser;
-            ModifiedDate = modifiedDate;
-        }
-
-        /// <summary>
-        /// Валидация имени пользователя
-        /// </summary>
-        /// <param name="user"></param>
-        /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        private static void ValidateUserName(User user)
-        {
-            if (string.IsNullOrWhiteSpace(user.UserName))
-            {
-                throw new MessageTemplateUserNameNullOrEmptyException(ExceptionMessages.ERROR_USERNAME, user.UserName);
-            }
+            ModifiedByUser = modifiedByUser;
+            ModificationDate = modificationDate;
         }
 
         /// <summary>
@@ -160,17 +156,20 @@ namespace NotificationMicroservice.Domain.Entities
                 throw new MessageTemplateNullOrEmptyException(ExceptionMessages.ERROR_TEMPLATE, template);
             }
 
+            if (template.Length < TEMPLATE_MIN_LENGTH && template.Length > TEMPLATE_MAX_LENGTH)
+            {
+                throw new MessageTemplateLengthException(ExceptionMessages.ERROR_TEMPLATE_LENGTH, TEMPLATE_MIN_LENGTH, TEMPLATE_MAX_LENGTH, template.Length.ToString());
+            }
+
             if (string.IsNullOrWhiteSpace(language))
             {
-                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionMessages.ERROR_LANG_CODE);
+                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionMessages.ERROR_LANG_CODE, language);
             }
 
             if (language.Length != LANGUAGE_LENGTH)
             {
-                throw new MessageTemplateLanguageLengthException(ExceptionMessages.ERROR_LANG_CODE_LENGTH, language.Length.ToString());
+                throw new MessageTemplateLanguageLengthException(ExceptionMessages.ERROR_LANG_CODE_LENGTH, LANGUAGE_LENGTH, language.Length.ToString());
             }
-
-            ValidateUserName(user);
         }
     }
 }

@@ -15,7 +15,10 @@ namespace NotificationMicroservice.Application.Mapper
             CreateMap<MessageType, TypeModel>().ReverseMap();
             CreateMap<MessageTemplate, TemplateModel>().ReverseMap();
             CreateMap<Message, MessageModel>().ReverseMap();
-            CreateMap<User, UserModel>().ReverseMap();
+            CreateMap<User, UserModel>()
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.Username.Value))
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.Email.Value))
+                .ReverseMap();
         }
     }
 }
