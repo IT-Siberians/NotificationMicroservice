@@ -12,11 +12,14 @@ namespace NotificationMicroservice.Application.Mapper
     {
         public ApplicationProfile()
         {
-            CreateMap<MessageType, TypeModel>().ReverseMap();
+            CreateMap<MessageType, TypeModel>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name.Value))
+                .ReverseMap();
             CreateMap<MessageTemplate, TemplateModel>().ReverseMap();
             CreateMap<Message, MessageModel>().ReverseMap();
             CreateMap<User, UserModel>()
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Username.Value))
+                .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName.Value))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email.Value))
                 .ReverseMap();
         }

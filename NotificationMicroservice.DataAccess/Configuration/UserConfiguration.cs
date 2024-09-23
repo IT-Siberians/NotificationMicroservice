@@ -21,6 +21,10 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .IsRequired();
 
             builder.Property(x => x.FullName)
+                .HasMaxLength(User.MAX_FULLNAME_LENGTH)
+                .HasConversion(
+                    v => v.Value,
+                    v => new FullName(v))
                 .IsRequired();
 
             builder.Property(x => x.Email)

@@ -19,6 +19,16 @@ namespace NotificationMicroservice.Domain.Entities
         public const int MAX_USERNAME_LENGTH = 30;
 
         /// <summary>
+        /// Минимальная длина FullName
+        /// </summary>
+        public const int MIN_FULLNAME_LENGTH = 5;
+
+        /// <summary>
+        /// Максимальная длина FullName
+        /// </summary>
+        public const int MAX_FULLNAME_LENGTH = 100;
+
+        /// <summary>
         /// Получает идентификатор пользователя.
         /// </summary>
         public Guid Id { get; }
@@ -31,7 +41,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Получает ФИО пользователя.
         /// </summary>
-        public string FullName { get; private set; }
+        public FullName FullName { get; private set; }
 
         /// <summary>
         /// Получает адрес электронной почты пользователя.
@@ -57,7 +67,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="username">Имя пользователя.</param>
         /// <param name="fullName">Имя пользователя.</param>
         /// <param name="email">Адрес электронной почты пользователя.</param>
-        public User(Guid id, Username username, string fullName, Email email)
+        public User(Guid id, Username username, FullName fullName, Email email)
         {
             Id = id;
             Username = username;
@@ -71,7 +81,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// </summary>
         /// <param name="fullName">Имя пользователя.</param>
         /// <param name="email">Адрес электронной почты пользователя.</param>
-        public void Update(string fullName, Email email)
+        public void Update(FullName fullName, Email email)
         {
             FullName = fullName;
             Email = email;

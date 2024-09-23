@@ -61,6 +61,9 @@ namespace NotificationMicroservice
             builder.Services.AddScoped<IUserApplicationService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+            builder.Services.AddScoped<RMQProducerService>();
+            builder.Services.AddScoped<SendService>();
+
             builder.Services.AddAutoMapper(typeof(PresentationProfile), typeof(ApplicationProfile));
 
             var app = builder.Build();

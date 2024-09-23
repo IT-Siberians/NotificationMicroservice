@@ -3,7 +3,7 @@
 namespace NotificationMicroservice.DataAccess.Repository.Abstractions.Base
 {
     /// <summary>
-    /// Описания общих методов для всех репозиториев.
+    /// Описания общих методов получения сущности для всех репозиториев.
     /// </summary>
     /// <typeparam name="TEntity"> Тип Entity для репозитория. </typeparam>
     /// <typeparam name="TKey"> Тип первичного ключа. </typeparam>

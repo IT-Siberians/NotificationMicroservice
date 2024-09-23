@@ -2,18 +2,15 @@
 
 namespace NotificationMicroservice.DataAccess.Repository.Abstractions.Base
 {
-    public interface IModifyRepository<TEntity, TKey> : IRepository<TEntity, TKey>
+    /// <summary>
+    /// Представляет абстракцию репозитория для получения, добавления и модификации сущностей в базе данных.
+    /// </summary>
+    /// <typeparam name="TEntity">Тип сущности, с которой работает репозиторий.</typeparam>
+    /// <typeparam name="TKey">Тип ключа сущности, обычно первичного ключа.</typeparam>
+    public interface IModifyRepository<TEntity, TKey> : IAddRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
         where TKey : struct
     {
-        /// <summary>
-        /// Добавить в базу одну сущность.
-        /// </summary>
-        /// <param name="entity"> Сущность для добавления. </param>
-        /// <param name="cancellationToken"> Токен отмены. </param>
-        /// <returns> Добавленная сущность. </returns>
-        Task<TKey> AddAsync(TEntity entity, CancellationToken cancellationToken);
-
         /// <summary>
         /// Для сущности проставить состояние - что она изменена.
         /// </summary>

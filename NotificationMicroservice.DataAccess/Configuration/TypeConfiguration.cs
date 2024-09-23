@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
@@ -15,6 +16,9 @@ namespace NotificationMicroservice.DataAccess.Configuration
 
             builder.Property(x => x.Name)
                 .HasMaxLength(MessageType.MAX_NAME_LENGTH)
+                .HasConversion(
+                    v => v.Value,
+                    v => new TypeName(v))
                 .IsRequired();
 
             builder.Property(x => x.IsRemoved)

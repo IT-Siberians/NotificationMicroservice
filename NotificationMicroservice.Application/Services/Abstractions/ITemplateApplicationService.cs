@@ -8,5 +8,11 @@ namespace NotificationMicroservice.Application.Abstractions
     /// </summary>
     public interface ITemplateApplicationService : IFullModifyService<TemplateModel, CreateTemplateModel, UpdateTemplateModel, DeleteTemplateModel, Guid>
     {
+        /// <summary>
+        /// Получение списка шаблонов по типу сообщения
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<IEnumerable<TemplateModel>> GetByTypeId(Guid id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
+using NotificationMicroservice.Domain.Enums;
 using NotificationMicroservice.Domain.Exception.Message;
 using NotificationMicroservice.Domain.Helpers;
 
@@ -32,7 +33,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Напрвление отправки
         /// </summary>
-        public string Direction { get; }
+        public Direction Direction { get; }
 
         /// <summary>
         /// Дата отправки сообщения
@@ -54,24 +55,11 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="direction">отправление отправки сообщения</param>
         /// <param name="creationDate">дата и время отправки сообщения</param>
         /// <exception cref="MessageTextNullOrEmptyException"></exception>
-        /// <exception cref="MessageDirectionNullOrEmptyException"></exception>
-        /// <exception cref="MessageDirectionLengthException"></exception>
-        public Message(MessageType type, string text, string direction, DateTime creationDate)
+        public Message(MessageType type, string text, Direction direction, DateTime creationDate)
         {
             if (string.IsNullOrWhiteSpace(text))
             {
                 throw new MessageTextNullOrEmptyException(ExceptionMessages.ERROR_TEXT, text);
-            }
-
-            if (string.IsNullOrWhiteSpace(direction))
-            {
-                throw new MessageDirectionNullOrEmptyException(ExceptionMessages.ERROR_DIRECTION, direction);
-
-            }
-
-            if (direction.Length > MAX_DIRECTION_LENGTH)
-            {
-                throw new MessageDirectionLengthException(ExceptionMessages.ERROR_DIRECTION_LENGTH, MAX_DIRECTION_LENGTH, direction.Length.ToString());
             }
 
             Type = type;

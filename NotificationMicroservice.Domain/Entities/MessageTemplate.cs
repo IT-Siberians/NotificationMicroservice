@@ -22,7 +22,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Максимальная длина названия для шаблона сообщения
         /// </summary>
-        public const int TEMPLATE_MAX_LENGTH = 250;
+        public const int TEMPLATE_MAX_LENGTH = 500;
 
         /// <summary>
         /// Идентификатор

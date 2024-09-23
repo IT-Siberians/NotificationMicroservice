@@ -25,9 +25,23 @@ namespace NotificationMicroservice.Application.Services
             return dbEntity is null ? null : mapper.Map<TemplateModel>(dbEntity);
         }
 
+        public async Task<IEnumerable<TemplateModel>> GetByTypeId(Guid id)
+        {
+            var dbEntities = await templateRepository.GetAllAsync(_cancelTokenSource.Token, true);
+
+            if (dbEntities is null)
+            {
+                return null;
+            }
+
+            var result = dbEntities.Where(i => i.Type.Id == id).ToList();
+
+            return result.Select(mapper.Map<TemplateModel>);
+        }
+
         public async Task<Guid?> AddAsync(CreateTemplateModel messageTemplate)
         {
-            var user = await userRepository.GetByIdAsync(messageTemplate.CreatedUserId, _cancelTokenSource.Token);
+            var user = await userRepository.GetByIdAsync(messageTemplate.CreatedByUserId, _cancelTokenSource.Token);
 
             if (user is null)
             {

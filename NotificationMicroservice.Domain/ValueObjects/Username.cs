@@ -1,5 +1,5 @@
 ﻿using NotificationMicroservice.Domain.Entities;
-using NotificationMicroservice.Domain.Exception.ValueObject.Username;
+using NotificationMicroservice.Domain.Exception.ValueObject.Name;
 
 namespace NotificationMicroservice.Domain.ValueObjects
 {
@@ -12,8 +12,8 @@ namespace NotificationMicroservice.Domain.ValueObjects
         /// Инициализирует новый экземпляр класса <see cref="Username"/> с заданным значением.
         /// </summary>
         /// <param name="value">Значение имени пользователя.</param>
-        /// <exception cref="UsernameEmptyException">Если значение имени пользователя пустое или состоит только из пробелов.</exception>
-        /// <exception cref="UsernameLengthException">Если длина значения имени пользователя выходит за пределы допустимого диапазона.</exception>
+        /// <exception cref="NameEmptyException">Если значение имени пользователя пустое или состоит только из пробелов.</exception>
+        /// <exception cref="NameLengthException">Если длина значения имени пользователя выходит за пределы допустимого диапазона.</exception>
         public Username(string value)
         {
             IsValid(value);
@@ -30,18 +30,18 @@ namespace NotificationMicroservice.Domain.ValueObjects
         /// Проверяет, является ли значение имени пользователя валидным.
         /// </summary>
         /// <param name="value">Значение имени пользователя для проверки.</param>
-        /// <exception cref="UsernameEmptyException">Если значение имени пользователя пустое или состоит только из пробелов.</exception>
-        /// <exception cref="UsernameLengthException">Если длина значения имени пользователя выходит за пределы допустимого диапазона.</exception>
+        /// <exception cref="NameEmptyException">Если значение имени пользователя пустое или состоит только из пробелов.</exception>
+        /// <exception cref="NameLengthException">Если длина значения имени пользователя выходит за пределы допустимого диапазона.</exception>
         private void IsValid(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new UsernameEmptyException(nameof(value));
+                throw new NameEmptyException(nameof(value));
             }
 
             if (value.Length < User.MIN_USERNAME_LENGTH || value.Length > User.MAX_USERNAME_LENGTH)
             {
-                throw new UsernameLengthException(value.Length, User.MIN_USERNAME_LENGTH, User.MAX_USERNAME_LENGTH, nameof(value));
+                throw new NameLengthException(value.Length, User.MIN_USERNAME_LENGTH, User.MAX_USERNAME_LENGTH, nameof(value));
             }
         }
 

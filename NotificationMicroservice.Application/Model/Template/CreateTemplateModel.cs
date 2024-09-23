@@ -4,6 +4,6 @@
         Guid MessageTypeId,
         string Language,
         string Template,
-        Guid CreatedUserId
+        Guid CreatedByUserId
         );
 }

@@ -3,6 +3,7 @@ using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Application.Services
 {
@@ -33,7 +34,7 @@ namespace NotificationMicroservice.Application.Services
                 return null;
             }
 
-            var typeNew = new MessageType(type.Name, false, user, DateTime.UtcNow, null, null);
+            var typeNew = new MessageType(new TypeName(type.Name), false, user, DateTime.UtcNow, null, null);
 
             return await messageTypeRepository.AddAsync(typeNew, _cancelTokenSource.Token);
         }
@@ -54,7 +55,7 @@ namespace NotificationMicroservice.Application.Services
                 return false;
             }
 
-            type.Update(messageType.Name, false, user, DateTime.UtcNow);
+            type.Update(new TypeName(messageType.Name), false, user, DateTime.UtcNow);
 
             return await messageTypeRepository.UpdateAsync(type, _cancelTokenSource.Token);
         }

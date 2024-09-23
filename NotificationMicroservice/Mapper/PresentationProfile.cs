@@ -18,6 +18,7 @@ namespace NotificationMicroservice.Mapper
             CreateMap<TypeModel, TypeResponse>();
 
             CreateMap<MessageModel, MessageResponse>();
+            CreateMap<MessageRequest, GetMessageModel>();
 
             CreateMap<TemplateModel, TemplateResponse>();
             CreateMap<AddTemplateRequest, CreateTemplateModel>();

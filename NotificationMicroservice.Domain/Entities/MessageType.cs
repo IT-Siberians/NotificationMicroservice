@@ -1,6 +1,5 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
-using NotificationMicroservice.Domain.Exception.MessageType;
-using NotificationMicroservice.Domain.Helpers;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Domain.Entities
 {
@@ -27,7 +26,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Название типа сообщения
         /// </summary>
-        public string Name { get; private set; }
+        public TypeName Name { get; private set; }
 
         /// <summary>
         /// Статус удаления типа
@@ -70,10 +69,8 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="creationDate">дата и время создания типа сообщения</param>
         /// <param name="modifiedByUser">пользователь изменивший тип сообщения</param>
         /// <param name="modificationDate">дата и время изменения типа сообщения</param>
-        public MessageType(string name, bool isRemoved, User createdByUser, DateTime creationDate, User? modifiedByUser, DateTime? modificationDate)
+        public MessageType(TypeName name, bool isRemoved, User createdByUser, DateTime creationDate, User? modifiedByUser, DateTime? modificationDate)
         {
-            ValidateData(name, createdByUser);
-
             Name = name;
             IsRemoved = isRemoved;
             CreatedByUser = createdByUser;
@@ -89,10 +86,8 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="isRemoved">признак удаления типа сообщения</param>
         /// <param name="modifiedByUser">пользователь изменивший тип сообщения</param>
         /// <param name="modificationDate">дата и время изменения типа сообщения</param>
-        public void Update(string name, bool isRemoved, User modifiedByUser, DateTime modificationDate)
+        public void Update(TypeName name, bool isRemoved, User modifiedByUser, DateTime modificationDate)
         {
-            ValidateData(name, modifiedByUser);
-
             Name = name;
             IsRemoved = isRemoved;
             ModifiedByUser = modifiedByUser;
@@ -109,24 +104,6 @@ namespace NotificationMicroservice.Domain.Entities
             IsRemoved = true;
             ModifiedByUser = modifiedByUser;
             ModificationDate = modificationDate;
-        }
-
-        /// <summary>
-        /// Валидация входных данных
-        /// </summary>
-        /// <param name="name">название типа сообщения</param>
-        /// <param name="user">имя пользователя</param>
-        private static void ValidateData(string name, User user)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new MessageTypeNameNullOrEmptyException(ExceptionMessages.ERROR_TYPE_NAME, name);
-            }
-
-            if (name.Length < MIN_NAME_LENGTH && name.Length > MAX_NAME_LENGTH)
-            {
-                throw new MessageTypeNameLengthException(ExceptionMessages.ERROR_TYPE_NAME_LENGTH, MIN_NAME_LENGTH, MAX_NAME_LENGTH, name.Length.ToString());
-            }
         }
     }
 }
