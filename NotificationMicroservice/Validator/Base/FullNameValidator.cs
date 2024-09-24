@@ -3,14 +3,14 @@ using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.Validator.Base
 {
-    public class TypeNameValidator : AbstractValidator<string>
+    public class FullNameValidator : AbstractValidator<string>
     {
-        public TypeNameValidator()
+        public FullNameValidator()
         {
             RuleFor(request => request)
-                .NotNull()
                 .NotEmpty()
-                .Length(MessageType.MIN_NAME_LENGTH, MessageType.MAX_NAME_LENGTH);
+                .NotNull()
+                .Length(User.MIN_FULLNAME_LENGTH, User.MAX_FULLNAME_LENGTH);
         }
     }
 }

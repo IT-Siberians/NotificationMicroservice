@@ -28,8 +28,4 @@
     <ProjectReference Include="..\NotificationMicroservice.DataAccess\NotificationMicroservice.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Validator\Event\" />
-  </ItemGroup>
-
 </Project>
