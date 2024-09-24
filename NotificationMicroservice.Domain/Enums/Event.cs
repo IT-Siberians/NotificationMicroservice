@@ -2,7 +2,9 @@
 {
     public enum Event
     {
-        Registration = 0,
-        EmailConfirmation = 1,
+        None = 0,
+        CreateUser = 1,
+        ChangeUser = 2,
+        ConfirmationEmail = 3,
     }
 }

@@ -29,7 +29,7 @@ namespace NotificationMicroservice.Application.Services
         {
             var user = await userRepository.GetByIdAsync(createUser.Id, _cancelTokenSource.Token);
 
-            if (user == null)
+            if (user is not null)
             {
                 return null;
             }

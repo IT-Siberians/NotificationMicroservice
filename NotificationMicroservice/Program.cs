@@ -10,6 +10,7 @@ using NotificationMicroservice.DataAccess;
 using NotificationMicroservice.DataAccess.Repository;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Mapper;
+using NotificationMicroservice.Services;
 
 namespace NotificationMicroservice
 {
@@ -63,6 +64,7 @@ namespace NotificationMicroservice
 
             builder.Services.AddScoped<RMQProducerService>();
             builder.Services.AddScoped<SendService>();
+            builder.Services.AddScoped<EventControlService>();
 
             builder.Services.AddAutoMapper(typeof(PresentationProfile), typeof(ApplicationProfile));
 
