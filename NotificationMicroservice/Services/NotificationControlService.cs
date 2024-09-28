@@ -31,7 +31,7 @@ namespace NotificationMicroservice.Services
                     }
 
                     var confirmationEmail = JsonSerializer.Deserialize<ConfirmationEmailEvent>(message);
-                    var messageText = string.Format(template.Template, confirmationEmail.Username, confirmationEmail.Link, _nameSite);
+                    var messageText = string.Format(template.Template, confirmationEmail!.Username, confirmationEmail.Link, _nameSite);
                     var messageSend = new SendMessageResponse(confirmationEmail.Username, confirmationEmail.Email, template.Type.Name, messageText);
 
                     sender.SendMessage(messageSend, Direction.Email);
@@ -68,6 +68,12 @@ namespace NotificationMicroservice.Services
             }
 
             var template = templates.FirstOrDefault(i => i.Language == _lang);
+
+            if (template == null)
+            {
+                template = templates.FirstOrDefault(i => i.Language == "Eng");
+            }
+
             return template is null ? null : template;
         }
     }
