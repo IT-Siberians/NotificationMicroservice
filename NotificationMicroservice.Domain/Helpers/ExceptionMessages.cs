@@ -14,6 +14,8 @@
         public const string ERROR_TEMPLATE_LENGTH = "The length of the message template is invalid. It should be between '{0}' and '{1}' characters long.";
         public const string ERROR_EMAIL = "Email is not valid. Value is '{0}'.";
         public const string NAME_EMPTY_STRING_ERROR = "{0} cannot null or empty.";
-        public const string NAME_LENGTH_ERROR = "The {0} is longer than the allowed length of the {0}. It should be between '{1}' and '{2}' characters long. Current value '{3}'";
+        public const string ERROR_NAME_LENGTH = "The {0} is longer than the allowed length of the {0}. It should be between '{1}' and '{2}' characters long. Current value '{3}'";
+        public const string ERROR_QUEUENAME = "QueueName is not valid. Value is '{0}'.";
+        public const string ERROR_QUEUENAME_LENGTH = "The {0} of the queue name is invalid. It should be between '{1}' and '{2}' characters long. Current value '{3}'";
     }
 }

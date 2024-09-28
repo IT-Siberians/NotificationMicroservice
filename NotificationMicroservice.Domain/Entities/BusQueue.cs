@@ -9,6 +9,16 @@ namespace NotificationMicroservice.Domain.Entities
     public class BusQueue : IModifyEntity<Guid>
     {
         /// <summary>
+        /// Минимальная длина QueueName
+        /// </summary>
+        public const int MIN_QUEUENAME_LENGTH = 5;
+
+        /// <summary>
+        /// Максимальная длина QueueName
+        /// </summary>
+        public const int MAX_QUEUENAME_LENGTH = 30;
+
+        /// <summary>
         /// Идентификатор очереди.
         /// </summary>
         public Guid Id { get; }
