@@ -2,7 +2,6 @@
 {
     public record AddTypeRequest(
         string Name,
-        Guid CreatedByUserId
-        );
+        Guid CreatedByUserId);
 
 }

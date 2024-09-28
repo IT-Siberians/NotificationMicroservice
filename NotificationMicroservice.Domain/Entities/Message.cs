@@ -1,7 +1,7 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
 using NotificationMicroservice.Domain.Enums;
 using NotificationMicroservice.Domain.Exception.Message;
-using NotificationMicroservice.Domain.Helpers;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Domain.Entities
 {
@@ -10,11 +10,6 @@ namespace NotificationMicroservice.Domain.Entities
     /// </summary>
     public class Message : IEntity<Guid>
     {
-        /// <summary>
-        /// Длинна строки описывающий направление отправки
-        /// </summary>
-        public const int MAX_DIRECTION_LENGTH = 10;
-
         /// <summary>
         /// Идентификатор
         /// </summary>
@@ -28,7 +23,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Сообщение
         /// </summary>
-        public string Text { get; }
+        public MessageText Text { get; }
 
         /// <summary>
         /// Напрвление отправки
@@ -55,13 +50,8 @@ namespace NotificationMicroservice.Domain.Entities
         /// <param name="direction">отправление отправки сообщения</param>
         /// <param name="creationDate">дата и время отправки сообщения</param>
         /// <exception cref="MessageTextNullOrEmptyException"></exception>
-        public Message(MessageType type, string text, Direction direction, DateTime creationDate)
+        public Message(MessageType type, MessageText text, Direction direction, DateTime creationDate)
         {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                throw new MessageTextNullOrEmptyException(ExceptionMessages.ERROR_TEXT, text);
-            }
-
             Type = type;
             Text = text;
             Direction = direction;

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using NotificationMicroservice.Application.Model.BusQueue;
 using NotificationMicroservice.Application.Model.Message;
 using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Application.Model.Type;
@@ -21,6 +22,9 @@ namespace NotificationMicroservice.Application.Mapper
                 .ForMember(d => d.Username, o => o.MapFrom(s => s.Username.Value))
                 .ForMember(d => d.FullName, o => o.MapFrom(s => s.FullName.Value))
                 .ForMember(d => d.Email, o => o.MapFrom(s => s.Email.Value))
+                .ReverseMap();
+            CreateMap<BusQueue, BusQueueModel>()
+                .ForMember(d => d.QueueName, o => o.MapFrom(s => s.QueueName.Value))
                 .ReverseMap();
         }
     }

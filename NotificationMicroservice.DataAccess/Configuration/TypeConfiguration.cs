@@ -36,6 +36,9 @@ namespace NotificationMicroservice.DataAccess.Configuration
             builder.HasMany<MessageTemplate>()
                 .WithOne(x => x.Type);
 
+            builder.HasMany<BusQueue>()
+                .WithOne(p => p.Type);
+
             builder.HasOne(x => x.CreatedByUser)
                 .WithMany()
                 .IsRequired();

@@ -1,4 +1,5 @@
-﻿using NotificationMicroservice.Domain.Enums;
+﻿using NotificationMicroservice.Application.Model.Abstractions;
+using NotificationMicroservice.Domain.Enums;
 
 namespace NotificationMicroservice.Application.Model.Message
 {
@@ -6,5 +7,5 @@ namespace NotificationMicroservice.Application.Model.Message
         Guid MessageTypeId,
         string MessageText,
         Direction Direction
-        );
+        ) : ICreateModel;
 }

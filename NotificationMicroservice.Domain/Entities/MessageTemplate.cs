@@ -1,13 +1,14 @@
 ﻿using NotificationMicroservice.Domain.Entities.Base;
+using NotificationMicroservice.Domain.Enums;
 using NotificationMicroservice.Domain.Exception.MessageTemplate;
-using NotificationMicroservice.Domain.Helpers;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Domain.Entities
 {
     /// <summary>
     /// Шаблон сообщения
     /// </summary>
-    public class MessageTemplate : IModifyEntity<User, Guid>
+    public class MessageTemplate : IModifyEntity<Guid>
     {
         /// <summary>
         /// Длинна кодировки языка шаблона сообщения (ISO 639-3)
@@ -22,7 +23,7 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Максимальная длина названия для шаблона сообщения
         /// </summary>
-        public const int TEMPLATE_MAX_LENGTH = 500;
+        public const int TEMPLATE_MAX_LENGTH = 600;
 
         /// <summary>
         /// Идентификатор
@@ -37,12 +38,12 @@ namespace NotificationMicroservice.Domain.Entities
         /// <summary>
         /// Язык шаблона
         /// </summary>
-        public string Language { get; private set; }
+        public Language Language { get; private set; }
 
         /// <summary>
         /// Текс шаблона сообщений
         /// </summary>
-        public string Template { get; private set; }
+        public Template Template { get; private set; }
 
         /// <summary>
         /// Статус удаления шааблона
@@ -91,10 +92,8 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public MessageTemplate(MessageType type, string language, string template, bool isRemoved, User createdByUser, DateTime creationDate, User? modifiedByUser, DateTime? modificationDate)
+        public MessageTemplate(MessageType type, Language language, Template template, bool isRemoved, User createdByUser, DateTime creationDate, User? modifiedByUser, DateTime? modificationDate)
         {
-            ValidateData(language, template, createdByUser);
-
             Type = type;
             Language = language;
             Template = template;
@@ -118,11 +117,8 @@ namespace NotificationMicroservice.Domain.Entities
         /// <exception cref="MessageTemplateLanguageLengthException"></exception>
         /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
         /// <exception cref="MessageTemplateUserNameNullOrEmptyException"></exception>
-        public void Update(MessageType messageType, string language, string template, bool isRemoved, User modifiedByUser, DateTime modificationDate)
+        public void Update(MessageType messageType, Language language, Template template, bool isRemoved, User modifiedByUser, DateTime modificationDate)
         {
-
-            ValidateData(language, template, modifiedByUser);
-
             Type = messageType;
             Language = language;
             Template = template;
@@ -142,34 +138,6 @@ namespace NotificationMicroservice.Domain.Entities
             IsRemoved = true;
             ModifiedByUser = modifiedByUser;
             ModificationDate = modificationDate;
-        }
-
-        /// <summary>
-        /// Валидация входных данных
-        /// </summary>
-        /// <param name="template"></param>
-        /// <exception cref="MessageTemplateNullOrEmptyException"></exception>
-        private static void ValidateData(string language, string template, User user)
-        {
-            if (string.IsNullOrWhiteSpace(template))
-            {
-                throw new MessageTemplateNullOrEmptyException(ExceptionMessages.ERROR_TEMPLATE, template);
-            }
-
-            if (template.Length < TEMPLATE_MIN_LENGTH && template.Length > TEMPLATE_MAX_LENGTH)
-            {
-                throw new MessageTemplateLengthException(ExceptionMessages.ERROR_TEMPLATE_LENGTH, TEMPLATE_MIN_LENGTH, TEMPLATE_MAX_LENGTH, template.Length.ToString());
-            }
-
-            if (string.IsNullOrWhiteSpace(language))
-            {
-                throw new MessageTemplateLanguageNullOrEmptyException(ExceptionMessages.ERROR_LANG_CODE, language);
-            }
-
-            if (language.Length != LANGUAGE_LENGTH)
-            {
-                throw new MessageTemplateLanguageLengthException(ExceptionMessages.ERROR_LANG_CODE_LENGTH, LANGUAGE_LENGTH, language.Length.ToString());
-            }
         }
     }
 }

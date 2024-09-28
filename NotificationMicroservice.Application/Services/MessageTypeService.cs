@@ -9,25 +9,24 @@ namespace NotificationMicroservice.Application.Services
 {
     public class MessageTypeService(IMessageTypeRepository messageTypeRepository, IUserRepository userRepository, IMapper mapper) : ITypeApplicationService
     {
-        private readonly CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
 
-        public async Task<IEnumerable<TypeModel>> GetAllAsync()
+        public async Task<IEnumerable<TypeModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var dbEntities = await messageTypeRepository.GetAllAsync(_cancelTokenSource.Token, true);
+            var dbEntities = await messageTypeRepository.GetAllAsync(cancellationToken, true);
 
             return dbEntities.Select(mapper.Map<TypeModel>);
         }
 
-        public async Task<TypeModel?> GetByIdAsync(Guid id)
+        public async Task<TypeModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var dbEntity = await messageTypeRepository.GetByIdAsync(id, _cancelTokenSource.Token);
+            var dbEntity = await messageTypeRepository.GetByIdAsync(id, cancellationToken);
 
             return dbEntity is null ? null : mapper.Map<TypeModel>(dbEntity);
         }
 
-        public async Task<Guid?> AddAsync(CreateTypeModel type)
+        public async Task<Guid?> AddAsync(CreateTypeModel type, CancellationToken cancellationToken = default)
         {
-            var user = await userRepository.GetByIdAsync(type.CreatedByUserId, _cancelTokenSource.Token);
+            var user = await userRepository.GetByIdAsync(type.CreatedByUserId, cancellationToken);
 
             if (user is null)
             {
@@ -36,19 +35,19 @@ namespace NotificationMicroservice.Application.Services
 
             var typeNew = new MessageType(new TypeName(type.Name), false, user, DateTime.UtcNow, null, null);
 
-            return await messageTypeRepository.AddAsync(typeNew, _cancelTokenSource.Token);
+            return await messageTypeRepository.AddAsync(typeNew, cancellationToken);
         }
 
-        public async Task<bool> UpdateAsync(UpdateTypeModel messageType)
+        public async Task<bool> UpdateAsync(UpdateTypeModel messageType, CancellationToken cancellationToken = default)
         {
-            var user = await userRepository.GetByIdAsync(messageType.ModifiedByUserId, _cancelTokenSource.Token);
+            var user = await userRepository.GetByIdAsync(messageType.ModifiedByUserId, cancellationToken);
 
             if (user is null)
             {
                 return false;
             }
 
-            var type = await messageTypeRepository.GetByIdAsync(messageType.Id, _cancelTokenSource.Token);
+            var type = await messageTypeRepository.GetByIdAsync(messageType.Id, cancellationToken);
 
             if (type is null || type.IsRemoved)
             {
@@ -57,19 +56,19 @@ namespace NotificationMicroservice.Application.Services
 
             type.Update(new TypeName(messageType.Name), false, user, DateTime.UtcNow);
 
-            return await messageTypeRepository.UpdateAsync(type, _cancelTokenSource.Token);
+            return await messageTypeRepository.UpdateAsync(type, cancellationToken);
         }
 
-        public async Task<bool> DeleteAsync(DeleteTypeModel messageType)
+        public async Task<bool> DeleteAsync(DeleteTypeModel messageType, CancellationToken cancellationToken = default)
         {
-            var user = await userRepository.GetByIdAsync(messageType.ModifiedByUserId, _cancelTokenSource.Token);
+            var user = await userRepository.GetByIdAsync(messageType.ModifiedByUserId, cancellationToken);
 
             if (user is null)
             {
                 return false;
             }
 
-            var type = await messageTypeRepository.GetByIdAsync(messageType.Id, _cancelTokenSource.Token);
+            var type = await messageTypeRepository.GetByIdAsync(messageType.Id, cancellationToken);
 
             if (type is null)
             {
@@ -78,8 +77,7 @@ namespace NotificationMicroservice.Application.Services
 
             type.Delete(user, DateTime.UtcNow);
 
-            return await messageTypeRepository.DeleteAsync(type, _cancelTokenSource.Token);
+            return await messageTypeRepository.DeleteAsync(type, cancellationToken);
         }
-
     }
 }

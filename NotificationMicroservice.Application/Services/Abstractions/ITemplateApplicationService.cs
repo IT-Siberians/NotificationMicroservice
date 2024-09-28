@@ -13,6 +13,6 @@ namespace NotificationMicroservice.Application.Abstractions
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<IEnumerable<TemplateModel>> GetByTypeId(Guid id);
+        Task<IEnumerable<TemplateModel>> GetByTypeIdAsync(Guid id, CancellationToken cancellationToken);
     }
 }

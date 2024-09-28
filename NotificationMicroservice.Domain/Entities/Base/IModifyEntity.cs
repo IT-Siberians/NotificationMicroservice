@@ -3,21 +3,19 @@
     /// <summary>
     /// Описание модифицируемой Entity 
     /// </summary>
-    /// <typeparam name="TEntity"> Тип полей пользователей. </typeparam>
     /// <typeparam name="TKey"> Тип первичного ключа. </typeparam>
-    public interface IModifyEntity<TEntity, out TKey> : IEntity<TKey>
-        where TEntity : class
+    public interface IModifyEntity<out TKey> : IEntity<TKey>
         where TKey : struct
     {
         /// <summary>
         /// Пользователь создавший запись
         /// </summary>
-        TEntity CreatedByUser { get; }
+        User CreatedByUser { get; }
 
         /// <summary>
         /// Пользователь изменивший запись
         /// </summary>
-        TEntity? ModifiedByUser { get; }
+        User? ModifiedByUser { get; }
 
         /// <summary>
         /// Дата и время изменения

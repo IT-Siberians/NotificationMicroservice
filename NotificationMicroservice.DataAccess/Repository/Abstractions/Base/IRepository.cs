@@ -26,6 +26,5 @@ namespace NotificationMicroservice.DataAccess.Repository.Abstractions.Base
         /// <param name="cancellationToken"> Токен отмены. </param>
         /// <returns> Cущность. </returns>
         Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken);
-
     }
 }

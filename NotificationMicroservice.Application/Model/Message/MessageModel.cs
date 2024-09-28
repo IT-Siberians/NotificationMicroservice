@@ -1,14 +1,13 @@
-﻿using NotificationMicroservice.Application.Model.Type;
+﻿using NotificationMicroservice.Application.Model.Abstractions;
+using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.Domain.Enums;
 
 namespace NotificationMicroservice.Application.Model.Message
 {
-    public class MessageModel : IBaseModel<Guid>
-    {
-        public Guid Id { get; init; }
-        public string Text { get; init; } = string.Empty;
-        public Direction Direction { get; init; }
-        public DateTime CreationDate { get; init; }
-        public TypeModel Type { get; init; } = new TypeModel();
-    }
+    public record MessageModel(
+        Guid Id,
+        string Text,
+        Direction Direction,
+        DateTime CreationDate,
+        TypeModel Type) : IBaseModel<Guid>;
 }

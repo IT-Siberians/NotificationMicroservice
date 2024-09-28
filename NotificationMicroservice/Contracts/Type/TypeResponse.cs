@@ -7,7 +7,6 @@
         Guid CreatedByUserId,
         DateTime CreationDate,
         Guid? ModifiedByUserId,
-        DateTime? ModificationDate
-        );
+        DateTime? ModificationDate);
 
 }

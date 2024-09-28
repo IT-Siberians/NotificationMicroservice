@@ -73,7 +73,7 @@ namespace NotificationMicroservice.Domain.Entities
             Username = username;
             FullName = fullName;
             Email = email;
-            CreationDate = DateTime.Now;
+            CreationDate = DateTime.UtcNow;
         }
 
         /// <summary>

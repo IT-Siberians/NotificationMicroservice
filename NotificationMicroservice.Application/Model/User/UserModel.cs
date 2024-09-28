@@ -1,4 +1,6 @@
-﻿namespace NotificationMicroservice.Application.Model.User
+﻿using NotificationMicroservice.Application.Model.Abstractions;
+
+namespace NotificationMicroservice.Application.Model.User
 {
     public class UserModel : IBaseModel<Guid>
     {

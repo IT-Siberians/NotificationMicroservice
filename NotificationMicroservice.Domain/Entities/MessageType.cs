@@ -6,7 +6,7 @@ namespace NotificationMicroservice.Domain.Entities
     /// <summary>
     /// Тип шаблона сообщения
     /// </summary>
-    public class MessageType : IModifyEntity<User, Guid>
+    public class MessageType : IModifyEntity<Guid>
     {
         /// <summary>
         /// Минимальная длина названия для типа сообщения

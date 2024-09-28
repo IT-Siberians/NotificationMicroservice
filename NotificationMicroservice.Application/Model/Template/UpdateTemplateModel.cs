@@ -1,4 +1,6 @@
-﻿namespace NotificationMicroservice.Application.Model.Template
+﻿using NotificationMicroservice.Application.Model.Abstractions;
+
+namespace NotificationMicroservice.Application.Model.Template
 {
     public class UpdateTemplateModel : IBaseModel<Guid>
     {

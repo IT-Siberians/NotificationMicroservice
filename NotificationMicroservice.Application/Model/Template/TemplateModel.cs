@@ -1,4 +1,5 @@
-﻿using NotificationMicroservice.Application.Model.Type;
+﻿using NotificationMicroservice.Application.Model.Abstractions;
+using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.Application.Model.User;
 
 namespace NotificationMicroservice.Application.Model.Template

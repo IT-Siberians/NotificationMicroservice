@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Enums;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
@@ -15,9 +17,16 @@ namespace NotificationMicroservice.DataAccess.Configuration
 
             builder.Property(x => x.Language)
                 .HasMaxLength(MessageTemplate.LANGUAGE_LENGTH)
+                .HasConversion(
+                    o => o.ToString(),
+                    s => (Language)Enum.Parse(typeof(Language), s))
                 .IsRequired();
 
             builder.Property(x => x.Template)
+                .HasMaxLength(MessageTemplate.TEMPLATE_MAX_LENGTH)
+                .HasConversion(
+                    o => o.Value,
+                    s => new Template(s))
                 .IsRequired();
 
             builder.Property(x => x.IsRemoved)

@@ -22,6 +22,45 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("NotificationMicroservice.Domain.Entities.BusQueue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRemoved")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ModifiedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("QueueName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("TypeId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("ModifiedByUserId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("BusQueues");
+                });
+
             modelBuilder.Entity("NotificationMicroservice.Domain.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
@@ -76,7 +115,8 @@ namespace NotificationMicroservice.DataAccess.Migrations
 
                     b.Property<string>("Template")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(600)
+                        .HasColumnType("character varying(600)");
 
                     b.Property<Guid>("TypeId")
                         .HasColumnType("uuid");
@@ -153,6 +193,31 @@ namespace NotificationMicroservice.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("NotificationMicroservice.Domain.Entities.BusQueue", b =>
+                {
+                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("NotificationMicroservice.Domain.Entities.User", "ModifiedByUser")
+                        .WithMany()
+                        .HasForeignKey("ModifiedByUserId");
+
+                    b.HasOne("NotificationMicroservice.Domain.Entities.MessageType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("ModifiedByUser");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("NotificationMicroservice.Domain.Entities.Message", b =>

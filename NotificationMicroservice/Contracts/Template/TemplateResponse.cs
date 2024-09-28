@@ -11,7 +11,6 @@ namespace NotificationMicroservice.Contracts.Template
         Guid CreatedByUserId,
         DateTime CreationDate,
         Guid? ModifiedByUserId,
-        DateTime? ModificationDate
-        );
+        DateTime? ModificationDate);
 
 }

@@ -1,6 +1,8 @@
-﻿namespace NotificationMicroservice.Application.Model.Type
+﻿using NotificationMicroservice.Application.Model.Abstractions;
+
+namespace NotificationMicroservice.Application.Model.Type
 {
     public record CreateTypeModel(
         string Name,
-        Guid CreatedByUserId);
+        Guid CreatedByUserId) : ICreateModel;
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.DataAccess.Configuration
 {
@@ -14,6 +15,9 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .ValueGeneratedOnAdd();
 
             builder.Property(x => x.Text)
+                .HasConversion(
+                    o => o.Value,
+                    s => new MessageText(s))
                 .IsRequired();
 
             builder.Property(x => x.Direction)

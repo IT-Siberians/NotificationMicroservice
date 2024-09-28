@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Enums;
 
 namespace NotificationMicroservice.Validator.Base
 {
@@ -10,7 +11,14 @@ namespace NotificationMicroservice.Validator.Base
             RuleFor(request => request)
                 .Length(MessageTemplate.LANGUAGE_LENGTH)
                 .NotEmpty()
-                .NotNull();
+                .NotNull()
+                .Must(BeAValidLanguage);
+        }
+
+        private bool BeAValidLanguage(string request)
+        {
+            return Enum.GetNames(typeof(Language))
+                .Any(x => x.Equals(request, StringComparison.Ordinal));
         }
     }
 }

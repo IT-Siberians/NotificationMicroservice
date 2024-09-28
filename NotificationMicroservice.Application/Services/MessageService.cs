@@ -3,37 +3,36 @@ using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Model.Message;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Application.Services
 {
     public class MessageService(IMessageRepository messageRepository, IMessageTypeRepository typeRepository, IMapper mapper) : IMessageApplicationService
     {
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-
-        public async Task<Guid?> AddAsync(CreateMessageModel messageCreate)
+        public async Task<Guid?> AddAsync(CreateMessageModel messageCreate, CancellationToken cancellationToken = default)
         {
-            var type = await typeRepository.GetByIdAsync(messageCreate.MessageTypeId, _cancellationTokenSource.Token);
+            var type = await typeRepository.GetByIdAsync(messageCreate.MessageTypeId, cancellationToken);
 
             if (type is null)
             {
                 return null;
             }
 
-            var message = new Message(type, messageCreate.MessageText, messageCreate.Direction, DateTime.UtcNow);
+            var message = new Message(type, new MessageText(messageCreate.MessageText), messageCreate.Direction, DateTime.UtcNow);
 
-            return await messageRepository.AddAsync(message, _cancellationTokenSource.Token);
+            return await messageRepository.AddAsync(message, cancellationToken);
         }
 
-        public async Task<IEnumerable<MessageModel>> GetAllAsync()
+        public async Task<IEnumerable<MessageModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var dbEntities = await messageRepository.GetAllAsync(_cancellationTokenSource.Token, true);
+            var dbEntities = await messageRepository.GetAllAsync(cancellationToken, true);
 
             return dbEntities.Select(mapper.Map<MessageModel>);
         }
 
-        public async Task<MessageModel?> GetByIdAsync(Guid id)
+        public async Task<MessageModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var dbEntity = await messageRepository.GetByIdAsync(id, _cancellationTokenSource.Token);
+            var dbEntity = await messageRepository.GetByIdAsync(id, cancellationToken);
 
             return dbEntity is null ? null : mapper.Map<MessageModel>(dbEntity);
         }
