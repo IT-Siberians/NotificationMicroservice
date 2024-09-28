@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NotificationMicroservice.Application.Model.BusQueue;
 using NotificationMicroservice.Application.Services.Abstractions;
 using NotificationMicroservice.Contracts.BusQueue;
-using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Controllers
 {
@@ -37,7 +36,7 @@ namespace NotificationMicroservice.Controllers
         [ProducesResponseType(typeof(string), 404)]
         public async Task<ActionResult<BusQueueResponse>> GetTypeByQueueAsync(string queueName, CancellationToken cancellationToken)
         {
-            var queue = await queueService.GetTypeByEventAsync(new QueueName(queueName), cancellationToken);
+            var queue = await queueService.GetTypeByEventAsync(queueName, cancellationToken);
 
             return queue is null
                 ? NotFound($"Type not found for QueueName:{queueName}")

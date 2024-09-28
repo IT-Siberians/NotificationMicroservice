@@ -8,7 +8,6 @@ namespace NotificationMicroservice.Validator.Type
     {
         public EditTypeValidator()
         {
-
             RuleFor(type => type.Name)
                 .SetValidator(new TypeNameValidator());
 

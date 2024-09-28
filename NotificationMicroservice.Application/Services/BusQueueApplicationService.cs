@@ -23,9 +23,9 @@ namespace NotificationMicroservice.Application.Services
             return dbEntity is null ? null : mapper.Map<BusQueueModel>(dbEntity);
         }
 
-        public async Task<BusQueueModel?> GetTypeByEventAsync(QueueName queueName, CancellationToken cancellationToken = default)
+        public async Task<BusQueueModel?> GetTypeByEventAsync(string queueName, CancellationToken cancellationToken = default)
         {
-            var dbEntity = await queueRepository.GetTypeByEventAsync(queueName, cancellationToken);
+            var dbEntity = await queueRepository.GetTypeByEventAsync(new QueueName(queueName), cancellationToken);
 
             return dbEntity is null ? null : mapper.Map<BusQueueModel>(dbEntity);
         }

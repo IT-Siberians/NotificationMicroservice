@@ -9,7 +9,7 @@ namespace NotificationMicroservice.Validator.Event
         public UpdateUserValidator()
         {
             RuleFor(user => user.Id)
-                    .SetValidator(new GuidValidator());
+                .SetValidator(new GuidValidator());
             RuleFor(user => user.Email)
                 .SetValidator(new EmailValidator());
             RuleFor(user => user.FullName)

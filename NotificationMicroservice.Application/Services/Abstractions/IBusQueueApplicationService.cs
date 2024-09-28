@@ -1,6 +1,5 @@
 ﻿using NotificationMicroservice.Application.Model.BusQueue;
 using NotificationMicroservice.Application.Services.Abstractions.Base;
-using NotificationMicroservice.Domain.ValueObjects;
 
 namespace NotificationMicroservice.Application.Services.Abstractions
 {
@@ -15,6 +14,6 @@ namespace NotificationMicroservice.Application.Services.Abstractions
         /// <param name="queueName"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<BusQueueModel?> GetTypeByEventAsync(QueueName queueName, CancellationToken cancellationToken);
+        Task<BusQueueModel?> GetTypeByEventAsync(string queueName, CancellationToken cancellationToken);
     }
 }

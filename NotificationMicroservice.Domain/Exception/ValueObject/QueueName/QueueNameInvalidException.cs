@@ -6,5 +6,5 @@ namespace NotificationMicroservice.Domain.Exception.ValueObject.QueueName
     /// Конструктор с информационным сообщением и значением параметра
     /// </summary>
     /// <param name="value">Значение параметра вызвашвего исключение</param>
-    public class QueueNameInvalidException(string value) : FormatException(string.Format(ExceptionMessages.ERROR_EMAIL, value));
+    public class QueueNameInvalidException(string value) : FormatException(string.Format(ExceptionMessages.ERROR_QUEUENAME, value));
 }

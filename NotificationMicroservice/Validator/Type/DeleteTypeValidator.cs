@@ -8,7 +8,6 @@ namespace NotificationMicroservice.Validator.Type
     {
         public DeleteTypeValidator()
         {
-
             RuleFor(type => type.ModifiedByUserId)
                 .SetValidator(new GuidValidator());
         }

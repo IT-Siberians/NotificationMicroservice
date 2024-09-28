@@ -10,7 +10,7 @@ namespace NotificationMicroservice.Validator.Template
         {
 
             RuleFor(template => template.MessageTypeId)
-                .NotEmpty();
+                .SetValidator(new GuidValidator());
 
             RuleFor(template => template.Language)
                 .SetValidator(new LanguageValidatior());

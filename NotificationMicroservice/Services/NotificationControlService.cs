@@ -7,7 +7,6 @@ using NotificationMicroservice.Application.Services.Abstractions;
 using NotificationMicroservice.Contracts.Rabbit;
 using NotificationMicroservice.Contracts.Rabbit.Events;
 using NotificationMicroservice.Domain.Enums;
-using NotificationMicroservice.Domain.ValueObjects;
 using System.Globalization;
 using System.Text.Json;
 
@@ -54,7 +53,7 @@ namespace NotificationMicroservice.Services
 
         private async Task<TemplateModel?> GetTemplate(string queue, CancellationToken cancellationToken)
         {
-            var busQueue = await queueApplicationService.GetTypeByEventAsync(new QueueName(queue), cancellationToken);
+            var busQueue = await queueApplicationService.GetTypeByEventAsync(queue, cancellationToken);
 
             if (busQueue == null)
             {
