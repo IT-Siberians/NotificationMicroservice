@@ -27,14 +27,6 @@ namespace NotificationMicroservice.DataAccess.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Direction",
-                table: "Messages",
-                type: "integer",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "text");
         }
 
         /// <inheritdoc />
@@ -57,14 +49,6 @@ namespace NotificationMicroservice.DataAccess.Migrations
                 oldClrType: typeof(string),
                 oldType: "character varying(100)",
                 oldMaxLength: 100);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Direction",
-                table: "Messages",
-                type: "text",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "integer");
         }
     }
 }

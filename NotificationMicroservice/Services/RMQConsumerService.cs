@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NotificationMicroservice.Services
 {
-    public class RMQConsumerService : BackgroundService
+    public class RMQConsumerService : BackgroundService, IDisposable
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IConnection _connection;
@@ -67,11 +67,21 @@ namespace NotificationMicroservice.Services
             return Task.CompletedTask;
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public override Task StopAsync(CancellationToken cancellationToken) => base.StopAsync(cancellationToken);
+
+        public override void Dispose()
         {
-            _channel.Close();
-            _connection.Close();
-            return base.StopAsync(cancellationToken);
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _channel?.Dispose();
+                _connection?.Dispose();
+            }
         }
     }
 }

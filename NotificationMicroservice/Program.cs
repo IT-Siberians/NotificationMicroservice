@@ -9,6 +9,7 @@ using NotificationMicroservice.Application.Services.Abstractions;
 using NotificationMicroservice.DataAccess;
 using NotificationMicroservice.DataAccess.Repository;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
+using NotificationMicroservice.Helpers;
 using NotificationMicroservice.Mapper;
 using NotificationMicroservice.Services;
 
@@ -81,10 +82,11 @@ namespace NotificationMicroservice
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
+            app.MigrateDatabase<NotificationMicroserviceDbContext>();
 
             app.MapControllers();
 
