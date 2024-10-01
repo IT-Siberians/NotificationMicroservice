@@ -3,14 +3,12 @@ using NotificationMicroservice.Application.Model.User;
 
 namespace NotificationMicroservice.Application.Model.Type
 {
-    public class TypeModel : IBaseModel<Guid>
-    {
-        public Guid Id { get; init; }
-        public string Name { get; init; } = string.Empty;
-        public bool IsRemoved { get; init; }
-        public UserModel CreatedByUser { get; init; } = new UserModel();
-        public DateTime CreationDate { get; init; }
-        public UserModel? ModifiedByUser { get; init; } = new UserModel();
-        public DateTime? ModificationDate { get; init; }
-    }
+    public record TypeModel(
+        Guid Id,
+        string Name,
+        bool IsRemoved,
+        UserModel CreatedByUser,
+        DateTime CreationDate,
+        UserModel? ModifiedByUser,
+        DateTime? ModificationDate) : IBaseModel<Guid>;
 }

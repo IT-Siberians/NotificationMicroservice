@@ -11,7 +11,7 @@ namespace NotificationMicroservice.Application.Services.Abstractions.Base
     public interface IService<TEntity, TEntityCreate, TKey>
         where TEntity : class, IBaseModel<TKey>
         where TEntityCreate : class, ICreateModel
-        where TKey : struct
+        where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Получает все сущности из источника данных.

@@ -10,7 +10,7 @@ namespace NotificationMicroservice.Validator.Base
             RuleFor(request => request)
                 .NotEmpty()
                 .NotNull()
-                .Length(MessageTemplate.TEMPLATE_MIN_LENGTH, MessageTemplate.TEMPLATE_MAX_LENGTH);
+                .MinimumLength(MessageTemplate.TEMPLATE_MIN_LENGTH);
         }
     }
 }

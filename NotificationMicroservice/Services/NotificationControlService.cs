@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Model.Message;
-using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Application.Model.User;
 using NotificationMicroservice.Application.Services.Abstractions;
 using NotificationMicroservice.Contracts.Rabbit;
@@ -23,7 +22,7 @@ namespace NotificationMicroservice.Services
             {
                 case "ConfirmationEmail":
 
-                    var template = await GetTemplate(queue, cancellationToken);
+                    var template = await templateService.GetByQueueAndLanguageAsync(queue, _lang, cancellationToken);
 
                     if (template is null)
                     {
@@ -49,32 +48,6 @@ namespace NotificationMicroservice.Services
                     return await userService.UpdateAsync(mapper.Map<UpdateUserModel>(updateUser), cancellationToken);
             }
             return false;
-        }
-
-        private async Task<TemplateModel?> GetTemplate(string queue, CancellationToken cancellationToken)
-        {
-            var busQueue = await queueApplicationService.GetTypeByEventAsync(queue, cancellationToken);
-
-            if (busQueue == null)
-            {
-                return null;
-            }
-
-            var templates = await templateService.GetByTypeIdAsync(busQueue.Type.Id, cancellationToken);
-
-            if (templates == null)
-            {
-                return null;
-            }
-
-            var template = templates.FirstOrDefault(i => i.Language == _lang);
-
-            if (template == null)
-            {
-                template = templates.FirstOrDefault(i => i.Language == "Eng");
-            }
-
-            return template is null ? null : template;
         }
     }
 }

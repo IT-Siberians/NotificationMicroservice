@@ -23,7 +23,6 @@ namespace NotificationMicroservice.DataAccess.Configuration
                 .IsRequired();
 
             builder.Property(x => x.Template)
-                .HasMaxLength(MessageTemplate.TEMPLATE_MAX_LENGTH)
                 .HasConversion(
                     o => o.Value,
                     s => new Template(s))

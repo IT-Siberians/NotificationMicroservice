@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
 using NotificationMicroservice.Application.Abstractions;
 using NotificationMicroservice.Application.Model.Template;
+using NotificationMicroservice.Application.Services.Abstractions;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Entities.Base;
 using NotificationMicroservice.Domain.Enums;
 using NotificationMicroservice.Domain.ValueObjects;
 
 
 namespace NotificationMicroservice.Application.Services
 {
-    public class MessageTemplateService(IMessageTemplateRepository templateRepository, IMessageTypeRepository typeRepository, IUserRepository userRepository, IMapper mapper) : ITemplateApplicationService
+    public class MessageTemplateService(IMessageTemplateRepository templateRepository, IMessageTypeRepository typeRepository, IUserRepository userRepository, IBusQueueApplicationService queueApplicationService, IMapper mapper) : ITemplateApplicationService
     {
         public async Task<IEnumerable<TemplateModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
@@ -27,16 +29,23 @@ namespace NotificationMicroservice.Application.Services
 
         public async Task<IEnumerable<TemplateModel>> GetByTypeIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var dbEntities = await templateRepository.GetAllAsync(cancellationToken, true);
+            var dbEntities = await templateRepository.GetByTypeIdAsync(id, cancellationToken);
 
-            if (dbEntities is null)
+            return dbEntities.Select(mapper.Map<TemplateModel>);
+        }
+
+        public async Task<TemplateModel?> GetByQueueAndLanguageAsync(string queue, string language, CancellationToken cancellationToken = default)
+        {
+            var busQueue = await queueApplicationService.GetTypeByEventAsync(queue, cancellationToken);
+
+            if (busQueue == null)
             {
                 return null;
             }
 
-            var result = dbEntities.Where(i => i.Type.Id == id).ToList();
+            var dbEntity = await templateRepository.GetByQueueAndLanguageAsync(busQueue.Type.Id, (Language)Enum.Parse(typeof(Language), language), cancellationToken);
 
-            return result.Select(mapper.Map<TemplateModel>);
+            return dbEntity is null ? null : mapper.Map<TemplateModel>(dbEntity);
         }
 
         public async Task<Guid?> AddAsync(CreateTemplateModel messageTemplate, CancellationToken cancellationToken = default)

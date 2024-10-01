@@ -7,18 +7,23 @@ services:
     ports:
       - "3000:8080"
     depends_on:
-      - db
+       db:
+        condition: service_healthy
   db:
     image: postgres:latest
     container_name: local_pgdb_notif
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: "db"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "admin"
     volumes:
       - local_pgdata:/var/lib/postgresql/data
-
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "admin" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 volumes:
   local_pgdata:
   pgadmin-data:

@@ -6,7 +6,7 @@ namespace NotificationMicroservice.Application.Services.Abstractions.Base
         where TEntity : class, IBaseModel<TKey>
         where TEntityCreate : class, ICreateModel
         where TEntityUpdate : class, IBaseModel<TKey>
-        where TKey : struct
+        where TKey : struct, IEquatable<TKey>
     {
         /// <summary>
         /// Изменение сущности

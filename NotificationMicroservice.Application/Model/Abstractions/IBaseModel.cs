@@ -1,7 +1,7 @@
 ﻿namespace NotificationMicroservice.Application.Model.Abstractions
 {
-    public interface IBaseModel<Tkey> where Tkey : struct
+    public interface IBaseModel<TKey> where TKey : struct, IEquatable<TKey>
     {
-        Tkey Id { get; }
+        TKey Id { get; }
     }
 }

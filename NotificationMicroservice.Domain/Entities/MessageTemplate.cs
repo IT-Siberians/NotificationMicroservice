@@ -21,11 +21,6 @@ namespace NotificationMicroservice.Domain.Entities
         public const int TEMPLATE_MIN_LENGTH = 30;
 
         /// <summary>
-        /// Максимальная длина названия для шаблона сообщения
-        /// </summary>
-        public const int TEMPLATE_MAX_LENGTH = 600;
-
-        /// <summary>
         /// Идентификатор
         /// </summary>
         public Guid Id { get; private set; }

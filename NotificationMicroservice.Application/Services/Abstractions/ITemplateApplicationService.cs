@@ -14,5 +14,14 @@ namespace NotificationMicroservice.Application.Abstractions
         /// <param name="id"></param>
         /// <returns></returns>
         Task<IEnumerable<TemplateModel>> GetByTypeIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получение шаблона по типу сообщения и языку
+        /// </summary>
+        /// <param name="queue"></param>
+        /// <param name="language"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<TemplateModel?> GetByQueueAndLanguageAsync(string queue, string language, CancellationToken cancellationToken);
     }
 }

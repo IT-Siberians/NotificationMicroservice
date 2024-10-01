@@ -26,9 +26,9 @@ namespace NotificationMicroservice.Domain.ValueObjects
                 throw new MessageTemplateNullOrEmptyException(ExceptionMessages.ERROR_TEMPLATE, value);
             }
 
-            if (value.Length < MessageTemplate.TEMPLATE_MIN_LENGTH || value.Length > MessageTemplate.TEMPLATE_MAX_LENGTH)
+            if (value.Length < MessageTemplate.TEMPLATE_MIN_LENGTH)
             {
-                throw new MessageTemplateLengthException(ExceptionMessages.ERROR_TEMPLATE_LENGTH, MessageTemplate.TEMPLATE_MIN_LENGTH, MessageTemplate.TEMPLATE_MAX_LENGTH, value.Length.ToString());
+                throw new MessageTemplateLengthException(ExceptionMessages.ERROR_TEMPLATE_LENGTH, MessageTemplate.TEMPLATE_MIN_LENGTH, value.Length.ToString());
             }
         }
     }

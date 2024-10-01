@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Enums;
 
 namespace NotificationMicroservice.DataAccess.Repository
 {
@@ -11,6 +12,32 @@ namespace NotificationMicroservice.DataAccess.Repository
     /// <param name="context">Контекст базы данных для работы с сообщениями.</param>
     public class MessageTemplateRepository(NotificationMicroserviceDbContext context) : BaseRepository<MessageTemplate, Guid>(context), IMessageTemplateRepository
     {
+        /// <summary>
+        /// Возвращает коллекцию шаблонов сообщений, соответствующих указанному типу.
+        /// </summary>
+        /// <param name="id">Идентификатор типа</param>
+        /// <param name="cancellationToken">Маркер отмены</param>
+        /// <returns>Коллекция шаблонов сообщений</returns>
+        public async Task<IEnumerable<MessageTemplate>> GetByTypeIdAsync(Guid id, CancellationToken cancellationToken = default) => await context
+            .Templates
+            .AsNoTracking()
+            .Where(x => x.Type.Id.Equals(id))
+            .ToListAsync(cancellationToken);
+
+        /// <summary>
+        /// Возвращает шаблон сообщения, соответствующий указанной очереди и языку.
+        /// </summary>
+        /// <param name="id">Идентификатор очереди</param>
+        /// <param name="language">Язык шаблона сообщения</param>
+        /// <param name="cancellationToken">Маркер отмены</param>
+        /// <returns>Шаблон сообщения или null, если не найден</returns>
+        public async Task<MessageTemplate?> GetByQueueAndLanguageAsync(Guid id, Language language, CancellationToken cancellationToken = default)
+        {
+            var templates = await GetByTypeIdAsync(id, cancellationToken);
+
+            return templates.FirstOrDefault(i => i.Language == language) ?? templates.FirstOrDefault(i => i.Language == Language.Eng);
+        }
+
         /// <summary>
         /// Добавляет новый шаблон сообщения в базу данных.
         /// </summary>
