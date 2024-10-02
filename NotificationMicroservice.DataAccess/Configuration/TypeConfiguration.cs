@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using NotificationMicroservice.DataAccess.Models;
 using NotificationMicroservice.Domain.Entities;
 using NotificationMicroservice.Domain.ValueObjects;
 

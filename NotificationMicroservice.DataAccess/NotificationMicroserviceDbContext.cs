@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NotificationMicroservice.DataAccess.Models;
 using NotificationMicroservice.Domain.Entities;
 
 namespace NotificationMicroservice.DataAccess

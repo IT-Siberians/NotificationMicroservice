@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using NotificationMicroservice.Application.Model.BusQueue;
 using NotificationMicroservice.Application.Services.Abstractions;
+using NotificationMicroservice.DataAccess.Models;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
-using NotificationMicroservice.Domain.Entities;
-using NotificationMicroservice.Domain.ValueObjects;
+using NotificationMicroservice.DataAccess.ValueObject;
 
 namespace NotificationMicroservice.Application.Services
 {

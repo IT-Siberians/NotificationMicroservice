@@ -1,6 +1,6 @@
-﻿using NotificationMicroservice.DataAccess.Repository.Abstractions.Base;
-using NotificationMicroservice.Domain.Entities;
-using NotificationMicroservice.Domain.ValueObjects;
+﻿using NotificationMicroservice.DataAccess.Models;
+using NotificationMicroservice.DataAccess.Repository.Abstractions.Base;
+using NotificationMicroservice.DataAccess.ValueObject;
 
 namespace NotificationMicroservice.DataAccess.Repository.Abstractions
 {

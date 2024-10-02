@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
-using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.DataAccess.Models;
+using NotificationMicroservice.DataAccess.ValueObject;
 
 namespace NotificationMicroservice.Validator.Base
 {
@@ -10,6 +11,7 @@ namespace NotificationMicroservice.Validator.Base
             RuleFor(request => request)
                 .NotNull()
                 .NotEmpty()
+                .Matches(QueueName.QUEUE_NAME)
                 .Length(BusQueue.MIN_QUEUENAME_LENGTH, BusQueue.MAX_QUEUENAME_LENGTH);
         }
     }

@@ -1,11 +1,9 @@
-﻿using NotificationMicroservice.Domain.Entities.Base;
-using NotificationMicroservice.Domain.ValueObjects;
+﻿using NotificationMicroservice.DataAccess.ValueObject;
+using NotificationMicroservice.Domain.Entities;
+using NotificationMicroservice.Domain.Entities.Base;
 
-namespace NotificationMicroservice.Domain.Entities
+namespace NotificationMicroservice.DataAccess.Models
 {
-    /// <summary>
-    /// Представляет очередь сообщений.
-    /// </summary>
     public class BusQueue : IModifyEntity<Guid>
     {
         /// <summary>

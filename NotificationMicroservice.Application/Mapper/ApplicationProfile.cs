@@ -4,6 +4,7 @@ using NotificationMicroservice.Application.Model.Message;
 using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Application.Model.Type;
 using NotificationMicroservice.Application.Model.User;
+using NotificationMicroservice.DataAccess.Models;
 using NotificationMicroservice.Domain.Entities;
 
 

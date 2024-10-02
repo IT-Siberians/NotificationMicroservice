@@ -4,7 +4,6 @@ using NotificationMicroservice.Application.Model.Template;
 using NotificationMicroservice.Application.Services.Abstractions;
 using NotificationMicroservice.DataAccess.Repository.Abstractions;
 using NotificationMicroservice.Domain.Entities;
-using NotificationMicroservice.Domain.Entities.Base;
 using NotificationMicroservice.Domain.Enums;
 using NotificationMicroservice.Domain.ValueObjects;
 
